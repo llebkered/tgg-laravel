@@ -1,0 +1,26 @@
+#parallax-1 {
+    background-color: $slate-grey;
+    background: url(../images/bg-front-igloo.jpg);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-top: 10px solid $tgg-orange;
+}
+
+#parallax-1 hr {
+    background: $tgg-orange;
+}
+
+#parallax-2 {
+    background: url(../images/bg-front-trolley.jpg);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-top: 10px solid yellow;
+}
+
+#parallax-2 hr {
+    background: yellow;
+}

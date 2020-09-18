@@ -1,0 +1,10 @@
+$navbar-background-color: $tgg-orange;
+
+$navbar-item-color: white;
+$navbar-item-hover-color: white ;
+$navbar-item-hover-background-color: darken($navbar-background-color, 5%);
+
+$navbar-dropdown-background-color:  $tgg-orange;
+$navbar-dropdown-arrow: white ;
+$navbar-dropdown-item-hover-color: white;
+$navbar-dropdown-item-hover-background-color: darken($navbar-background-color, 5%);

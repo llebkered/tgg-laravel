@@ -1,0 +1,22 @@
+// -----------------------------------------------------------------------------
+// This file contains styles that are specific to the home page.
+// -----------------------------------------------------------------------------
+.home {
+    &__gradient {
+        background-color: $dark-green;
+        background: linear-gradient(to right, $dark-green, #52c234);
+    }
+    &__green {
+        background-color: $dark-green;
+    }
+
+    &__hero {
+        color: white;
+        h1,
+
+        h2,
+        h3 {
+            color: yellow;
+        }
+    }
+}

@@ -1,0 +1,38 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the header of the site/application.
+// -----------------------------------------------------------------------------
+.header {
+    background-color: #c6ccb2;
+    background: linear-gradient(
+        to right,
+        #c6ccb2,
+        #b0dab9
+    );
+    &__container {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 1rem;
+    }
+    &__logo {
+        img {
+            height: 3rem;
+        }
+    }
+    &__title {
+        img {
+            width: 20rem;
+        }
+    }
+}
+
+@media (min-width: 750px) {
+    .header {
+        &__logo,
+        &__title {
+            img {
+                height: 5rem;
+                width: auto;
+            }
+        }
+    }
+}

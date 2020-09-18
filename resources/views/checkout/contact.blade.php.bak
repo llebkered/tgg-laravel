@@ -1,0 +1,96 @@
+@extends('layouts.app')
+
+@section('content')
+
+<section class="section content">
+    <div class="container is-fluid">
+        <h1>{{ $page['title']}}</h1>
+        {{-- <h1>{{ $page['title']}}</h1>
+        {!! $page['body'] !!} --}}
+
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li class="is-active"><a href="#">Contact</a></li>
+                <li><a href="#">Delivery</a></li>
+                <li><a href="#">Payment</a></li>
+                <li><a href="#">Complete</a></li>
+            </ul>
+        </nav>
+
+        @if (Cart::count() > 0)
+        <div class="columns">
+            <form action="{{ route('checkout.contactpost') }}" class="form" method="POST">
+                {{  csrf_field() }}
+
+            </form>
+
+        </div>
+
+        <section class="container">
+            @if ($errors->any())
+            <div class="notice is-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            <div class="columns is-multiline">
+                <div class="column is-8 is-offset-2 register">
+                    <div class="columns">
+                        <div class="column left">
+                            <h2>Contact Details</h2>
+                            <form action="">
+                                {{ csrf_field() }}
+                                <div class="field">
+                                    <label for="name" class="label">Name</label>
+                                    <div class="control">
+                                        <input class="input is-medium" type="text" placeholder="Name">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label for="email" class="label">Email</label>
+                                    <div class="control">
+                                        <input class="input is-medium" type="email" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label for="phone" class="label">Phone</label>
+                                    <div class="control">
+                                        <input class="input is-medium" type="text" placeholder="Phone">
+                                    </div>
+                                </div>
+                                <button class="button is-block is-primary is-fullwidth is-medium">Submit</button>
+
+
+                            </form>
+                        </div>
+                        <div class="column right">
+                            <h1 class="title is-1">Super Cool Website</h1>
+                            <h2 class="subtitle colored is-4">Lorem ipsum dolor sit amet.</h2>
+                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis ex deleniti aliquam
+                                tempora libero excepturi vero soluta odio optio sed.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-8 is-offset-2">
+                    <br>
+
+                </div>
+            </div>
+        </section>
+
+
+
+
+        @else
+        <!-- Cart Empty -->
+        <h2>Cart empty</h2>
+        <p>There are no items in your cart.</p>
+        @endif
+
+    </div>
+</section>
+
+@endsection
