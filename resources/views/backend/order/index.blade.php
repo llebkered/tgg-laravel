@@ -2,7 +2,7 @@
 
 @section('content')
 
-<section class="hero is-info welcome is-small">
+<section class="hero is-info welcome is-small mb-6">
     <div class="hero-body">
         <div class="container">
             <h1 class="title">
@@ -12,7 +12,47 @@
     </div>
 </section>
 
-<section>
+<section class="info-tiles mb-6">
+    <div class="tile is-ancestor has-text-centered">
+        <div class="tile is-parent">
+            <article class="tile is-child box">
+                <p class="title">439k</p>
+                <p class="subtitle">Users</p>
+            </article>
+        </div>
+        <div class="tile is-parent">
+            <article class="tile is-child box">
+                <p class="title">59k</p>
+                <p class="subtitle">Products</p>
+            </article>
+        </div>
+        <div class="tile is-parent">
+            <article class="tile is-child box">
+                <p class="title">3.4k</p>
+                <p class="subtitle">Open Orders</p>
+            </article>
+        </div>
+        <div class="tile is-parent">
+            <article class="tile is-child box">
+                <p class="title">19</p>
+                <p class="subtitle">Exceptions</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mb-6">
+    <div class="columns">
+        <div class="column">
+            <a href="" class="button is-primary">All Orders</a>
+        </div>
+        <div class="column">
+            <a href="" class="button is-primary">Open Orders</a>
+        </div>
+    </div>
+</section>
+
+<section class="mb-6">
     <div class="panel content">
         <h2>Orders</h2>
         <table class="table">

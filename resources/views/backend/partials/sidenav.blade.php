@@ -3,10 +3,15 @@
         General
     </p>
     <ul class="menu-list">
+    <li><a href="{{ route('home')}}">Exit to website</a></li>
         <li><a class="is-active">Dashboard</a></li>
         <li><a>Customers</a></li>
         <li><a>Other</a></li>
     </ul>
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="navbar-item">
+        {{ csrf_field() }}
+        <button class="button is-danger is-inverted">Log Out</button>
+    </form>
     <p class="menu-label">
         Administration
     </p>

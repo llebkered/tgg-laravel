@@ -3,7 +3,7 @@
 @section('content')
 
 
-<section class="hero is-info welcome is-small">
+<section class="hero is-info welcome is-small mb-6">
     <div class="hero-body">
         <div class="container">
             <h1 class="title">
@@ -14,7 +14,7 @@
 </section>
 
 <section>
-    <div class="panel content">
+    <div class="panel content mb-6">
         <h2>Orders</h2>
         <table class="table">
             <thead>
@@ -32,14 +32,14 @@
                 <td>{{ $order->name }}</td>
                 <td>{{ $order->address }}, {{ $order->city }}, {{ $order->state }} {{ $order->postcode }}</td>
                 <td>{{ $order->order_status->title }}</td>
-                <td><a href="" class="button is-primary is-small">action</a></td>
+                <td><a href="" class="button is-primary is-outlined is-small">action</a></td>
             </tr>
             @endforeach
         </table>
     </div>
 </section>
 
-<section class="info-tiles">
+<section class="info-tiles mb-6">
     <div class="tile is-ancestor has-text-centered">
         <div class="tile is-parent">
             <article class="tile is-child box">
