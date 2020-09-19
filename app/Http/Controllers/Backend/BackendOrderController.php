@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderResource;
 
 class BackendOrderController extends Controller
 {
@@ -50,7 +51,10 @@ class BackendOrderController extends Controller
      */
     public function show(Order $order)
     {
-        return view('backend.order.show', compact(['order']));
+
+        // $order = new OrderResource($order);
+
+        return view('backend.order.show', compact('order'));
     }
 
     /**
