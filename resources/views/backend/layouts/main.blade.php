@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.0/css/bulma.min.css" />
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
+    @yield('header_extras')
 </head>
 
 <body>
@@ -30,6 +31,7 @@
     </div>
 
     <script async type="text/javascript" src="{{ asset('js/bulma.js') }}"></script>
+    @yield('footer_extras')
 </body>
 
 </html>
