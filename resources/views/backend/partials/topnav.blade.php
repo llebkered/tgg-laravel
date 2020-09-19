@@ -37,8 +37,8 @@
                 <div class="navbar-item">
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link">
-                            {{-- {{ Auth::user()->name }} --}}
-                        User
+                            {{ Auth::user()->name }}
+
                         </a>
 
                         <div class="navbar-dropdown">

@@ -80,9 +80,11 @@ Route::prefix('checkout')->group(function () {
 });
 
 
+
+
 // Backend dashboard
-// Don't forget to close off to auth only
-Route::prefix('backend')->group(function () {
+// middleware('App\Http\Middleware\AdminAccessMiddleware') ['auth:sanctum', 'verified']
+Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function () {
     Route::get('/', [BackendController::class, 'index'])->name('backend.index');
     Route::get('/orders', [BackendOrderController::class, 'index'])->name('backend.orders');
     Route::get('/pages', [BackendPageController::class, 'index'])->name('backend.pages');

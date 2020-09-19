@@ -16,14 +16,14 @@
     <div class="tile is-ancestor has-text-centered">
         <div class="tile is-parent">
             <article class="tile is-child box">
-                <p class="title">439k</p>
-                <p class="subtitle">Users</p>
+            <p class="title">{{ $orders->count() }}</p>
+                <p class="subtitle">Orders</p>
             </article>
         </div>
         <div class="tile is-parent">
             <article class="tile is-child box">
-                <p class="title">59k</p>
-                <p class="subtitle">Products</p>
+            <p class="title">{{ $openOrders->count() }}</p>
+                <p class="subtitle">Open Orders</p>
             </article>
         </div>
         <div class="tile is-parent">
