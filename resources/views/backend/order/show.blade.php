@@ -1,0 +1,148 @@
+@extends('backend.layouts.main')
+
+@section('content')
+
+<section class="hero is-info welcome is-small mb-6">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">
+                Edit Order {{ $order->id }}
+            </h1>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <form action="">
+            @csrf
+            <div class="columns has-background-light mb-6">
+                <div class="column">
+                    Order ID: {{ $order->id }}
+                </div>
+
+                <div class="column">
+                    Customer ID: {{ $order->customer_id }}
+                </div>
+
+                <div class="column">
+                    User ID: {{ $order->user_id }}
+                </div>
+
+                <div class="column">
+                    Address ID: {{ $order->address_id }}
+                </div>
+            </div>
+    </div>
+
+    <div class="columns">
+        <div class="column is-2"><label class="label" for="name">Order Status</label></div>
+        <div class="column">
+            {{ $order->order_status->title }}
+            {{-- <div class="control">
+                <input class="input" name="name" id="name" type="text" placeholder="Name"
+                    value="{{ old('name') ? old('name') : $order->name }}">
+            </div> --}}
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column is-2"><label class="label" for="name">Name</label></div>
+        <div class="column">
+            <div class="control">
+                <input class="input" name="name" id="name" type="text" placeholder="Name"
+                    value="{{ old('name') ? old('name') : $order->name }}">
+            </div>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column is-2"><label class="label" for="email">Email</label></div>
+        <div class="column">
+            <div class="control">
+                <input class="input" name="email" id="email" type="text" placeholder="email"
+                    value="{{ old('email') ? old('email') : $order->email }}">
+            </div>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column is-2"><label class="label" for="name">Address</label></div>
+        <div class="column">
+            <div class="control">
+                <input class="input" name="address" id="address" type="text" placeholder="address"
+                    value="{{ old('address') ? old('address') : $order->address }}">
+            </div>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column is-2"><label class="label" for="name">Line 2</label></div>
+        <div class="column">
+            <div class="control">
+                <input class="input" name="line2" id="line2" type="text" placeholder="line2"
+                    value="{{ old('line2') ? old('line2') : $order->line2 }}">
+            </div>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <div class="column is-2"><label class="label" for="city">City</label></div>
+            <div class="column">
+                <div class="control">
+                    <input class="input" name="city" id="city" type="text" placeholder="city"
+                        value="{{ old('city') ? old('city') : $order->city }}">
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="columns">
+                <div class="column is-2"><label class="label" for="state">State</label></div>
+                <div class="column">
+                    <div class="control">
+                        <input class="input" name="state" id="state" type="text" placeholder="state"
+                            value="{{ old('state') ? old('state') : $order->state }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="columns">
+                <div class="column is-2"><label class="label" for="name">Postcode</label></div>
+                <div class="column">
+                    <div class="control">
+                        <input class="input" name="postcode" id="postcode" type="text" placeholder="postcode"
+                            value="{{ old('postcode') ? old('postcode') : $order->postcode }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {"id":1,"customer_id":null,"user_id":null,"order_status_id":1,"address_id":1,"email":"test@example.com","name":"Test
+    Buyer","address":"1 Main St","line2":null,"city":"Melton
+    South","state":"Vic","postcode":"3338","country":null,"phone":"03 7010 1234","cart":"
+
+    <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+            <input class="input" type="text" placeholder="Text input">
+        </div>
+    </div>
+
+    <button class="button is-primary">Submit</button>
+    </form>
+
+
+    </div>
+
+    {{ $order }}
+
+</section>
+
+
+
+
+@endsection

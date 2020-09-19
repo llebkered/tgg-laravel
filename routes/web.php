@@ -86,7 +86,10 @@ Route::prefix('checkout')->group(function () {
 // middleware('App\Http\Middleware\AdminAccessMiddleware') ['auth:sanctum', 'verified']
 Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function () {
     Route::get('/', [BackendController::class, 'index'])->name('backend.index');
+
     Route::get('/orders', [BackendOrderController::class, 'index'])->name('backend.orders');
+    Route::get('/orders/{order}', [BackendOrderController::class, 'show'])->name('backend.show');
+
     Route::get('/pages', [BackendPageController::class, 'index'])->name('backend.pages');
     Route::get('/plants', [BackendPlantController::class, 'index'])->name('backend.plants');
     Route::get('/products', [BackendProductController::class, 'index'])->name('backend.products');
