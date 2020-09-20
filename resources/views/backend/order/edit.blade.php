@@ -5,16 +5,30 @@
 <section class="hero is-info welcome is-small mb-6">
     <div class="hero-body">
         <div class="container">
-            <h1 class="title">
-                Edit Order {{ $order->id }}
-            </h1>
+
+            <div class="columns">
+                <div class="column">
+                    <h1 class="title">
+                        Edit Order #{{ $order->id }}
+                    </h1>
+                    <div class="has-text-weight-light">
+                        <p>Created: {{ $order->created_at->format('j M, Y') }}</p>
+                        <p>Updated: {{ $order->updated_at->format('j M, Y') }}</p>
+                    </div>
+                </div>
+                <div class="column has-text-right">
+                    <p>{{ $order->name  }}</p>
+                    <p>${{ $order->total  }}</p>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
 
 <section>
     <div class="container">
-        <form action="">
+        <form action="" method="POST">
             @csrf
             <div class="columns has-background-light mb-6">
                 <div class="column">
@@ -42,8 +56,8 @@
             {{-- <div class="control">
                 <input class="input" name="name" id="name" type="text" placeholder="Name"
                     value="{{ old('name') ? old('name') : $order->name }}">
-            </div> --}}
-        </div>
+        </div> --}}
+    </div>
     </div>
 
     <div class="columns">
@@ -120,10 +134,22 @@
         </div>
     </div>
 
+    <div class="content">
+        <h3>Order Items</h3>
+        <table>
+            @foreach ($cart as $item)
+            <tr>
+                <td>{{ $item->qty }} x {{ $item->name }} {{ $item->qty }}</td>
+                <td class="has-text-right"> ${{ $item->subtotal }}</td>
+            </tr>
+            @endforeach
+            <tr>
+                <td></td>
+                <td class="has-text-right"><strong>${{ $order->total}}</strong></td>
+            </tr>
+        </table>
+    </div>
 
-    {"id":1,"customer_id":null,"user_id":null,"order_status_id":1,"address_id":1,"email":"test@example.com","name":"Test
-    Buyer","address":"1 Main St","line2":null,"city":"Melton
-    South","state":"Vic","postcode":"3338","country":null,"phone":"03 7010 1234","cart":"
 
     <div class="field">
         <label class="label">Name</label>
@@ -132,13 +158,13 @@
         </div>
     </div>
 
-    <button class="button is-primary">Submit</button>
+    <button class="button is-primary">Update Order</button>
     </form>
 
 
     </div>
 
-    {{ $order }}
+
 
 </section>
 

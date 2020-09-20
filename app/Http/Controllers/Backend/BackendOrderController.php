@@ -6,6 +6,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
+use App\Models\OrderStatus;
 
 class BackendOrderController extends Controller
 {
@@ -65,7 +66,9 @@ class BackendOrderController extends Controller
      */
     public function edit(Order $order)
     {
-        return view('backend.order.index', compact(['order']));
+        $cart = json_decode($order->cart);
+        $order_statuses = OrderStatus::all();
+        return view('backend.order.edit', compact(['cart','order','order_statuses']));
     }
 
     /**
@@ -75,9 +78,13 @@ class BackendOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Order $order)
     {
-        //
+        // validate
+
+        // update datat
+
+        return view('backend.order.edit', compact('order'));
     }
 
     /**

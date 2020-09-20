@@ -16,13 +16,13 @@
     <div class="tile is-ancestor has-text-centered">
         <div class="tile is-parent">
             <article class="tile is-child box">
-            <p class="title">{{ $orders->count() }}</p>
+                <p class="title">{{ $orders->count() }}</p>
                 <p class="subtitle">Orders</p>
             </article>
         </div>
         <div class="tile is-parent">
             <article class="tile is-child box">
-            <p class="title">{{ $openOrders->count() }}</p>
+                <p class="title">{{ $openOrders->count() }}</p>
                 <p class="subtitle">Open Orders</p>
             </article>
         </div>
@@ -71,7 +71,8 @@
                 <td>{{ $order->name }}</td>
                 <td>{{ $order->address }}, {{ $order->city }}, {{ $order->state }} {{ $order->postcode }}</td>
                 <td>{{ $order->order_status->title }}</td>
-                <td><a href="" class="button is-primary is-small">action</a></td>
+                <td><a href="{{ route('backend.orders.edit', $order->id ) }}"
+                        class="button is-primary is-small">edit</a></td>
             </tr>
             @endforeach
         </table>

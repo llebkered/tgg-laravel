@@ -88,10 +88,12 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
     Route::get('/', [BackendController::class, 'index'])->name('backend.index');
 
     Route::get('/orders', [BackendOrderController::class, 'index'])->name('backend.orders');
-    Route::get('/orders/{order}', [BackendOrderController::class, 'show'])->name('backend.orders.show');
+    Route::get('/orders/{order}', [BackendOrderController::class, 'edit'])->name('backend.orders.edit');
+    Route::post('/orders/{order}', [BackendOrderController::class, 'update'])->name('backend.orders.update');
 
     Route::get('/pages', [BackendPageController::class, 'index'])->name('backend.pages');
-    Route::get('/pages/{page}', [BackendPageController::class, 'show'])->name('backend.pages.show');
+    Route::get('/pages/{page}', [BackendPageController::class, 'edit'])->name('backend.pages.edit');
+    Route::post('/pages/{page}', [BackendPageController::class, 'update'])->name('backend.pages.update');
 
     Route::get('/plants', [BackendPlantController::class, 'index'])->name('backend.plants');
     Route::get('/products', [BackendProductController::class, 'index'])->name('backend.products');

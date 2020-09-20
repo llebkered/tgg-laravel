@@ -29,7 +29,7 @@ class OrderResource extends JsonResource
             'state' => $this->state,
             'country' => $this->country,
             'phone' => $this->phone,
-            'cart' => (array)json_decode($this->cart),
+            // 'cart' => $this->cart, //(array)json_decode($this->cart),
             'description' => $this->description,
             'comments' => $this->comments,
             'tax' => $this->tax,

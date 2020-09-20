@@ -32,7 +32,8 @@
                 <td>{{ $order->name }}</td>
                 <td>{{ $order->address }}, {{ $order->city }}, {{ $order->state }} {{ $order->postcode }}</td>
                 <td>{{ $order->order_status->title }}</td>
-                <td><a href="" class="button is-primary is-outlined is-small">action</a></td>
+                <td><a href="{{ route('backend.orders.edit', $order->id ) }}"
+                    class="button is-primary is-small">edit</a></td>
             </tr>
             @endforeach
         </table>
