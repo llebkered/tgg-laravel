@@ -27,6 +27,6 @@ class AdminAccessMiddleware
             return redirect('/');
         }
 
-        return redirect('/login');
+        return redirect('/backend/login');
     }
 }

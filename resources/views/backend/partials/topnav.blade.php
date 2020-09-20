@@ -32,15 +32,13 @@
                     Users
                 </a>
             </div>
-
+            @auth
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link">
                             {{ Auth::user()->name }}
-
                         </a>
-
                         <div class="navbar-dropdown">
                             <a href="/admin" class="navbar-item">Voyager Admin</a>
                             <hr class="navbar-divider">
@@ -51,7 +49,7 @@
                         </div>
                     </div>
                 </div>
-
+                @endauth
         </div>
     </div>
 </nav>

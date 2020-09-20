@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PaulowniaController;
 use App\Http\Controllers\Backend\BackendController;
+use App\Http\Controllers\Backend\BackendAuthController;
 use App\Http\Controllers\Backend\BackendPageController;
 use App\Http\Controllers\Backend\BackendUserController;
 use App\Http\Controllers\Backend\BackendOrderController;
@@ -83,6 +84,8 @@ Route::prefix('checkout')->group(function () {
 
 
 // Backend dashboard
+Route::get('/backend/login', [BackendAuthController::class, 'index'])->name('backend.login');
+Route::post('/backend/login', [BackendAuthController::class, 'login']);
 // middleware('App\Http\Middleware\AdminAccessMiddleware') ['auth:sanctum', 'verified']
 Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function () {
     Route::get('/', [BackendController::class, 'index'])->name('backend.index');
