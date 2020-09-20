@@ -19,8 +19,6 @@ class BackendAuthController extends Controller
 
     public function login(Request $request)
     {
-        // dd($request);
-
         // validate
         $request->validate([
             'email' => 'email|required',
