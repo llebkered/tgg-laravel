@@ -50,16 +50,15 @@
     <div class="container">
         <div class="columns has-background-light mb-6">
             <div class="column is-3">
-                <form action="{{ route('backend.orders.sendshippedemail', $order->id) }}" method="POST">
-                    @csrf
-                    <button class="button is-primary is-outlined">Send Order Shipped Email</button>
-                    <form>
+
+            <a href="{{ route('backend.orders.sendshippedemail', $order->id)}}" class="button is-primary is-outlined">Send Order Shipped Email</a>
+
             </div>
         </div>
     </div>
 
     <div class="container">
-        <form action="" method="POST">
+        <form action="{{ route('backend.orders.update', $order->id) }}" method="POST">
             @csrf
 
             <div class="columns">
