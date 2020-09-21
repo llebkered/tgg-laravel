@@ -81,8 +81,6 @@ Route::prefix('checkout')->group(function () {
 });
 
 
-
-
 // Backend dashboard
 Route::get('/backend/login', [BackendAuthController::class, 'index'])->name('backend.login');
 Route::post('/backend/login', [BackendAuthController::class, 'login']);

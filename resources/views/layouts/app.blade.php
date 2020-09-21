@@ -30,6 +30,11 @@
 
         @include('partials.flash-message')
 
+        @if (isset($slot))
+        {{ $slot }}
+        @endif
+
+
         @yield('content')
 
         @include('partials.footer')
