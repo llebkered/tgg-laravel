@@ -28,7 +28,9 @@ class BackendAuthController extends Controller
         // auth
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
+        $remember_me  = ( !empty( $request->remember_me ) )? TRUE : FALSE;
+
+        if (Auth::attempt($credentials, $remember_me)) {
             // Authentication passed...
             return redirect()->intended('backend');
         }
