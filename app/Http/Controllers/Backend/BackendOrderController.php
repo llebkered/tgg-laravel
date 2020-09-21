@@ -135,12 +135,12 @@ class BackendOrderController extends Controller
         //
     }
 
-    public function sendOrderShippedEmail($order)
+    public function sendOrderShippedEmail($id)
     {
         // send order email
-        $orderDetails = $order;
+        $orderDetails = Order::find($id);
 
-        $products = json_decode($order->cart);
+        $products = json_decode($orderDetails->cart);
 
         $orderDetails->products = $products;
 
@@ -151,5 +151,6 @@ class BackendOrderController extends Controller
                 ->subject($orderDetails["subject"])
                 ->from('sales@toadgully.com.au', 'Toad Gully Growers');
         });
+        return redirect()->route('backend.orders.edit', $orderDetails->id)->with('success_message', 'Order Shipped Email has been sent.');
     }
 }
