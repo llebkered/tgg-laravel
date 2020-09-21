@@ -17,12 +17,12 @@
 
 <body>
     @include('backend.partials.topnav')
-    <div class="container">
+    <div class="container is-fluid">
         <div class="columns">
-            <div class="column is-3">
+            <div class="column is-2">
                 @include('backend.partials.sidenav')
             </div>
-            <div class="column is-9">
+            <div class="column is-10">
                 <div class="container">
                     @include('partials.flash-message')
                     @yield('content')

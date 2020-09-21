@@ -1,6 +1,6 @@
 <!-- START NAV -->
 <nav class="navbar">
-    <div class="container">
+    <div class="container is-fluid">
         <div class="navbar-brand">
             <a class="navbar-item brand-text" href="{{ route('backend.index') }}">
                 TGG Admin

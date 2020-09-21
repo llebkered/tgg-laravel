@@ -1,43 +1,22 @@
-<aside class="menu is-hidden-mobile">
-    <p class="menu-label">
-        General
+<aside class="menu">
+    <p class="menu-label mt-6">
+        Menu
     </p>
     <ul class="menu-list">
-    <li><a href="{{ route('home')}}">Exit to website</a></li>
-        <li><a class="is-active">Dashboard</a></li>
-        <li><a>Customers</a></li>
-        <li><a>Other</a></li>
+        <li><a href="{{ route('home')}}">Go to home page</a></li>
+    </ul>
+    <p class="menu-label">
+        Admin
+    </p>
+    <ul class="menu-list">
+        <li><a href="{{ route('backend.pages') }}">Pages</a></li>
+        <li><a href="{{ route('backend.plants') }}"> Plants </a></li>
+        <a href="{{ route('backend.products') }}">Products</a></li>
+        <li><a href="{{ route('backend.orders') }}">Orders</a></li>
+        <li><a href="{{ route('backend.users') }}">Users</a></li>
     </ul>
     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="navbar-item">
         {{ csrf_field() }}
         <button class="button is-danger is-inverted">Log Out</button>
     </form>
-    <p class="menu-label">
-        Administration
-    </p>
-    <ul class="menu-list">
-        <li><a>Team Settings</a></li>
-        <li>
-            <a>Manage Your Team</a>
-            <ul>
-                <li><a>Members</a></li>
-                <li><a>Plugins</a></li>
-                <li><a>Add a member</a></li>
-                <li><a>Remove a member</a></li>
-            </ul>
-        </li>
-        <li><a>Invitations</a></li>
-        <li><a>Cloud Storage Environment Settings</a></li>
-        <li><a>Authentication</a></li>
-        <li><a>Payments</a></li>
-    </ul>
-    <p class="menu-label">
-        Transactions
-    </p>
-    <ul class="menu-list">
-        <li><a>Payments</a></li>
-        <li><a>Transfers</a></li>
-        <li><a>Balance</a></li>
-        <li><a>Reports</a></li>
-    </ul>
 </aside>
