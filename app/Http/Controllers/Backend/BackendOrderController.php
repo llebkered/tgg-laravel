@@ -18,9 +18,11 @@ class BackendOrderController extends Controller
     public function index()
     {
         $orders = Order::all();
-        $openOrders = Order::whereIn('order_status_id', [2,3,4])->get();
+        $openOrders = Order::whereIn('order_status_id', [2, 3, 4])->get();
 
-        return view('backend.order.index', compact(['orders', 'openOrders']));
+        $order_statuses = OrderStatus::all();
+
+        return view('backend.order.index', compact(['orders', 'openOrders', 'order_statuses']));
     }
 
     /**
@@ -66,9 +68,17 @@ class BackendOrderController extends Controller
      */
     public function edit(Order $order)
     {
+        $states = [
+            'ACT' => 'ACT',
+            'NSW' => 'New South Wales',
+            'NT' => 'Northern Territory',
+            'SA' => 'South Australia',
+            'Qld' => 'Queensland',
+            'Vic' => 'Victoria'
+        ];
         $cart = json_decode($order->cart);
         $order_statuses = OrderStatus::all();
-        return view('backend.order.edit', compact(['cart','order','order_statuses']));
+        return view('backend.order.edit', compact(['cart', 'order', 'order_statuses', 'states']));
     }
 
     /**
@@ -78,13 +88,40 @@ class BackendOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Order $order)
+    public function update(Order $order, Request $request)
     {
+        // $cart = json_decode($order->cart);
+        // $order_statuses = OrderStatus::all();
+
         // validate
 
-        // update datat
 
-        return view('backend.order.edit', compact('order'));
+        // update data
+
+        $order->update($request->only(
+            [
+                'order_status_id',
+                // 'address_id',
+                'name',
+                'address',
+                'line2',
+                'city',
+                'state',
+                'postcode',
+                'country',
+                'phone',
+                // 'cart',
+                // 'description',
+                'comments',
+                // 'tax',
+                // 'gst',
+                // 'total'
+            ]
+        ));
+        // $order->save();
+
+
+        return redirect()->route('backend.orders.edit', $order->id)->with('success_message', 'Order has been updated.');
     }
 
     /**
