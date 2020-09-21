@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\Order;
+use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Resources\OrderResource;
-use App\Models\OrderStatus;
 
 class BackendOrderController extends Controller
 {
@@ -90,10 +91,6 @@ class BackendOrderController extends Controller
      */
     public function update(Order $order, Request $request)
     {
-        // $cart = json_decode($order->cart);
-        // $order_statuses = OrderStatus::all();
-
-        // validate
 
 
         // update data
@@ -118,8 +115,11 @@ class BackendOrderController extends Controller
                 // 'total'
             ]
         ));
-        // $order->save();
 
+        // send order shipped email
+        if ($order->order_status_id == 4) {
+            $this->sendOrderShippedEmail($order);
+        }
 
         return redirect()->route('backend.orders.edit', $order->id)->with('success_message', 'Order has been updated.');
     }
@@ -133,5 +133,25 @@ class BackendOrderController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function sendOrderShippedEmail($order)
+    {
+        // send order email
+        $orderDetails = $order;
+
+        $products = json_decode($order->cart);
+
+        $orderDetails->products = $products;
+
+        $orderDetails['subject'] = "Order from Toad Gully Growers has been shipped";
+
+
+
+        Mail::send('emails.orders.shipped', compact('orderDetails'), function ($message) use ($orderDetails) {
+            $message->to($orderDetails["email"], $orderDetails["name"])
+                ->subject($orderDetails["subject"])
+                ->from('sales@toadgully.com.au', 'Toad Gully Growers');
+        });
     }
 }
