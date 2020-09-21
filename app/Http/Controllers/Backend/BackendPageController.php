@@ -49,7 +49,7 @@ class BackendPageController extends Controller
      */
     public function show(Page $page)
     {
-        return view('backend.page.show', compact('page'));
+        return view('backend.page.edit', compact('page'));
     }
 
     /**
@@ -58,9 +58,11 @@ class BackendPageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit( Page $page )
     {
-        //
+
+
+        return view('backend.page.edit', compact('page'));
     }
 
     /**

@@ -10,7 +10,8 @@
 // Bulma
 @import 'abstracts/variables',
         'abstracts/bulma-overrides';
-@import '~bulma/bulma';
+@import '~bulma/bulma',
+        '@creativebulma/bulma-tooltip';
 
 // Abstracts
 @import

@@ -19432,10 +19432,10 @@ document.addEventListener("DOMContentLoaded", function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\VIP\sites\laravel8\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! C:\Users\VIP\sites\laravel8\resources\js\bulma.js */"./resources/js/bulma.js");
-__webpack_require__(/*! C:\Users\VIP\sites\laravel8\resources\js\menu.js */"./resources/js/menu.js");
-module.exports = __webpack_require__(/*! C:\Users\VIP\sites\laravel8\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\VIP\sites\toadgully.com.au\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! C:\Users\VIP\sites\toadgully.com.au\resources\js\bulma.js */"./resources/js/bulma.js");
+__webpack_require__(/*! C:\Users\VIP\sites\toadgully.com.au\resources\js\menu.js */"./resources/js/menu.js");
+module.exports = __webpack_require__(/*! C:\Users\VIP\sites\toadgully.com.au\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
