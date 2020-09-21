@@ -50,6 +50,14 @@
             </div>
     </div>
 
+    <div class="container">
+        <div class="columns has-background-light mb-6">
+            <div class="column is-3">
+                <a href="" class="button is-primary is-outlined">Send Order Shipped Email</a>
+            </div>
+        </div>
+    </div>
+
     <div class="columns">
         <div class="column is-2"><label class="label" for="order_status_id">Order Status</label></div>
         <div class="column">
@@ -169,11 +177,7 @@
     <button class="button is-primary">Update Order</button>
     </form>
 
-
     </div>
-
-
-
 </section>
 
 

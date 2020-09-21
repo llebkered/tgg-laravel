@@ -117,9 +117,9 @@ class BackendOrderController extends Controller
         ));
 
         // send order shipped email
-        if ($order->order_status_id == 4) {
-            $this->sendOrderShippedEmail($order);
-        }
+        // if ($order->order_status_id == 4) {
+        //     $this->sendOrderShippedEmail($order);
+        // }
 
         return redirect()->route('backend.orders.edit', $order->id)->with('success_message', 'Order has been updated.');
     }
@@ -145,8 +145,6 @@ class BackendOrderController extends Controller
         $orderDetails->products = $products;
 
         $orderDetails['subject'] = "Order from Toad Gully Growers has been shipped";
-
-
 
         Mail::send('emails.orders.shipped', compact('orderDetails'), function ($message) use ($orderDetails) {
             $message->to($orderDetails["email"], $orderDetails["name"])

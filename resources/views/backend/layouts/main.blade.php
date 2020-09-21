@@ -24,6 +24,7 @@
             </div>
             <div class="column is-9">
                 <div class="container">
+                    @include('partials.flash-message')
                     @yield('content')
                 </div>
             </div>
