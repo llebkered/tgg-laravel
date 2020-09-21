@@ -29,7 +29,7 @@
                 <td>{{ $user->id }}</td>
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
-                <td><a href="" class="button is-primary is-small is-outlined">Action</a></td>
+                <td><a href="" class="button is-link is-small is-outlined">Action</a></td>
             </tr>
 
             @endforeach

@@ -29,7 +29,7 @@
                 <td>{{ $plant->id }}</td>
                 <td>{{ $plant->title }}</td>
                 <td>{{ $plant->published }}</td>
-                <td><a href="" class="button is-primary is-small is-outlined">Action</a></td>
+                <td><a href="" class="button is-link is-small is-outlined">Action</a></td>
             </tr>
 
             @endforeach

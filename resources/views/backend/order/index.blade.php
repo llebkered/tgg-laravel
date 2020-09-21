@@ -55,27 +55,7 @@
 <section class="mb-6">
     <div class="panel content">
         <h2>Orders</h2>
-        <table class="table">
-            <thead>
-                <th>Id</th>
-                <th>Date</th>
-                <th>Customer</th>
-                <th>Address</th>
-                <th>Status</th>
-                <th></th>
-            </thead>
-            @foreach ($orders as $order)
-            <tr>
-                <td>{{ $order->id }}</td>
-                <td>{{ $order->created_at }}</td>
-                <td>{{ $order->name }}</td>
-                <td>{{ $order->address }}, {{ $order->city }}, {{ $order->state }} {{ $order->postcode }}</td>
-                <td>{{ $order->order_status->title }}</td>
-                <td><a href="{{ route('backend.orders.edit', $order->id ) }}"
-                        class="button is-primary is-small">edit</a></td>
-            </tr>
-            @endforeach
-        </table>
+        @include('backend.partials.orders.list')
     </div>
 </section>
 
