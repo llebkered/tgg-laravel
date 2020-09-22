@@ -95,7 +95,7 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
 
     Route::get('/pages', [BackendPageController::class, 'index'])->name('backend.pages');
     Route::get('/pages/{page}/edit', [BackendPageController::class, 'edit'])->name('backend.pages.edit');
-    Route::post('/pages/{page}', [BackendPageController::class, 'update'])->name('backend.pages.update');
+    Route::post('/pages/{page}/edit', [BackendPageController::class, 'update'])->name('backend.pages.update');
 
     Route::get('/plants', [BackendPlantController::class, 'index'])->name('backend.plants');
     Route::get('/products', [BackendProductController::class, 'index'])->name('backend.products');

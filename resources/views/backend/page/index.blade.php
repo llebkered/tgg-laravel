@@ -29,7 +29,7 @@
                 <td>{{ $page->id }}</td>
                 <td>{{ $page->title }}</td>
                 <td>{{ $page->published }}</td>
-            <td><a href="{{ route('backend.pages.edit', $page->id) }}" class="button is-link is-small is-outlined">Action</a></td>
+            <td><a href="{{ route('backend.pages.edit', $page->id) }}" class="button is-link is-small is-outlined">edit</a></td>
             </tr>
 
             @endforeach

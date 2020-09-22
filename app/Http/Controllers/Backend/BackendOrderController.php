@@ -121,7 +121,7 @@ class BackendOrderController extends Controller
         //     $this->sendOrderShippedEmail($order);
         // }
 
-        return redirect()->route('backend.orders.edit', $order->id)->with('success_message', 'Order has been updated.');
+        return redirect()->back()->with('success_message', 'Order has been updated.');
     }
 
     /**

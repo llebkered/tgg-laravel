@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Models\Page;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 
 class BackendPageController extends Controller
 {
@@ -58,7 +60,7 @@ class BackendPageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit( Page $page )
+    public function edit(Page $page)
     {
 
 
@@ -74,7 +76,40 @@ class BackendPageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //https://scotch.io/tutorials/understanding-and-working-with-files-in-laravel
+
+        $page = Page::find($id);
+
+        if ($request->file('image')) {
+
+            // validate the uploaded file
+            $validation = $request->validate([
+                'image' => 'required|file|image|mimes:jpeg,png,gif,webp|max:2048'
+                // for multiple file uploads
+                // 'photo.*' => 'required|file|image|mimes:jpeg,png,gif,webp|max:2048'
+            ]);
+
+            // remove old image
+            $oldfile = $page->image;
+            Storage::delete($oldfile);
+            // add new image
+            $file      = $validation['image']; // get the validated file
+
+            // how to resize
+            // https://codebriefly.com/laravel-image-processing-intervention-image-package/
+            // http://www.expertphp.in/article/php-laravel-5-intervention-image-upload-and-resize-tutorial
+            // dd($file->getClientOriginalName());
+            // $extension = $file->getClientOriginalExtension();
+            // $filename  = 'profile-photo-' . time() . '.' . $extension;
+            // $path      = $file->storeAs('testing', $filename);
+            $path = $request->file('image')->store('testing');
+            // Image::make(storage_path($filename))->resize(300, 200);
+            $page->image = $path;
+        }
+
+        $page->update();
+
+        return redirect()->back()->with('success_message', 'Page has been updated.');
     }
 
     /**
