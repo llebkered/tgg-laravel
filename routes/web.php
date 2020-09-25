@@ -114,6 +114,10 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
 // });
 
 
+Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+});
+
 
 //Clear configurations:
 Route::get('/config-clear', function() {
