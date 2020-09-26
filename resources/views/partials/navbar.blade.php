@@ -53,6 +53,7 @@
 
                     <div class="navbar-dropdown">
                         <a href="/admin" class="navbar-item">Voyager Admin</a>
+                        <a href="{{ route('backend.index') }}" class="navbar-item">TGG Dashboard</a>
                         <hr class="navbar-divider">
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="navbar-item">
                             {{ csrf_field() }}
