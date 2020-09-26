@@ -20,8 +20,7 @@
 </div>
 </div>
 </div> --}}
-{{--
-{!! $page['body'] !!} --}}
+{!! $page['body'] !!}
 
 <div class="hero is-medium home__hero home__green">
     <div class="hero-body">
