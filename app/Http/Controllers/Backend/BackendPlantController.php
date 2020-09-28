@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Models\Plant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\PlantCategory;
 
 class BackendPlantController extends Controller
 {
@@ -58,9 +59,11 @@ class BackendPlantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Plant $plant)
     {
-        //
+        $plant_categories = PlantCategory::where('published','=','1')->get();
+
+        return view('backend.plant.edit', compact('plant','plant_categories'));
     }
 
     /**

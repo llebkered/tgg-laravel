@@ -16,7 +16,7 @@
     <div>
         <a href="" class="button is-primary">Add new plant</a>
     </div>
-    <table class="table">
+    <table class="table is-hoverable">
         <thead>
             <th>ID</th>
             <th>Title</th>
@@ -27,9 +27,9 @@
             @foreach ($plants as $plant)
             <tr>
                 <td>{{ $plant->id }}</td>
-                <td>{{ $plant->title }}</td>
+                <td>{{ $plant->title }} (<em>{{ $plant->botanical_name }}</em>)</td>
                 <td>{{ $plant->published }}</td>
-                <td><a href="" class="button is-link is-small is-outlined">Action</a></td>
+            <td><a href="{{ route('backend.plants.edit', $plant->id)}}" class="button is-link is-small is-outlined">edit</a></td>
             </tr>
 
             @endforeach

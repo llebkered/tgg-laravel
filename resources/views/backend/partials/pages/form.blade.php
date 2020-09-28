@@ -1,5 +1,3 @@
-
-
 <div class="content mb-6">
     <div class="field">
         <label class="label" for="title">Title</label>
@@ -21,15 +19,15 @@
 <div class="content mb-6">
     <label for="body">Content</label>
     <textarea name="body" id="" class="tinymce textarea" cols="30" rows="10">
-    {{ $page->body }}
-</textarea>
+    {{ old('body') ? old('body') : $page->body }}
+    </textarea>
 </div>
 
 <div class="content mb-6">
     <label for="excerpt">Excerpt</label>
     <textarea name="excerpt" id="" class="tinymce textarea" cols="30" rows="2">
-    {{ $page->excerpt }}
-</textarea>
+    {{ old('excerpt') ? old('excerpt') : $page->excerpt }}
+    </textarea>
 </div>
 
 <div class="content mb-6">
@@ -43,7 +41,7 @@
     <div class="field">
         <label class="label" for="meta_keywords">Meta Keywords</label>
         <div class="control">
-            <input class="input" name="tmeta_keywords" type="meta_keywords" placeholder="meta keywords"
+            <input class="input" name="meta_keywords" type="meta_keywords" placeholder="meta keywords"
                 value="{{ old('meta_keywords') ? old('meta_keywords') : $page->meta_keywords }}">
         </div>
     </div>
@@ -58,8 +56,7 @@
             Active
         </label>
         <label class="radio">
-            <input type="radio" name="status" value="INACTIVE"
-                {{ ($page->status =='INACTIVE') ? 'checked' :''}}>
+            <input type="radio" name="status" value="INACTIVE" {{ ($page->status =='INACTIVE') ? 'checked' :''}}>
             Inactive
         </label>
     </div>
@@ -84,3 +81,4 @@
             </div>
         </div>
     </div>
+</div>

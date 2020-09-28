@@ -31,7 +31,6 @@
                 <img src="{{ asset( 'storage/' . $page->image) }}" alt="">
                 @endif
             </div>
-
         </div>
 
         <div class="content mb-6">
