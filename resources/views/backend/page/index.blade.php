@@ -14,7 +14,7 @@
 
 <section class="panel mb-6">
     <div>
-        <a href="" class="button is-primary">Add new page</a>
+    <a href="{{ route('backend.pages.create') }}" class="button is-primary">Add new page</a>
     </div>
     <table class="table">
         <thead>

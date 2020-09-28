@@ -6,6 +6,7 @@ use App\Models\Page;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,7 +31,19 @@ class BackendPageController extends Controller
      */
     public function create()
     {
-        //
+        // $page = [
+        //         'title' => '',
+        //         'slug' => '',
+        //         'excerpt' => '',
+        //         'body' => '',
+        //         'image' => '',
+        //         'meta_description' => '',
+        //         'meta_keywords' => '',
+        //         'status' => ''
+        //     ];
+        $page = new Page;
+
+        return view('backend.page.create', compact('page'));
     }
 
     /**
@@ -41,7 +54,66 @@ class BackendPageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        // $page = [
+        //         'title' => '',
+        //         'slug' => '',
+        //         'excerpt' => '',
+        //         'body' => '',
+        //         'image' => '',
+        //         'meta_description' => '',
+        //         'meta_keywords' => '',
+        //         'status' => ''
+        //     ];
+
+        $request->validate([
+            'title' => 'required',
+            'slug' => 'required|alpha_dash|unique:pages,slug'
+            // 'excerpt' => '',
+            // 'body' => '',
+            // 'image' => '',
+            // 'meta_description' => '',
+            // 'meta_keywords' => '',
+            // 'status' => ''
+        ]);
+
+        // $page = new Page;
+
+        // $page->author_id = Auth::id();
+
+        // dd($request->only(
+        //     [
+        //         'title',
+        //         'slug',
+        //         'excerpt',
+        //         'body',
+        //         'image',
+        //         'meta_description',
+        //         'meta_keywords',
+        //         'status'
+        //     ]
+        // ));
+
+        $page = $request->only(
+            [
+                'title',
+                'slug',
+                'excerpt',
+                'body',
+                'image',
+                'meta_description',
+                'meta_keywords',
+                'status'
+            ]
+        );
+        $page['author_id'] = Auth::id();
+
+        // dd($page);
+
+        Page::create($page);
+
+        return redirect()->route('backend.pages')
+            ->with('success', 'Page has been created successfully.');
     }
 
     /**
@@ -108,12 +180,25 @@ class BackendPageController extends Controller
                 })
                 ->encode('jpg', 80);
             // stor filename and image object
-            Storage::disk('public')->put('testing/'. $basename . '-400.jpg', $photo);
+            Storage::disk('public')->put('testing/' . $basename . '-400.jpg', $photo);
             // add new image path to page
             $page->image = $path;
         }
 
-        $page->update();
+        $page->update($request->only(
+            [
+                // 'author_id',
+                'title',
+                'slug',
+                'excerpt',
+                'body',
+                'image',
+                'meta_description',
+                'meta_keywords',
+                'status'
+            ]
+        ));
+
 
         return redirect()->back()->with('success_message', 'Page has been updated.');
     }

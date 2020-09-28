@@ -94,6 +94,8 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
     Route::get('/orders/{order}/sendshippedemail', [BackendOrderController::class, 'sendOrderShippedEmail'])->name('backend.orders.sendshippedemail');
 
     Route::get('/pages', [BackendPageController::class, 'index'])->name('backend.pages');
+    Route::get('/pages/create', [BackendPageController::class, 'create'])->name('backend.pages.create');
+    Route::post('/pages', [BackendPageController::class, 'store'])->name('backend.pages.store');
     Route::get('/pages/{page}/edit', [BackendPageController::class, 'edit'])->name('backend.pages.edit');
     Route::post('/pages/{page}/edit', [BackendPageController::class, 'update'])->name('backend.pages.update');
 
