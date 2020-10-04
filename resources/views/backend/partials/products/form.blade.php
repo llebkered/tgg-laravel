@@ -31,6 +31,11 @@
             <input class="input" name="title" type="text" placeholder="Title"
                 value="{{ old('title') ? old('title') : $product['title'] }}">
         </div>
+        @error('title')
+        <div class="notification is-danger is-light">
+            <p>{{ $message }}</p>
+        </div>
+        @enderror
     </div>
 
     <div class="field">
@@ -39,14 +44,24 @@
             <input class="input" name="slug" type="text" placeholder="slug"
                 value="{{ old('slug') ? old('slug') : $product->slug }}">
         </div>
+        @error('slug')
+        <div class="notification is-danger is-light">
+            <p>{{ $message }}</p>
+        </div>
+        @enderror
     </div>
 
     <div class="field">
-        <label class="label" for="slug">Product Code</label>
+        <label class="label" for="code">Product Code</label>
         <div class="control">
-            <input class="input" name="slug" type="text" placeholder="product code"
+            <input class="input" name="code" type="text" placeholder="product code"
                 value="{{ old('code') ? old('code') : $product->code }}">
         </div>
+        @error('code')
+        <div class="notification is-danger is-light">
+            <p>{{ $message }}</p>
+        </div>
+        @enderror
     </div>
 </div>
 
@@ -55,6 +70,11 @@
     <textarea name="description" id="" class="tinymce textarea" cols="30" rows="10">
     {{ old('description') ? old('description') : $product->description }}
     </textarea>
+    @error('description')
+    <div class="notification is-danger is-light">
+        <p>{{ $message }}</p>
+    </div>
+    @enderror
 </div>
 
 

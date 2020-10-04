@@ -5,6 +5,11 @@
             <input class="input" name="title" type="text" placeholder="Title"
                 value="{{ old('title') ? old('title') : $page['title'] }}">
         </div>
+        @error('title')
+        <div class="notification is-danger is-light">
+            <p>{{ $message }}</p>
+        </div>
+        @enderror
     </div>
 
     <div class="field">
@@ -14,6 +19,11 @@
                 value="{{ old('slug') ? old('slug') : $page->slug }}">
         </div>
     </div>
+    @error('slug')
+    <div class="notification is-danger is-light">
+        <p>{{ $message }}</p>
+    </div>
+    @enderror
 </div>
 
 <div class="content mb-6">
@@ -21,6 +31,11 @@
     <textarea name="body" id="" class="tinymce textarea" cols="30" rows="10">
     {{ old('body') ? old('body') : $page->body }}
     </textarea>
+    @error('body')
+    <div class="notification is-danger is-light">
+        <p>{{ $message }}</p>
+    </div>
+    @enderror
 </div>
 
 <div class="content mb-6">
@@ -28,6 +43,11 @@
     <textarea name="excerpt" id="" class="tinymce textarea" cols="30" rows="2">
     {{ old('excerpt') ? old('excerpt') : $page->excerpt }}
     </textarea>
+    @error('excerpt')
+    <div class="notification is-danger is-light">
+        <p>{{ $message }}</p>
+    </div>
+    @enderror
 </div>
 
 <div class="content mb-6">
@@ -37,6 +57,11 @@
             <input class="input" name="meta_description" type="text" placeholder="meta description"
                 value="{{ old('meta_description') ? old('meta_description') : $page->meta_description }}">
         </div>
+        @error('meta_description')
+        <div class="notification is-danger is-light">
+            <p>{{ $message }}</p>
+        </div>
+        @enderror
     </div>
     <div class="field">
         <label class="label" for="meta_keywords">Meta Keywords</label>
@@ -44,6 +69,11 @@
             <input class="input" name="meta_keywords" type="meta_keywords" placeholder="meta keywords"
                 value="{{ old('meta_keywords') ? old('meta_keywords') : $page->meta_keywords }}">
         </div>
+        @error('meta_keywords')
+        <div class="notification is-danger is-light">
+            <p>{{ $message }}</p>
+        </div>
+        @enderror
     </div>
 </div>
 
@@ -81,4 +111,9 @@
             </div>
         </div>
     </div>
+    @error('image')
+    <div class="notification is-danger is-light">
+        <p>{{ $message }}</p>
+    </div>
+    @enderror
 </div>
