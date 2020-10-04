@@ -27,7 +27,9 @@ class BackendProductController extends Controller
      */
     public function create()
     {
-        //
+        $product = new Product;
+
+        return view('backend.product.create', compact('product'));
     }
 
     /**
@@ -38,7 +40,17 @@ class BackendProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $product = $request->validate([
+            'title' => 'required',
+            'slug' => 'required|alpha_dash|unique:products,slug',
+            'description' => 'required'
+        ]);
+
+        $newProduct = Product::create($product);
+
+        return redirect()->route('backend.products.edit', $newProduct->id)
+            ->with('success', 'Product has been created successfully. You will need to add product variations for prices.');
     }
 
     /**
@@ -58,9 +70,11 @@ class BackendProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Product $product)
     {
-        //
+
+
+        return view('backend.product.edit', compact('product'));
     }
 
     /**
