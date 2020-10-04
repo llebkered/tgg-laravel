@@ -19414,6 +19414,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /***/ }),
 
+/***/ "./resources/sass/admin.scss":
+/*!***********************************!*\
+  !*** ./resources/sass/admin.scss ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "./resources/sass/app.scss":
 /*!*********************************!*\
   !*** ./resources/sass/app.scss ***!
@@ -19426,16 +19437,17 @@ document.addEventListener("DOMContentLoaded", function () {
 /***/ }),
 
 /***/ 0:
-/*!************************************************************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/js/bulma.js ./resources/js/menu.js ./resources/sass/app.scss ***!
-  \************************************************************************************************************/
+/*!****************************************************************************************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/js/bulma.js ./resources/js/menu.js ./resources/sass/app.scss ./resources/sass/admin.scss ***!
+  \****************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! C:\Users\VIP\sites\toadgully.com.au\resources\js\app.js */"./resources/js/app.js");
 __webpack_require__(/*! C:\Users\VIP\sites\toadgully.com.au\resources\js\bulma.js */"./resources/js/bulma.js");
 __webpack_require__(/*! C:\Users\VIP\sites\toadgully.com.au\resources\js\menu.js */"./resources/js/menu.js");
-module.exports = __webpack_require__(/*! C:\Users\VIP\sites\toadgully.com.au\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\VIP\sites\toadgully.com.au\resources\sass\app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! C:\Users\VIP\sites\toadgully.com.au\resources\sass\admin.scss */"./resources/sass/admin.scss");
 
 
 /***/ })

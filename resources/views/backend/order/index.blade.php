@@ -26,18 +26,6 @@
                 <p class="subtitle">Open Orders</p>
             </article>
         </div>
-        <div class="tile is-parent">
-            <article class="tile is-child box">
-                <p class="title">3.4k</p>
-                <p class="subtitle">Open Orders</p>
-            </article>
-        </div>
-        <div class="tile is-parent">
-            <article class="tile is-child box">
-                <p class="title">19</p>
-                <p class="subtitle">Exceptions</p>
-            </article>
-        </div>
     </div>
 </section>
 

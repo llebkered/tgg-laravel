@@ -18,9 +18,9 @@ class BackendController extends Controller
     {
         $page = [];
         $orders = Order::all();
+        $openOrders = Order::whereIn('order_status_id', [1, 2, 3])->get();
 
-
-        return view('backend.index', compact(['orders', 'page']));
+        return view('backend.index', compact(['orders', 'openOrders', 'page']));
     }
 
     /**

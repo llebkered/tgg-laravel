@@ -19,7 +19,7 @@ class BackendOrderController extends Controller
     public function index()
     {
         $orders = Order::all();
-        $openOrders = Order::whereIn('order_status_id', [2, 3, 4])->get();
+        $openOrders = Order::whereIn('order_status_id', [1, 2, 3])->get();
 
         $order_statuses = OrderStatus::all();
 
