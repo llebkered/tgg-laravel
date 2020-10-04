@@ -29,7 +29,8 @@
                 <td>{{ $product->id }}</td>
                 <td>{{ $product->title }}</td>
                 <td>{{ $product->published }}</td>
-                <td><a href="" class="button is-link is-small is-outlined">Action</a></td>
+                <td><a href="{{ route('backend.products.edit', $product->id)}}"
+                        class="button is-link is-small is-outlined">edit</a></td>
             </tr>
 
             @endforeach

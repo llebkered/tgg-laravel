@@ -55,7 +55,6 @@ Route::get('/paulownia', [PaulowniaController::class, 'index'])->name('paulownia
 Route::get('/products', [ProductController::class, 'index'])->name('products');
 
 
-
 // Route::prefix('admin')->group(function () {
 //     Route::get('pages', 'Admin\PageController@index')->name('admin.pages');
 // });
@@ -88,23 +87,15 @@ Route::post('/backend/login', [BackendAuthController::class, 'login']);
 Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function () {
     Route::get('/', [BackendController::class, 'index'])->name('backend.index');
 
-    Route::get('/orders', [BackendOrderController::class, 'index'])->name('backend.orders');
-    Route::get('/orders/{order}/edit', [BackendOrderController::class, 'edit'])->name('backend.orders.edit');
-    Route::post('/orders/{order}/edit', [BackendOrderController::class, 'update'])->name('backend.orders.update');
+    Route::resource('/orders', BackendProductController::class , ['as' => 'backend', 'only' => ['index', 'edit','update']]);
     Route::get('/orders/{order}/sendshippedemail', [BackendOrderController::class, 'sendOrderShippedEmail'])->name('backend.orders.sendshippedemail');
 
-    Route::get('/pages', [BackendPageController::class, 'index'])->name('backend.pages');
-    Route::get('/pages/create', [BackendPageController::class, 'create'])->name('backend.pages.create');
-    Route::post('/pages', [BackendPageController::class, 'store'])->name('backend.pages.store');
-    Route::get('/pages/{page}/edit', [BackendPageController::class, 'edit'])->name('backend.pages.edit');
-    Route::post('/pages/{page}/edit', [BackendPageController::class, 'update'])->name('backend.pages.update');
+    Route::resource('/pages', BackendPageController::class , ['as' => 'backend', 'only' => ['index','create', 'edit', 'store', 'update']]);
 
-    Route::get('/plants', [BackendPlantController::class, 'index'])->name('backend.plants');
-    Route::get('/plants/{plant}/edit', [BackendPlantController::class, 'edit'])->name('backend.plants.edit');
-    Route::post('/plants/{plant}/edit', [BackendPlantController::class, 'update'])->name('backend.plants.update');
+    Route::resource('/plants', BackendPlantController::class , ['as' => 'backend', 'only' => ['index', 'edit','update']]);
 
+    Route::resource('/products', BackendProductController::class , ['as' => 'backend', 'only' => ['index', 'edit']]);
 
-    Route::get('/products', [BackendProductController::class, 'index'])->name('backend.products');
     Route::get('/users', [BackendUserController::class, 'index'])->name('backend.users');
 });
 

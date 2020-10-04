@@ -5,10 +5,10 @@
         </p>
     </div>
     <ul class="menu-list">
-        <li><a href="{{ route('backend.pages') }}">Pages</a></li>
-        <li><a href="{{ route('backend.plants') }}"> Plants </a></li>
-        <a href="{{ route('backend.products') }}">Products</a></li>
-        <li><a href="{{ route('backend.orders') }}">Orders</a></li>
+        <li><a href="{{ route('backend.pages.index') }}">Pages</a></li>
+        <li><a href="{{ route('backend.plants.index') }}"> Plants </a></li>
+        <li><a href="{{ route('backend.products.index') }}">Products</a></li>
+        <li><a href="{{ route('backend.orders.index') }}">Orders</a></li>
         <li><a href="{{ route('backend.users') }}">Users</a></li>
         <hr class="navbar-divider">
         <li> <a href="/admin">Voyager Admin</a></li>
