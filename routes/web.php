@@ -88,7 +88,7 @@ Route::post('/backend/login', [BackendAuthController::class, 'login']);
 Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function () {
     Route::get('/', [BackendController::class, 'index'])->name('backend.index');
 
-    Route::resource('/orders', BackendProductController::class , ['as' => 'backend', 'only' => ['index', 'edit','update']]);
+    Route::resource('/orders', BackendOrderController::class , ['as' => 'backend', 'only' => ['index', 'edit','update']]);
     Route::get('/orders/{order}/sendshippedemail', [BackendOrderController::class, 'sendOrderShippedEmail'])->name('backend.orders.sendshippedemail');
 
     Route::resource('/pages', BackendPageController::class , ['as' => 'backend', 'only' => ['index','create', 'edit', 'store', 'update']]);
