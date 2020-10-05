@@ -40,6 +40,12 @@
 
     </form>
 
+    <form class="is-pulled-right" action="{{ route('backend.products.destroy', $product->id) }}" method="POST">
+        @method('DELETE')
+        @csrf
+        <button class="button is-danger">Delete Product</button>
+    </form>
+
 </section>
 
 @endsection

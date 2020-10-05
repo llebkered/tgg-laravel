@@ -59,9 +59,9 @@ class BackendProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Product $product)
     {
-        //
+        return view('backend.product.edit', compact('product'));
     }
 
     /**
@@ -72,8 +72,6 @@ class BackendProductController extends Controller
      */
     public function edit(Product $product)
     {
-
-
         return view('backend.product.edit', compact('product'));
     }
 
@@ -86,7 +84,17 @@ class BackendProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = Product::find($id);
+
+        $data = $request->validate([
+            'title' => 'required',
+            'slug' => 'required|alpha_dash|unique:products,slug',
+            'description' => 'required'
+        ]);
+
+        $product->save($data);
+
+        return redirect()->route('backend.products.index')->with('success', 'New Product has been created.');
     }
 
     /**
@@ -97,6 +105,7 @@ class BackendProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Product::destroy($id);
+        return redirect()->route('backend.products.index')->with('success', 'Product has been deleted.');
     }
 }

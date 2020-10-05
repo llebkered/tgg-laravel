@@ -93,11 +93,13 @@ class BackendPlantController extends Controller
         $plant = Plant::find($id);
         $plant_categories = PlantCategory::where('published', '=', '1')->get();
 
-        $request->validate([
+        $data = $request->validate([
             'title' => 'required',
             'botanical_name' => 'required',
             'description' => 'required'
         ]);
+
+        $plant->update($data);
 
         return view('backend.plant.edit', compact('plant', 'plant_categories'))->with('success_message', 'Plant has been updated.');
     }

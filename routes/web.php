@@ -95,7 +95,7 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
 
     Route::resource('/plants', BackendPlantController::class , ['as' => 'backend']);
 
-    Route::resource('/products', BackendProductController::class , ['as' => 'backend', 'only' => ['index', 'create', 'edit','store']]);
+    Route::resource('/products', BackendProductController::class , ['as' => 'backend']);
 
     Route::get('/variations/create/{product}', [BackendVariationController::class, 'create'])->name('backend.variations.create');
     Route::post('/variations', [BackendVariationController::class, 'store'])->name('backend.variations.store');
