@@ -28,9 +28,12 @@
 <div class="content mb-6">
     <div class="field">
         <label class="label" for="price">Price</label>
-        <div class="control">
-            <input class="input" name="price" type="text" placeholder="Title"
+        <div class="control has-icons-left">
+            <input class="input" name="price" type="text" placeholder="42"
                 value="{{ old('price') ? old('price') : $variation['price'] }}">
+                <span class="icon is-small is-left">
+                    $
+                  </span>
         </div>
         @error('price')
         <div class="notification is-danger is-light">

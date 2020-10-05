@@ -3,7 +3,7 @@
     <h2>Variations</h2>
 <p class="mb-3"><a href="{{ route('backend.variations.create', $product->id)}}" class="button is-primary">Add new variation</a>
     </p>
-    <div class="columns">
+    <div class="columns is-multiline">
         @foreach ($product->variations as $variation)
         <div class="column">
             <div class="card">
@@ -11,7 +11,7 @@
                     <div class="content">
                         <h3>{{ $variation->title }}</h3>
                         <h4>Description</h4>
-                        <div>{{ $variation->description }}</div>
+                        <div>{!! $variation->description !!}</div>
                         <div class="my-3"><strong>Price: </strong> ${{ $variation->price }}</div>
                         <footer class="card-footer py-3">
                             <a href="{{ route('backend.variations.edit',$variation->id) }}"

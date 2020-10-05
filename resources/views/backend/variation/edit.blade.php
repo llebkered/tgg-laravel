@@ -27,7 +27,11 @@
         <div class="content mb-6">
             <button class="button is-primary" type="submit">Submit</button>
         </div>
-
+    </form>
+    <form class="is-pulled-right" action="{{ route('backend.variations.destroy', $variation->id) }}" method="POST">
+        @method('DELETE')
+        @csrf
+        <button class="button is-danger">Delete Variation</button>
     </form>
 
 </section>

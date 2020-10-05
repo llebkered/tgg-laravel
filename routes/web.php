@@ -101,6 +101,7 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
     Route::post('/variations', [BackendVariationController::class, 'store'])->name('backend.variations.store');
     Route::get('/variations/{variation}/edit', [BackendVariationController::class, 'edit'])->name('backend.variations.edit');
     Route::put('/variations/{variation}/update', [BackendVariationController::class, 'update'])->name('backend.variations.update');
+    Route::delete('/variations/{variation}', [BackendVariationController::class, 'destroy'])->name('backend.variations.destroy');
 
 
     Route::get('/users', [BackendUserController::class, 'index'])->name('backend.users');

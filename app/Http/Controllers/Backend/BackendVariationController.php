@@ -28,7 +28,7 @@ class BackendVariationController extends Controller
     {
         $variation = new Variation;
 
-        return view('backend.variation.create', compact('product','variation'));
+        return view('backend.variation.create', compact('product', 'variation'));
     }
 
     /**
@@ -39,7 +39,18 @@ class BackendVariationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $data = $request->validate([
+            'title' => 'required',
+            'price' => 'required|numeric',
+            'description' => 'required',
+            'product_id' => 'numeric'
+        ]);
+
+        Variation::create($data);
+
+        return redirect()->route('backend.products.edit', $data['product_id']);
+
     }
 
     /**
@@ -73,7 +84,17 @@ class BackendVariationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $variation = Variation::find($id);
+
+        $data = $request->validate([
+            'title' => 'required',
+            'price' => 'required|numeric',
+            'description' => 'required'
+        ]);
+
+        $variation->update($data);
+
+        return redirect()->route('backend.products.show', $variation->product->id)->with('success', 'Product vraion has been updated');
     }
 
     /**
@@ -84,6 +105,8 @@ class BackendVariationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $variation = Variation::find($id);
+        Variation::destroy($id);
+        return redirect()->route('backend.products.show', $variation->product->id)->with('success', 'Product variation has been deleted.');
     }
 }

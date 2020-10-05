@@ -21,6 +21,8 @@
     <form action="{{ route('backend.variations.store')}}" method="POST" enctype="multipart/form-data">
         @csrf
 
+        <input type="hidden" name="product_id" value="{{ $product->id }}">
+
         @include('backend.variation.form')
 
         <div class="content mb-6">
