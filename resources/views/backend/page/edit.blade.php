@@ -39,6 +39,11 @@
         </div>
 
     </form>
+    <form class="is-pulled-right" action="{{ route('backend.pages.destroy', $page->id) }}" method="POST">
+        @method('DELETE')
+        @csrf
+        <button class="button is-danger">Delete Page</button>
+    </form>
 
 </section>
 

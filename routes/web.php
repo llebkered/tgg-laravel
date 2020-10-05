@@ -91,7 +91,7 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
     Route::resource('/orders', BackendOrderController::class , ['as' => 'backend', 'only' => ['index', 'edit','update']]);
     Route::get('/orders/{order}/sendshippedemail', [BackendOrderController::class, 'sendOrderShippedEmail'])->name('backend.orders.sendshippedemail');
 
-    Route::resource('/pages', BackendPageController::class , ['as' => 'backend', 'only' => ['index','create', 'edit', 'store', 'update']]);
+    Route::resource('/pages', BackendPageController::class , ['as' => 'backend']);
 
     Route::resource('/plants', BackendPlantController::class , ['as' => 'backend']);
 
