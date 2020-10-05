@@ -1,7 +1,8 @@
 @if ( $product->id )
 <div class="box content">
     <h2>Variations</h2>
-    <p class="mb-3"><a href="" class="button is-primary">Add new variation</a></p>
+<p class="mb-3"><a href="{{ route('backend.variations.create', $product->id)}}" class="button is-primary">Add new variation</a>
+    </p>
     <div class="columns">
         @foreach ($product->variations as $variation)
         <div class="column">
@@ -13,7 +14,8 @@
                         <div>{{ $variation->description }}</div>
                         <div class="my-3"><strong>Price: </strong> ${{ $variation->price }}</div>
                         <footer class="card-footer py-3">
-                            <a href="" class="button is-link is-small is-outlined">edit</a>{{ $variation->id }}
+                            <a href="{{ route('backend.variations.edit',$variation->id) }}"
+                                class="button is-link is-small is-outlined">edit</a>
                         </footer>
                     </div>
                 </div>

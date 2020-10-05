@@ -20,7 +20,7 @@
 <section>
     <form action="{{ route('backend.pages.update', $page->id)}}" method="POST" enctype="multipart/form-data">
         @csrf
-        @include('backend.partials.pages.form')
+        @include('backend.page.form')
 
         <div class="columns mb-6">
             <div class="column">

@@ -26,7 +26,7 @@
         <form action="{{ route('backend.plants.update', $plant->id) }}" method="POST">
             @csrf
 
-            @include('backend.partials.plants.form')
+            @include('backend.plant.form')
 
             <div class="columns mb-6">
                 <div class="column">

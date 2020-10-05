@@ -17,6 +17,7 @@ use App\Http\Controllers\Backend\BackendUserController;
 use App\Http\Controllers\Backend\BackendOrderController;
 use App\Http\Controllers\Backend\BackendPlantController;
 use App\Http\Controllers\Backend\BackendProductController;
+use App\Http\Controllers\Backend\BackendVariationController;
 
 
 
@@ -95,6 +96,12 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
     Route::resource('/plants', BackendPlantController::class , ['as' => 'backend', 'only' => ['index', 'edit','update']]);
 
     Route::resource('/products', BackendProductController::class , ['as' => 'backend', 'only' => ['index', 'create', 'edit','store']]);
+
+    Route::get('/variations/create/{product}', [BackendVariationController::class, 'create'])->name('backend.variations.create');
+    Route::post('/variations', [BackendVariationController::class, 'store'])->name('backend.variations.store');
+    Route::get('/variations/{variation}/edit', [BackendVariationController::class, 'edit'])->name('backend.variations.edit');
+    Route::put('/variations/{variation}/update', [BackendVariationController::class, 'update'])->name('backend.variations.update');
+
 
     Route::get('/users', [BackendUserController::class, 'index'])->name('backend.users');
 });

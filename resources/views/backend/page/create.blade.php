@@ -20,7 +20,7 @@
 <section>
     <form action="{{ route('backend.pages.store')}}" method="POST" enctype="multipart/form-data">
         @csrf
-        @include('backend.partials.pages.form', $page)
+        @include('backend.page.form', $page)
 
         <div class="content mb-6">
             <button class="button is-primary" type="submit">Submit</button>

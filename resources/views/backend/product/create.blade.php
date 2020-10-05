@@ -26,7 +26,7 @@
         <form action="{{ route('backend.products.store') }}" method="POST">
             @csrf
 
-            @include('backend.partials.products.form')
+            @include('backend.product.form')
 
             <button class="button is-primary">Add Products</button>
         </form>
