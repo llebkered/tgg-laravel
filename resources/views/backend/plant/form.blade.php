@@ -1,25 +1,40 @@
 <div class="content mb-6">
     <div class="field">
-        <label class="label" for="name">Common Name</label>
+        <label class="label" for="title">Common Name</label>
         <div class="control">
-            <input class="input" name="name" type="text" placeholder="common name"
-                value="{{ old('name') ? old('name') : $plant->title }}">
+            <input class="input" name="title" type="text" placeholder="common name"
+                value="{{ old('title') ? old('title') : $plant->title }}">
         </div>
+        @error('title')
+        <div class="notification is-danger is-light">
+            <p>{{ $message }}</p>
+        </div>
+        @enderror
     </div>
 
     <div class="field">
         <label class="label" for="botanical_name">Botanical Name</label>
         <div class="control">
             <input class="input" name="botanical_name" type="text" placeholder="botanical name"
-                value="{{ old('botanical_name') ? old('slug') : $plant->botanical_name }}">
+                value="{{ old('botanical_name') ? old('botanical_name') : $plant->botanical_name }}">
         </div>
     </div>
+    @error('botanical_name')
+    <div class="notification is-danger is-light">
+        <p>{{ $message }}</p>
+    </div>
+    @enderror
 </div>
 
 <div class="content">
-    <textarea name="" id="" class="tinymce textarea" cols="30" rows="10">
+    <textarea name="description" id="" class="tinymce textarea" cols="30" rows="10">
         {{ old('description') ? old('description') : $plant->description }}
     </textarea>
+    @error('description')
+    <div class="notification is-danger is-light">
+        <p>{{ $message }}</p>
+    </div>
+    @enderror
 </div>
 
 <div class="content">
@@ -83,5 +98,10 @@
             </div>
         </div>
     </div>
+    @error('image')
+    <div class="notification is-danger is-light">
+        <p>{{ $message }}</p>
+    </div>
+    @enderror
 </div>
 

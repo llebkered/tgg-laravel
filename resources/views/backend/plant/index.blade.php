@@ -14,7 +14,7 @@
 
 <section class="panel mb-6">
     <div>
-        <a href="" class="button is-primary">Add new plant</a>
+    <a href="{{ route('backend.plants.create')}}" class="button is-primary">Add new plant</a>
     </div>
     <table class="table is-hoverable">
         <thead>

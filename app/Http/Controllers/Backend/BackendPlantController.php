@@ -28,7 +28,10 @@ class BackendPlantController extends Controller
      */
     public function create()
     {
-        //
+        $plant_categories = PlantCategory::where('published', '=', '1')->get();
+        $plant = new Plant;
+
+        return view('backend.plant.create', compact('plant', 'plant_categories'));
     }
 
     /**
@@ -39,7 +42,16 @@ class BackendPlantController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $plant = $request->validate([
+            'title' => 'required',
+            'botanical_name' => 'required',
+            'description' => 'required'
+        ]);
+
+        Plant::create($plant);
+
+        return redirect()->route('backend.plants.index')
+            ->with('success', 'Plant has been created successfully.');
     }
 
     /**
@@ -48,9 +60,11 @@ class BackendPlantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Plant $plant)
     {
-        //
+        $plant_categories = PlantCategory::where('published', '=', '1')->get();
+
+        return view('backend.plant.edit', compact('plant', 'plant_categories'));
     }
 
     /**
@@ -61,9 +75,9 @@ class BackendPlantController extends Controller
      */
     public function edit(Plant $plant)
     {
-        $plant_categories = PlantCategory::where('published','=','1')->get();
+        $plant_categories = PlantCategory::where('published', '=', '1')->get();
 
-        return view('backend.plant.edit', compact('plant','plant_categories'));
+        return view('backend.plant.edit', compact('plant', 'plant_categories'));
     }
 
     /**
@@ -75,7 +89,17 @@ class BackendPlantController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $plant = Plant::find($id);
+        $plant_categories = PlantCategory::where('published', '=', '1')->get();
+
+        $request->validate([
+            'title' => 'required',
+            'botanical_name' => 'required',
+            'description' => 'required'
+        ]);
+
+        return view('backend.plant.edit', compact('plant', 'plant_categories'))->with('success_message', 'Plant has been updated.');
     }
 
     /**
@@ -86,6 +110,7 @@ class BackendPlantController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Plant::destroy($id);
+        return redirect()->route('backend.plants.index')->with('success', 'Plant has been deleted.');
     }
 }

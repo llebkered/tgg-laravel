@@ -93,7 +93,7 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
 
     Route::resource('/pages', BackendPageController::class , ['as' => 'backend', 'only' => ['index','create', 'edit', 'store', 'update']]);
 
-    Route::resource('/plants', BackendPlantController::class , ['as' => 'backend', 'only' => ['index', 'edit','update']]);
+    Route::resource('/plants', BackendPlantController::class , ['as' => 'backend']);
 
     Route::resource('/products', BackendProductController::class , ['as' => 'backend', 'only' => ['index', 'create', 'edit','store']]);
 

@@ -42,6 +42,11 @@
 
             <button class="button is-primary">Update Plant</button>
         </form>
+        <form class="is-pulled-right" action="{{ route('backend.plants.destroy', $plant->id) }}" method="POST">
+            @method('DELETE')
+            @csrf
+            <button class="button is-danger">Delete Plant</button>
+        </form>
     </div>
 
 </section>
