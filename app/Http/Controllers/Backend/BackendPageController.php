@@ -135,9 +135,13 @@ class BackendPageController extends Controller
      */
     public function edit(Page $page)
     {
+        if ($page->id == 1) {
+            $editTemplate = 'backend.page.edit-home';
+        } else {
+            $editTemplate = 'backend.page.edit';
+        }
 
-
-        return view('backend.page.edit', compact('page'));
+        return view($editTemplate, compact('page'));
     }
 
     /**

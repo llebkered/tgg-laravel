@@ -38,17 +38,6 @@
     @enderror
 </div>
 
-<div class="content mb-6">
-    <label for="excerpt">Excerpt</label>
-    <textarea name="excerpt" id="" class="tinymce textarea" cols="30" rows="2">
-    {{ old('excerpt') ? old('excerpt') : $page->excerpt }}
-    </textarea>
-    @error('excerpt')
-    <div class="notification is-danger is-light">
-        <p>{{ $message }}</p>
-    </div>
-    @enderror
-</div>
 
 <div class="content mb-6">
     <div class="field">
