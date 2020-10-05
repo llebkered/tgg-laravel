@@ -28,7 +28,7 @@
                     @foreach ($product->variations as $variation)
                     <article class="mb-6">
                         <h4>{{ $variation->title }} </h4>
-                        <p>{{ $variation->description }} </p>
+                        <p>{!! $variation->description !!} </p>
                         <p>${{ number_format($variation->price, 2) }} </p>
                         <form action="{{ route('cart.store') }}" method="POST">
                             {{ csrf_field() }}

@@ -18,7 +18,7 @@
 </section>
 
 <section>
-    <form action="{{ route('backend.pages.update', $product->id)}}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('backend.products.update', $product->id)}}" method="POST" enctype="multipart/form-data">
         @method('PUT')
         @csrf
         @include('backend.product.form')
