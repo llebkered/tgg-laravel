@@ -59,6 +59,7 @@
 
     <div class="container">
         <form action="{{ route('backend.orders.update', $order->id) }}" method="POST">
+            @method('PUT')
             @csrf
 
             <div class="columns">

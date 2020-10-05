@@ -24,6 +24,7 @@
 
     <div class="container">
         <form action="{{ route('backend.plants.update', $plant->id) }}" method="POST">
+            @method('PUT')
             @csrf
 
             @include('backend.plant.form')

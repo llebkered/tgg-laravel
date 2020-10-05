@@ -19,6 +19,7 @@
 
 <section>
     <form action="{{ route('backend.variations.update', $variation->id)}}" method="POST" enctype="multipart/form-data">
+        @method('PUT')
         @csrf
 
         @include('backend.variation.form')
