@@ -31,16 +31,6 @@ class BackendPageController extends Controller
      */
     public function create()
     {
-        // $page = [
-        //         'title' => '',
-        //         'slug' => '',
-        //         'excerpt' => '',
-        //         'body' => '',
-        //         'image' => '',
-        //         'meta_description' => '',
-        //         'meta_keywords' => '',
-        //         'status' => ''
-        //     ];
         $page = new Page;
 
         return view('backend.page.create', compact('page'));
@@ -55,17 +45,6 @@ class BackendPageController extends Controller
     public function store(Request $request)
     {
 
-        // $page = [
-        //         'title' => '',
-        //         'slug' => '',
-        //         'excerpt' => '',
-        //         'body' => '',
-        //         'image' => '',
-        //         'meta_description' => '',
-        //         'meta_keywords' => '',
-        //         'status' => ''
-        //     ];
-
         $request->validate([
             'title' => 'required',
             'slug' => 'required|alpha_dash|unique:pages,slug'
@@ -77,22 +56,6 @@ class BackendPageController extends Controller
             // 'status' => ''
         ]);
 
-        // $page = new Page;
-
-        // $page->author_id = Auth::id();
-
-        // dd($request->only(
-        //     [
-        //         'title',
-        //         'slug',
-        //         'excerpt',
-        //         'body',
-        //         'image',
-        //         'meta_description',
-        //         'meta_keywords',
-        //         'status'
-        //     ]
-        // ));
 
         $page = $request->only(
             [
@@ -106,9 +69,8 @@ class BackendPageController extends Controller
                 'status'
             ]
         );
-        $page['author_id'] = Auth::id();
 
-        // dd($page);
+        $page['author_id'] = Auth::id();
 
         Page::create($page);
 
@@ -157,6 +119,26 @@ class BackendPageController extends Controller
 
         $page = Page::find($id);
 
+        $data = $request->only(
+            [
+                // 'author_id',
+                'title',
+                'slug',
+                'excerpt',
+                'body',
+                'image',
+                'meta_description',
+                'meta_keywords',
+                'status'
+            ]);
+
+        if ($request->input('deleteimage') == "on"){
+            $data['image'] = null;
+            $oldfile = $page->image;
+            Storage::delete($oldfile);
+        }
+
+
         if ($request->file('image')) {
 
             // validate the uploaded file
@@ -189,19 +171,7 @@ class BackendPageController extends Controller
             $page->image = $path;
         }
 
-        $page->update($request->only(
-            [
-                // 'author_id',
-                'title',
-                'slug',
-                'excerpt',
-                'body',
-                'image',
-                'meta_description',
-                'meta_keywords',
-                'status'
-            ]
-        ));
+        $page->update($data);
 
 
         return redirect()->back()->with('success_message', 'Page has been updated.');
@@ -215,6 +185,8 @@ class BackendPageController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Page::destroy($id);
+        return redirect()->route('backend.pages.index')->with('success', 'Page has been deleted.');
+
     }
 }

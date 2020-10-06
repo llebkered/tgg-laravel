@@ -5,11 +5,11 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    border-top: 10px solid $tgg-orange;
+    border-top: 10px solid $tgg-accent1;
 }
 
 #parallax-1 hr {
-    background: $tgg-orange;
+    background: $tgg-accent1;
 }
 
 #parallax-2 {
@@ -18,9 +18,9 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    border-top: 10px solid yellow;
+    border-top: 10px solid $tgg-accent2;
 }
 
 #parallax-2 hr {
-    background: yellow;
+    background: $tgg-accent2;
 }

@@ -83,7 +83,6 @@
 <div class="content mb-6">
     <div class="control">
         <span class="has-text-weight-bold">Published: </span>
-
         <label class="radio">
             <input type="radio" name="published" value="1" {{ ($product->published =='1') ? 'checked' :''}}>
             Published

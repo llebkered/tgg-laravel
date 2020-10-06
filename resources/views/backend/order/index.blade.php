@@ -43,7 +43,7 @@
 <section class="mb-6">
     <div class="panel content">
         <h2>Orders</h2>
-        @include('backend.partials.orders.list')
+        @include('backend.order.list')
     </div>
 </section>
 

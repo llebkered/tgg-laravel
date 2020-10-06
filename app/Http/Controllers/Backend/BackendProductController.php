@@ -86,15 +86,15 @@ class BackendProductController extends Controller
     {
         $product = Product::find($id);
 
-        $data = $request->validate([
+        $request->validate([
             'title' => 'required',
-            'slug' => 'required|alpha_dash|unique:products,slug',
+            'slug' => 'required|alpha_dash',
             'description' => 'required'
         ]);
 
-        $product->save($data);
+        $product->update($request->all());
 
-        return redirect()->route('backend.products.index')->with('success', 'New Product has been created.');
+        return redirect()->route('backend.products.index')->with('success', 'Product has been updated.');
     }
 
     /**

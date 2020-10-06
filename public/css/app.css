@@ -4361,7 +4361,7 @@ button.dropdown-item.is-active {
 }
 
 .navbar {
-  background-color: #bf4e30;
+  background-color: #F44F4D;
   min-height: 3.25rem;
   position: relative;
   z-index: 30;
@@ -5049,7 +5049,7 @@ a.navbar-item:focus, a.navbar-item:focus-within, a.navbar-item:hover, a.navbar-i
 .navbar-link:focus-within,
 .navbar-link:hover,
 .navbar-link.is-active {
-  background-color: #ab462b;
+  background-color: #f33735;
   color: white;
 }
 
@@ -5133,7 +5133,7 @@ a.navbar-item:focus, a.navbar-item:focus-within, a.navbar-item:hover, a.navbar-i
   }
 
   .navbar-menu {
-    background-color: #bf4e30;
+    background-color: #F44F4D;
     box-shadow: 0 8px 16px rgba(10, 10, 10, 0.1);
     padding: 0.5rem 0;
   }
@@ -5204,7 +5204,7 @@ body.has-navbar-fixed-bottom-touch {
     background-color: transparent !important;
   }
   .navbar.is-transparent .navbar-dropdown a.navbar-item:focus, .navbar.is-transparent .navbar-dropdown a.navbar-item:hover {
-    background-color: #ab462b;
+    background-color: #f33735;
     color: white;
   }
   .navbar.is-transparent .navbar-dropdown a.navbar-item.is-active {
@@ -5261,7 +5261,7 @@ body.has-navbar-fixed-bottom-touch {
   }
 
   .navbar-dropdown {
-    background-color: #bf4e30;
+    background-color: #F44F4D;
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
     border-top: 2px solid #dbdbdb;
@@ -5282,7 +5282,7 @@ body.has-navbar-fixed-bottom-touch {
     padding-right: 3rem;
   }
   .navbar-dropdown a.navbar-item:focus, .navbar-dropdown a.navbar-item:hover {
-    background-color: #ab462b;
+    background-color: #f33735;
     color: white;
   }
   .navbar-dropdown a.navbar-item.is-active {
@@ -5362,7 +5362,7 @@ body.has-spaced-navbar-fixed-bottom {
   }
 
   .navbar-item.has-dropdown:focus .navbar-link, .navbar-item.has-dropdown:hover .navbar-link, .navbar-item.has-dropdown.is-active .navbar-link {
-    background-color: #ab462b;
+    background-color: #f33735;
   }
 }
 .hero.is-fullheight-with-navbar {
@@ -11881,11 +11881,11 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  border-top: 10px solid #bf4e30;
+  border-top: 10px solid #F44F4D;
 }
 
 #parallax-1 hr {
-  background: #bf4e30;
+  background: #F44F4D;
 }
 
 #parallax-2 {
@@ -11894,19 +11894,19 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  border-top: 10px solid yellow;
+  border-top: 10px solid #EC42E1;
 }
 
 #parallax-2 hr {
-  background: yellow;
+  background: #EC42E1;
 }
 
 .home__gradient {
-  background-color: #056839;
-  background: linear-gradient(to right, #056839, #52c234);
+  background-color: #255023;
+  background: linear-gradient(to right, #255023, #52c234);
 }
 .home__green {
-  background-color: #056839;
+  background-color: #255023;
 }
 .home__hero {
   color: white;
@@ -11914,6 +11914,6 @@ body {
 .home__hero h1,
 .home__hero h2,
 .home__hero h3 {
-  color: yellow;
+  color: #EC42E1;
 }
 /*# sourceMappingURL=app.css.map*/

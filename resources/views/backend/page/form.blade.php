@@ -28,7 +28,7 @@
 
 <div class="content mb-6">
     <label for="body">Content</label>
-    <textarea name="body" id="" class="tinymce textarea" cols="30" rows="10">
+    <textarea name="body" id="" class="tinymce textarea" cols="30" rows="50">
     {{ old('body') ? old('body') : $page->body }}
     </textarea>
     @error('body')
@@ -99,6 +99,16 @@
                 </label>
             </div>
         </div>
+        @if ($page->image)
+        <div class="columns">
+            <div class="column is-4 is-pulled-right ">
+                <label class="checkbox has-text-danger" for="deleteimage">
+                    <input type="checkbox" name="deleteimage">
+                    Delete image
+                </label>
+            </div>
+        </div>
+        @endif
     </div>
     @error('image')
     <div class="notification is-danger is-light">
