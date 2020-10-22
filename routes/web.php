@@ -14,6 +14,7 @@ use App\Http\Controllers\Backend\BackendController;
 use App\Http\Controllers\Backend\BackendAuthController;
 use App\Http\Controllers\Backend\BackendPageController;
 use App\Http\Controllers\Backend\BackendUserController;
+use App\Http\Controllers\Backend\BackendBlockController;
 use App\Http\Controllers\Backend\BackendOrderController;
 use App\Http\Controllers\Backend\BackendPlantController;
 use App\Http\Controllers\Backend\BackendProductController;
@@ -87,6 +88,8 @@ Route::post('/backend/login', [BackendAuthController::class, 'login']);
 // middleware('App\Http\Middleware\AdminAccessMiddleware') ['auth:sanctum', 'verified']
 Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function () {
     Route::get('/', [BackendController::class, 'index'])->name('backend.index');
+
+    Route::resource('/blocks', BackendBlockController::class , ['as' => 'backend', 'only' => ['create','delete','edit','show','store','update']]);
 
     Route::resource('/orders', BackendOrderController::class , ['as' => 'backend', 'only' => ['index', 'edit','update']]);
     Route::get('/orders/{order}/sendshippedemail', [BackendOrderController::class, 'sendOrderShippedEmail'])->name('backend.orders.sendshippedemail');

@@ -6,9 +6,9 @@
  * Clear inner floats
  */
 .clearfix::after {
-  clear: both;
-  content: '';
-  display: table;
+    clear: both;
+    content: "";
+    display: table;
 }
 
 /**
@@ -18,13 +18,13 @@
  * 3. Leave some space on the edges, especially valuable on small screens
  */
 .container {
-  max-width: $max-width; /* 1 */
-  margin-left: auto; /* 2 */
-  margin-right: auto; /* 2 */
-  padding-left: 20px; /* 3 */
-  padding-right: 20px; /* 3 */
-  width: 100%; /* 1 */
- }
+    max-width: $max-width; /* 1 */
+    margin-left: auto; /* 2 */
+    margin-right: auto; /* 2 */
+    padding-left: 20px; /* 3 */
+    padding-right: 20px; /* 3 */
+    width: 100%; /* 1 */
+}
 
 /**
  * Hide text while making it readable for screen readers
@@ -32,10 +32,10 @@
  *    See: https://code.google.com/p/chromium/issues/detail?id=457146
  */
 .hide-text {
-  overflow: hidden;
-  padding: 0; /* 1 */
-  text-indent: 101%;
-  white-space: nowrap;
+    overflow: hidden;
+    padding: 0; /* 1 */
+    text-indent: 101%;
+    white-space: nowrap;
 }
 
 /**
@@ -44,12 +44,74 @@
  * https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css#L119-L133
  */
 .visually-hidden {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.has-background-trans-dark {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.has-background-trans-light {
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.has-background-dark-green {
+    background-color: $dark-green;
+}
+.has-background-dark-green-gradient {
+    background-color: $dark-green;
+    background: linear-gradient(to right, $dark-green, #52c234);
+}
+
+.has-background-tgg-accent1 {
+    background-color: $tgg-accent1;
+}
+
+.has-background-tgg-accent2 {
+    background-color: $tgg-accent2;
+}
+
+.has-background-light-green {
+    background-color: $light-green;
+}
+
+.has-background-off-white {
+    background-color: $off-white;
+}
+
+.has-background-slate-grey {
+    background-color: $slate-grey;
+}
+
+.has-text-dark-green {
+    color: $dark-green;
+}
+
+.has-text-tgg-accent1 {
+    color: $tgg-accent1;
+}
+
+.has-text-tgg-accent2 {
+    color: $tgg-accent2;
+}
+
+.has-text-light-green {
+    color: $light-green;
+}
+
+.has-text-off-white {
+    color: $off-white;
+}
+
+.has-text-slate-grey {
+    color: $slate-grey;
 }

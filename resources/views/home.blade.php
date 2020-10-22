@@ -2,6 +2,19 @@
 
 @section('content')
 
+@include('partials.front-hero')
+
+@if ($blocks)
+    @foreach ($blocks as $block)
+        @include('partials.front-block')
+    @endforeach
+@endif
+
+
+
+
+<hr>
+
 {!! $page['body'] !!}
 {{--
 <div class="hero is-medium home__hero home__green">

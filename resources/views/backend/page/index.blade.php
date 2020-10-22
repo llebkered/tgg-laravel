@@ -12,10 +12,11 @@
     </div>
 </section>
 
-<section class="panel mb-6">
-    <div>
+<div class="mb-6">
     <a href="{{ route('backend.pages.create') }}" class="button is-primary">Add new page</a>
-    </div>
+</div>
+
+<section class="panel mb-6">
     <table class="table">
         <thead>
             <th>ID</th>
@@ -29,7 +30,8 @@
                 <td>{{ $page->id }}</td>
                 <td>{{ $page->title }}</td>
                 <td>{{ $page->published }}</td>
-            <td><a href="{{ route('backend.pages.edit', $page->id) }}" class="button is-link is-small is-outlined">edit</a></td>
+                <td><a href="{{ route('backend.pages.edit', $page->id) }}"
+                        class="button is-link is-small is-outlined">edit</a></td>
             </tr>
 
             @endforeach

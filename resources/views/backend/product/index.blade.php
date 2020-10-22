@@ -12,10 +12,12 @@
     </div>
 </section>
 
-<section class="panel mb-6">
-    <div>
+<div class="mb-6">
     <a href="{{ route('backend.products.create') }}" class="button is-primary">Add new product</a>
-    </div>
+</div>
+
+<section class="panel mb-6">
+
     <table class="table">
         <thead>
             <th>ID</th>

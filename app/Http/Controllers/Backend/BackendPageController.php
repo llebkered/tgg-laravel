@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\Page;
+use App\Models\Block;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -99,6 +100,9 @@ class BackendPageController extends Controller
     {
         if ($page->id == 1) {
             $editTemplate = 'backend.page.edit-home';
+            $heroes = Block::where('hero', 1)->get();
+            $blocks = Block::where('hero', 0)->get();
+            return view($editTemplate, compact('blocks', 'heroes', 'page'));
         } else {
             $editTemplate = 'backend.page.edit';
         }

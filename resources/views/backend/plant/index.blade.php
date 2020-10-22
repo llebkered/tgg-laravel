@@ -12,10 +12,11 @@
     </div>
 </section>
 
-<section class="panel mb-6">
-    <div>
+<div class="mb-6">
     <a href="{{ route('backend.plants.create')}}" class="button is-primary">Add new plant</a>
     </div>
+
+<section class="panel mb-6">
     <table class="table is-hoverable">
         <thead>
             <th>ID</th>
