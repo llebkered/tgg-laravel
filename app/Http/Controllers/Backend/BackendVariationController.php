@@ -94,7 +94,7 @@ class BackendVariationController extends Controller
 
         $variation->update($data);
 
-        return redirect()->route('backend.products.show', $variation->product->id)->with('success', 'Product vraion has been updated');
+        return redirect()->route('backend.products.show', $variation->product->id)->with('success_message', 'Product varation has been updated');
     }
 
     /**
@@ -107,6 +107,6 @@ class BackendVariationController extends Controller
     {
         $variation = Variation::find($id);
         Variation::destroy($id);
-        return redirect()->route('backend.products.show', $variation->product->id)->with('success', 'Product variation has been deleted.');
+        return redirect()->route('backend.products.show', $variation->product->id)->with('success_message', 'Product variation has been deleted.');
     }
 }

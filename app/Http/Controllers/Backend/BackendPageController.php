@@ -76,7 +76,7 @@ class BackendPageController extends Controller
         Page::create($page);
 
         return redirect()->route('backend.pages')
-            ->with('success', 'Page has been created successfully.');
+            ->with('success_message', 'Page has been created successfully.');
     }
 
     /**
@@ -190,7 +190,7 @@ class BackendPageController extends Controller
     public function destroy($id)
     {
         Page::destroy($id);
-        return redirect()->route('backend.pages.index')->with('success', 'Page has been deleted.');
+        return redirect()->route('backend.pages.index')->with('success_message', 'Page has been deleted.');
 
     }
 }

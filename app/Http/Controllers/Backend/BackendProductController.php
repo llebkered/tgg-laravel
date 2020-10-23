@@ -50,7 +50,7 @@ class BackendProductController extends Controller
         $newProduct = Product::create($product);
 
         return redirect()->route('backend.products.edit', $newProduct->id)
-            ->with('success', 'Product has been created successfully. You will need to add product variations for prices.');
+            ->with('success_message', 'Product has been created successfully. You will need to add product variations for prices.');
     }
 
     /**
@@ -94,7 +94,7 @@ class BackendProductController extends Controller
 
         $product->update($request->all());
 
-        return redirect()->route('backend.products.index')->with('success', 'Product has been updated.');
+        return redirect()->route('backend.products.index')->with('success_message', 'Product has been updated.');
     }
 
     /**
@@ -106,6 +106,6 @@ class BackendProductController extends Controller
     public function destroy($id)
     {
         Product::destroy($id);
-        return redirect()->route('backend.products.index')->with('success', 'Product has been deleted.');
+        return redirect()->route('backend.products.index')->with('success_message', 'Product has been deleted.');
     }
 }

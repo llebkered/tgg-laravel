@@ -81,7 +81,7 @@
                 <div class="field">
                     <label class="label" for="">Heading</label>
                     <div class="control">
-                        <input type="text" class="input">
+                        <input name="heading" type="text" class="input">
                     </div>
                     @error('heading')
                     <div class="notification is-danger is-light">
@@ -102,26 +102,31 @@
                         @endforeach
                     </select>
                 </div>
-
             </div>
+            
         </div>
 
         <hr>
 
-        <textarea class="textarea  mb-2" name="" id="" cols="30" rows="10">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta, deserunt. Voluptatum fugiat
-            adipisci facere perferendis dolorum odio quas quisquam, dignissimos, ad quae tenetur ea neque,
-            nam eveniet consequuntur ex repellendus!
+        <textarea name="content" class="textarea  mb-2" name="content" id="" cols="30" rows="10">
         </textarea>
+        @error('content')
+        <div class="notification is-danger is-light">
+            <p>{{ $message }}</p>
+        </div>
+        @enderror
 
         <hr>
 
         <div class="columns px-2 py-2 mb-2">
             <div class="column">
                 width half full
+                $table->text('content_width')->nullable();
+
             </div>
             <div class="column">
                 left right
+                $table->text('content_position')->nullable();
             </div>
 
         </div>
@@ -130,21 +135,21 @@
         <h3>Call to action</h3>
         <div class="columns px-2 py-2 mb-2">
             <div class="column">
-                <label for="" class="label">Text</label>
-                <input class="input type=" text" name="" id="">
+                <label for="cta_title" class="label">Text</label>
+                <input class="input" type=" text" name="cta_title" id="">
             </div>
             <div class="column">
-                <label for="" class="label">Link</label>
-                <input class="input type=" text" name="" id="">
-            </div>
-            <div class="column">
-                button colour
-            </div>
-            <div class="column">
-                button size
+                <label for="cta_link" class="label">Link</label>
+                <input class="input" input type="text" name="cta_link" id="">
             </div>
         </div>
 
     </div>
 
+    <div class="panel content px-2 py-2 mb-3">
+        <label for="published" class="checkbox">
+            <input type="checkbox" name="published">
+            Published
+        </label>
+    </div>
 </section>

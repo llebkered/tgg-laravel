@@ -32,39 +32,33 @@ class BackendBlockController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'title' => 'required',
-        //     'slug' => 'required|alpha_dash|unique:pages,slug'
-        //     // 'excerpt' => '',
-        //     // 'body' => '',
-        //     // 'image' => '',
-        //     // 'meta_description' => '',
-        //     // 'meta_keywords' => '',
-        //     // 'status' => ''
-        // ]);
+        $request->validate([
+            'content' => 'required',
+        ]);
 
 
-        // $block = $request->only(
-        //     [
-        //         'title',
-        //         'slug',
-        //         'excerpt',
-        //         'body',
-        //         'image',
-        //         'meta_description',
-        //         'meta_keywords',
-        //         'status'
-        //     ]
-        // );
-
-        // $block['author_id'] = Auth::id();
-
+        $block = $request->only(
+            [
+                'hero',
+                'published',
+                'weight',
+                'text_colour',
+                'background_colour',
+                'background_image',
+                'heading',
+                'heading_colour',
+                'content',
+                'content_width',
+                'content_position',
+                'cta_title',
+                'cta_link'
+            ]
+        );
+        
         // Block::create($block);
 
-        dd($request->all());
-
-        return redirect()->route('backend.pages')
-            ->with('success', 'Block has been created successfully.');
+        return redirect('/backend/pages/1/edit')
+            ->with('success_message', 'A new block has been created successfully.');
     }
 
     

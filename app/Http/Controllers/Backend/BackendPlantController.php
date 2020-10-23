@@ -51,7 +51,7 @@ class BackendPlantController extends Controller
         Plant::create($plant);
 
         return redirect()->route('backend.plants.index')
-            ->with('success', 'Plant has been created successfully.');
+            ->with('success_message', 'Plant has been created successfully.');
     }
 
     /**
@@ -113,6 +113,6 @@ class BackendPlantController extends Controller
     public function destroy($id)
     {
         Plant::destroy($id);
-        return redirect()->route('backend.plants.index')->with('success', 'Plant has been deleted.');
+        return redirect()->route('backend.plants.index')->with('success_message', 'Plant has been deleted.');
     }
 }
