@@ -21,7 +21,8 @@ class BackendBlockController extends Controller
     {
         $background_colours = Backgroundcolour::all();
         $text_colours = Textcolour::all();
-        return view('backend.block.create', compact(['background_colours','text_colours']));
+        $block = new Block;
+        return view('backend.block.create', compact(['background_colours', 'block','text_colours']));
     }
 
     /**
