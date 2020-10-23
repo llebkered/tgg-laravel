@@ -3,11 +3,7 @@
 // -----------------------------------------------------------------------------
 .header {
     background-color: #c6ccb2;
-    background: linear-gradient(
-        to right,
-        #c6ccb2,
-        #b0dab9
-    );
+    background: linear-gradient(to right, #c6ccb2, #b0dab9);
     &__container {
         display: flex;
         justify-content: space-between;

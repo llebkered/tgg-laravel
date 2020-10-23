@@ -21,7 +21,7 @@ class BackendBlockController extends Controller
     {
         $background_colours = Backgroundcolour::all();
         $text_colours = Textcolour::all();
-        return view('backend.block.create',compact(['background_colours','text_colours']));
+        return view('backend.block.create', compact(['background_colours','text_colours']));
     }
 
     /**
@@ -32,9 +32,42 @@ class BackendBlockController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $request->validate([
+        //     'title' => 'required',
+        //     'slug' => 'required|alpha_dash|unique:pages,slug'
+        //     // 'excerpt' => '',
+        //     // 'body' => '',
+        //     // 'image' => '',
+        //     // 'meta_description' => '',
+        //     // 'meta_keywords' => '',
+        //     // 'status' => ''
+        // ]);
+
+
+        // $block = $request->only(
+        //     [
+        //         'title',
+        //         'slug',
+        //         'excerpt',
+        //         'body',
+        //         'image',
+        //         'meta_description',
+        //         'meta_keywords',
+        //         'status'
+        //     ]
+        // );
+
+        // $block['author_id'] = Auth::id();
+
+        // Block::create($block);
+
+        dd($request->all());
+
+        return redirect()->route('backend.pages')
+            ->with('success', 'Block has been created successfully.');
     }
 
+    
     /**
      * Display the specified resource.
      *

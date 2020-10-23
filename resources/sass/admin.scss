@@ -95,14 +95,13 @@ body {
 //         color: black;
 //     }
 // }
-@import 'variables';
+@import "variables";
 
 // Bootstrap
 // @import '~bootstrap/scss/bootstrap';
 
 // Bulma
-@import 'abstracts/variables',
-        'abstracts/bulma-overrides';
+@import "abstracts/variables", "abstracts/bulma-overrides";
 
 .side-menu {
     background-color: darken($background-colour-admin, 5%);
