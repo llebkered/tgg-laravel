@@ -25,19 +25,18 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $hero = [
-            'image' => '',
-            'title' => 'Toad Gully Growers',
-            'body' => '<p>Toad Gully Growers is a wholesale production nursery on the Mornington Peninsula, Victoria, Australia
-            growing ferns, succulents and foliage plants for sale into the nursery industry. We also sell bare root
-            Paulownia trees online, with postal delivery within Australia.</p>'
-        ];
+        $hero = Block::where('published', 1)
+            ->where('hero', 1)
+            ->orderByRaw('RAND()')
+            ->first();
 
-        $hero = Block::find(1);
-        $blocks = Block::where('published',1)->where('hero', 0)->get();
+        $blocks = Block::where('published', 1)
+            ->where('hero', 0)
+            ->orderBy('weight', 'ASC')
+            ->get();
 
         $page = Page::where('slug', '=', '/')->first();
 
-        return view('home', compact('blocks','hero', 'page'));
+        return view('home', compact('blocks', 'hero', 'page'));
     }
 }

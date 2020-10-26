@@ -1,5 +1,3 @@
-<div>{{ $block }}</div>
-
 <section class='content panel px-2 py-2 mb-6'>
 
     <div class="panel px-2 py-2 mb-4">
@@ -144,8 +142,22 @@
         @enderror
 
         <hr>
-
+        @if( old('content_background')=="has-background-trans-dark" || $block->content_background=="has-background-trans-dark") selected @endif
         <div class="columns px-2 py-2 mb-2">
+            <div class="column">
+                <label class="label" for="content_background">Content background</label>
+                <div class="select">
+                    <select name="content_background">
+                        <option value="">None</option>
+                        <option value="has-background-trans-dark"
+                        @if( old('content_background')=="has-background-trans-dark" || $block->content_background=="has-background-trans-dark") selected @endif
+                        > Transparent Dark</option>
+                        <option value="has-background-trans-light"
+                        @if( old('content_background')=="has-background-trans-light" || $block->content_background=="has-background-trans-light") selected @endif
+                        >Transparent Light</option>
+                    </select>
+                </div>
+            </div>
             <div class="column">
                 <label class="label" for="content_width">Content width</label>
                 <div class="select">

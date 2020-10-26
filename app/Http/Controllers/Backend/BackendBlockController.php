@@ -47,10 +47,10 @@ class BackendBlockController extends Controller
                 'weight',
                 'text_colour',
                 'background_colour',
-                'background_image',
                 'heading',
                 'heading_colour',
                 'content',
+                'content_background',
                 'content_width',
                 'content_position',
                 'cta_title',
@@ -58,7 +58,7 @@ class BackendBlockController extends Controller
             ]
         );
         
-        // Block::create($block);
+        Block::create($block);
 
         return redirect('/backend/pages/1/edit')
             ->with('success_message', 'A new block has been created successfully.');
@@ -119,6 +119,7 @@ class BackendBlockController extends Controller
                 'heading',
                 'heading_colour',
                 'content',
+                'content_background',
                 'content_width',
                 'content_position',
                 'cta_title',
@@ -152,12 +153,14 @@ class BackendBlockController extends Controller
             $filename  = $basename . '.' . $extension;
             $path      = $file->storeAs('testing', $filename);
 
-            // Resize image
-            $photo = Image::make($file)->resize(1366, 768)->encode('jpg', 80);
-                // ->resize(400, null, function ($constraint) {  // 1366 x 768
-                //     $constraint->aspectRatio();
-                // })
-                ;
+            // Resize & crop image
+            $photo = Image::make($file)
+                ->resize(1366, null, function ($constraint) {  // 1366 x 768
+                    $constraint->aspectRatio();
+                })
+                ->resizeCanvas(1366, 768)
+                ->encode('jpg', 80);
+                
             // store filename and image object
             Storage::disk('public')->put('testing/' . $basename . '.jpg', $photo);
             // add new image path to page
