@@ -1,6 +1,5 @@
 var editor_config = {
     path_absolute : "/",
-    // path_absolute : "/public/storage/",
     selector: "textarea.tinymce",
     plugins: [
       "advlist autolink lists link image charmap print preview hr anchor pagebreak",

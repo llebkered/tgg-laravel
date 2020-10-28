@@ -40,16 +40,15 @@ class BackendProductController extends Controller
      */
     public function store(Request $request)
     {
-
-        $product = $request->validate([
+        $data = $request->validate([
             'title' => 'required',
             'slug' => 'required|alpha_dash|unique:products,slug',
             'description' => 'required'
         ]);
 
-        $newProduct = Product::create($product);
+        $product = Product::create($data);
 
-        return redirect()->route('backend.products.edit', $newProduct->id)
+        return redirect()->route('backend.products.edit', $product->id)
             ->with('success_message', 'Product has been created successfully. You will need to add product variations for prices.');
     }
 
@@ -86,13 +85,13 @@ class BackendProductController extends Controller
     {
         $product = Product::find($id);
 
-        $request->validate([
+        $data = $request->validate([
             'title' => 'required',
             'slug' => 'required|alpha_dash',
             'description' => 'required'
         ]);
 
-        $product->update($request->all());
+        $product->update($data);
 
         return redirect()->route('backend.products.index')->with('success_message', 'Product has been updated.');
     }
