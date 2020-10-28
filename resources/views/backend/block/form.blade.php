@@ -84,6 +84,18 @@
                     <div class="column">
                         {{ $block->background_image }}
                         <img src="{{ asset('storage/'. $block->background_image )}}" alt="">
+
+                        <strong>Background Image Attachment</strong>
+                        <div class="control">
+                            <label class="radio">
+                                <input value="" type="radio" name="background_attachment" @if( ! old('background_attachment') || $block->background_attachment) checked @endif>
+                                Scroll
+                            </label>
+                            <label class="radio">
+                                <input value="background-attachment: fixed;" type="radio" name="background_attachment" @if( ( old('background_attachment') || $block->background_attachment)) checked @endif>
+                                Fixed (Parallax effect)
+                            </label>
+                        </div>
                         <label class="checkbox has-text-danger" for="deleteimage">
                             <input type="checkbox" name="deleteimage">
                             Delete image

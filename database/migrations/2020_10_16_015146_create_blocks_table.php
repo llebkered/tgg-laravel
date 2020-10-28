@@ -21,6 +21,7 @@ class CreateBlocksTable extends Migration
             $table->text('text_colour')->nullable();
             $table->text('background_colour')->nullable();
             $table->text('background_image')->nullable();
+            $table->text('background_attachment')->nullable();
             $table->string('heading')->nullable();
             $table->text('heading_colour')->nullable();
             $table->text('content')->nullable();

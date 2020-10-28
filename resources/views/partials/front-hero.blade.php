@@ -1,6 +1,6 @@
 <section class="hero is-medium {{ $hero->text_colour }} {{ $hero->background_colour }}" @if ($hero->background_image)
     style="background: url('{{ asset( 'storage/' . $hero->background_image )}}') no-repeat center center;
-    background-size: cover;"
+    background-size: cover; {{ $hero->background_attachment }}"
     @endif
     >
     <div class="hero-body">

@@ -47,6 +47,8 @@ class BackendBlockController extends Controller
                 'weight',
                 'text_colour',
                 'background_colour',
+                'background_image',
+                'background_attachment',
                 'heading',
                 'heading_colour',
                 'content',
@@ -116,6 +118,8 @@ class BackendBlockController extends Controller
                 'weight',
                 'text_colour',
                 'background_colour',
+                'background_image',
+                'background_attachment',
                 'heading',
                 'heading_colour',
                 'content',
@@ -127,7 +131,7 @@ class BackendBlockController extends Controller
             ]
         );
 
-        if ($request->input('deleteimage') == "on"){
+        if ($request->input('deleteimage') == "on") {
             $data['background_image'] = null;
             $oldfile = $block->background_image;
             Storage::delete($oldfile);
