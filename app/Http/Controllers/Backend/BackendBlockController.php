@@ -182,8 +182,9 @@ class BackendBlockController extends Controller
      * @param  \App\Models\Block  $block
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Block $block)
+    public function destroy($id)
     {
-        //
+        Block::destroy($id);
+        return redirect(url('backend/pages/1/edit'))->with('success_message', 'Block has been deleted.');
     }
 }

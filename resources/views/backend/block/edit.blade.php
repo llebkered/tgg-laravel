@@ -27,6 +27,11 @@
         </div>
 
     </form>
+    <form class="is-pulled-right" action="{{ route('backend.blocks.destroy', $block->id) }}" method="POST">
+        @method('DELETE')
+        @csrf
+        <button class="button is-danger is-outlined">Delete Block</button>
+    </form>
 
 </section>
 
