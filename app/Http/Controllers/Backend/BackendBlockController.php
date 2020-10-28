@@ -155,7 +155,7 @@ class BackendBlockController extends Controller
             $extension = Str::lower($file->getClientOriginalExtension());
             $basename = Str::slug($fileinfo['filename']);
             $filename  = $basename . '.' . $extension;
-            $path      = $file->storeAs('testing', $filename);
+            $path      = $file->storeAs('images/blocks/', $filename);
 
             // Resize & crop image
             $photo = Image::make($file)
@@ -166,7 +166,7 @@ class BackendBlockController extends Controller
                 ->encode('jpg', 80);
                 
             // store filename and image object
-            Storage::disk('public')->put('testing/' . $basename . '.jpg', $photo);
+            Storage::disk('public')->put('images/blocks/' . $basename . '.jpg', $photo);
             // add new image path to page
             $block->background_image = $path;
         }
