@@ -19443,11 +19443,11 @@ document.addEventListener("DOMContentLoaded", function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\VIP\sites\toadgully.com.au\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! C:\Users\VIP\sites\toadgully.com.au\resources\js\bulma.js */"./resources/js/bulma.js");
-__webpack_require__(/*! C:\Users\VIP\sites\toadgully.com.au\resources\js\menu.js */"./resources/js/menu.js");
-__webpack_require__(/*! C:\Users\VIP\sites\toadgully.com.au\resources\sass\app.scss */"./resources/sass/app.scss");
-module.exports = __webpack_require__(/*! C:\Users\VIP\sites\toadgully.com.au\resources\sass\admin.scss */"./resources/sass/admin.scss");
+__webpack_require__(/*! /home/derek/sites/toadgully.com.au/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /home/derek/sites/toadgully.com.au/resources/js/bulma.js */"./resources/js/bulma.js");
+__webpack_require__(/*! /home/derek/sites/toadgully.com.au/resources/js/menu.js */"./resources/js/menu.js");
+__webpack_require__(/*! /home/derek/sites/toadgully.com.au/resources/sass/app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! /home/derek/sites/toadgully.com.au/resources/sass/admin.scss */"./resources/sass/admin.scss");
 
 
 /***/ })

@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "@creativebulma/bulma-tooltip": "^1.2.0",
-        "bulma": "^0.9.0"
+        "bulma": "^0.9.0",
+        "simplelightbox": "^2.5.0"
     }
 }

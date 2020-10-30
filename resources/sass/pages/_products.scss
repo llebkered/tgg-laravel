@@ -1,0 +1,22 @@
+.products {
+    &-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    }
+}
+
+.photo {
+    img {
+        background-color: #eee;
+        border: 1px solid #ddd;
+        height: auto;
+        padding: 0.25rem;
+        transition: transform 0.3s;
+        width: 100%;
+
+        &:hover {
+            transform: scale(1.25);
+        }
+    }
+}

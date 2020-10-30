@@ -2,17 +2,55 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Product extends Model
+class Product extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     protected $guarded = [];
 
     public function variations()
     {
         return $this->hasMany('App\Models\Variation');
+    }
+
+ 
+
+
+
+    public function registerMediaCollections(): void
+    {
+        $this
+        ->addMediaCollection('images')
+        ->withResponsiveImages()
+        ->onlyKeepLatest(6);
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+       
+        
+        $this->addMediaConversion('thumb')
+            ->width(360)
+            ->height(360);
+        // ->sharpen(10);
+
+              
+        $this->addMediaConversion('medium')
+            ->width(540)
+            ->height(540);
+        // ->sharpen(10);
+
+                      
+        $this->addMediaConversion('large')
+            ->width(960)
+            ->height(960);
+        // ->sharpen(10);
     }
 }

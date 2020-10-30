@@ -1,7 +1,8 @@
 @if ( $product->id )
 <div class="box content">
     <h2>Variations</h2>
-<p class="mb-3"><a href="{{ route('backend.variations.create', $product->id)}}" class="button is-primary">Add new variation</a>
+    <p class="mb-3"><a href="{{ route('backend.variations.create', $product->id)}}" class="button is-primary">Add new
+            variation</a>
     </p>
     <div class="columns is-multiline">
         @foreach ($product->variations as $variation)
@@ -111,6 +112,24 @@
                     </span>
                 </label>
             </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="columns is-multiline ">
+            @foreach ($images as $image)
+            <div class="column is-4">
+                <div class="card">
+                    <div class="card-image">
+                        <figure class="image">
+                            <img src="{{ $image->getUrl('thumb') }}" alt="{{ $image->getUrl('thumb') }}">
+                        </figure>
+                    </div>
+                    <div class="content">
+                    </div>
+                </div>
+            </div>
+            @endforeach
         </div>
     </div>
 </div>

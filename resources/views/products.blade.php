@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@section('header_extras')
+<link href="{{ asset('public/vendor/simplelightbox/simple-lightbox.min.css') }}" rel="stylesheet">
+@endsection
+
+
 @section('content')
 
 <section class="section content">
@@ -15,12 +20,18 @@
         <div class="product">
             <div class="columns">
                 <div class="column">
+
                     <h2>{{ $product->title }}</h2>
-                    @if ($product->image)
-                    <figure>
-                        <img src="{{ $product->image }}" alt="{{ $product->title }}">
-                    </figure>
-                    @endif
+                    <div class="gallery products-grid">
+                        @foreach ($product->getMedia('images') as $image)
+                        <a href="{{ $image->getUrl('large') }}">
+                            <div class="photo">
+                                <img src="{{ $image->getUrl('thumb') }}" alt="{{ $image->getUrl('thumb') }}" title="" />
+                            </div>
+                        </a>
+                        @endforeach
+                    </div>
+
                     <div>{!! $product->description !!}</div>
                 </div>
                 <div class="column is-one-third has-background-light">
@@ -44,7 +55,16 @@
         </div>
         @endforeach
     </div>
+
 </section>
 
+
+@endsection
+
+@section('footer_extras')
+<script src="{{ asset('public/vendor/simplelightbox/simple-lightbox.js') }}"></script>
+<script>
+    var lightbox = new SimpleLightbox('.gallery a', { /* options */ });   
+</script>
 
 @endsection

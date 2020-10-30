@@ -60,7 +60,8 @@ class BackendProductController extends Controller
      */
     public function show(Product $product)
     {
-        return view('backend.product.edit', compact('product'));
+        $images =  $product->getMedia('images');
+        return view('backend.product.edit', compact('product','images'));
     }
 
     /**
@@ -71,7 +72,9 @@ class BackendProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('backend.product.edit', compact('product'));
+        $images =  $product->getMedia('images');
+      
+        return view('backend.product.edit', compact('product','images'));
     }
 
     /**
@@ -91,9 +94,14 @@ class BackendProductController extends Controller
             'description' => 'required'
         ]);
 
+    
+        if ($request->image) {
+            $product->addMediaFromRequest('image')->toMediaCollection('images');
+        }
+        
         $product->update($data);
 
-        return redirect()->route('backend.products.index')->with('success_message', 'Product has been updated.');
+        return redirect()->route('backend.products.edit', $id)->with('success_message', 'Product has been updated.');
     }
 
     /**
@@ -104,6 +112,7 @@ class BackendProductController extends Controller
      */
     public function destroy($id)
     {
+        Product::clearMediaCollection('images');
         Product::destroy($id);
         return redirect()->route('backend.products.index')->with('success_message', 'Product has been deleted.');
     }

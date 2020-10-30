@@ -38,11 +38,13 @@
 @import
     'components/button',
     'components/mdi',
-    'components/parallax';
+    'components/parallax',
+    'components/wysiwyg';
 
 // 6. Page-specific styles
 @import
-    'pages/home';
+    'pages/home',
+    'pages/products';
 
 // 7. Themes
 @import

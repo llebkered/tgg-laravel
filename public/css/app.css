@@ -4361,7 +4361,7 @@ button.dropdown-item.is-active {
 }
 
 .navbar {
-  background-color: #F44F4D;
+  background-color: #f44f4d;
   min-height: 3.25rem;
   position: relative;
   z-index: 30;
@@ -5133,7 +5133,7 @@ a.navbar-item:focus, a.navbar-item:focus-within, a.navbar-item:hover, a.navbar-i
   }
 
   .navbar-menu {
-    background-color: #F44F4D;
+    background-color: #f44f4d;
     box-shadow: 0 8px 16px rgba(10, 10, 10, 0.1);
     padding: 0.5rem 0;
   }
@@ -5261,7 +5261,7 @@ body.has-navbar-fixed-bottom-touch {
   }
 
   .navbar-dropdown {
-    background-color: #F44F4D;
+    background-color: #f44f4d;
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
     border-top: 2px solid #dbdbdb;
@@ -11509,11 +11509,11 @@ body {
 }
 
 .has-background-tgg-accent1 {
-  background-color: #F44F4D;
+  background-color: #f44f4d;
 }
 
 .has-background-tgg-accent2 {
-  background-color: #EC42E1;
+  background-color: #ec42e1;
 }
 
 .has-background-light-green {
@@ -11533,11 +11533,11 @@ body {
 }
 
 .has-text-tgg-accent1 {
-  color: #F44F4D;
+  color: #f44f4d;
 }
 
 .has-text-tgg-accent2 {
-  color: #EC42E1;
+  color: #ec42e1;
 }
 
 .has-text-light-green {
@@ -11606,11 +11606,11 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  border-top: 10px solid #F44F4D;
+  border-top: 10px solid #f44f4d;
 }
 
 #parallax-1 hr {
-  background: #F44F4D;
+  background: #f44f4d;
 }
 
 #parallax-2 {
@@ -11619,11 +11619,15 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  border-top: 10px solid #EC42E1;
+  border-top: 10px solid #ec42e1;
 }
 
 #parallax-2 hr {
-  background: #EC42E1;
+  background: #ec42e1;
+}
+
+span img {
+  margin: 0.5rem;
 }
 
 .home__gradient {
@@ -11639,6 +11643,24 @@ body {
 .home__hero h1,
 .home__hero h2,
 .home__hero h3 {
-  color: #EC42E1;
+  color: #ec42e1;
+}
+
+.products-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+}
+
+.photo img {
+  background-color: #eee;
+  border: 1px solid #ddd;
+  height: auto;
+  padding: 0.25rem;
+  transition: transform 0.3s;
+  width: 100%;
+}
+.photo img:hover {
+  transform: scale(1.25);
 }
 /*# sourceMappingURL=app.css.map*/
