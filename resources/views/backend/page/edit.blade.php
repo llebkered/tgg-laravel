@@ -1,8 +1,8 @@
 @extends('backend.layouts.main')
 
 @section('header_extras')
-<script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
-<script src="{{ asset('js/tinymcesettings.js') }}" referrerpolicy="origin"></script>
+<script src="{{ asset('public/js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
+<script src="{{ asset('public/js/tinymcesettings.js') }}" referrerpolicy="origin"></script>
 @endsection
 
 @section('content')

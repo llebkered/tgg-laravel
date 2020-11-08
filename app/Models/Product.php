@@ -20,9 +20,6 @@ class Product extends Model implements HasMedia
         return $this->hasMany('App\Models\Variation');
     }
 
- 
-
-
 
     public function registerMediaCollections(): void
     {

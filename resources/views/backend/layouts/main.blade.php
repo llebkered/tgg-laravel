@@ -11,8 +11,8 @@
     <title> {{ config('app.name', 'Laravel') }} - Admin</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
+    <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('public/css/admin.css') }}" rel="stylesheet">
     @yield('header_extras')
 </head>
 
@@ -32,7 +32,7 @@
             </div>
 
     </div>
-    <script async type="text/javascript" src="{{ asset('js/bulma.js') }}"></script>
+    <script async type="text/javascript" src="{{ asset('public/js/bulma.js') }}"></script>
     @yield('footer_extras')
 </body>
 
