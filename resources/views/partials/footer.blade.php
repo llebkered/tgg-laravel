@@ -23,6 +23,6 @@
         </div>
         <div class="web-credit">Site by <a href="https://lucid.com.au">Lucid Web Design</a></div>
     </div>
-    <script src="{{ asset('public/js/menu.js') }}" defer></script>
+    <script src="{{ asset('js/menu.js') }}" defer></script>
     @yield('footer_extras')
 </footer>

@@ -40,7 +40,7 @@
                     <span class="tag is-info is-rounded is-size-6">{{ Cart::count() }}</span>
                     @endif
                     <span class="mx-3">
-                        <img class="mdi-white" src="{{ asset('public/images/cart-white.svg') }}" alt="Cart">
+                        <img class="mdi-white" src="{{ asset('images/cart-white.svg') }}" alt="Cart">
                     </span>
                     Cart
                 </a>
