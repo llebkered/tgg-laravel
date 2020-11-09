@@ -32,6 +32,7 @@ mix.options({
 mix.js(["resources/js/app.js","resources/js/bulma.js","resources/js/menu.js"], "public/js")
     .sass("resources/sass/app.scss", "public/css")
     .sass("resources/sass/admin.scss", "public/css")
+    .sass("resources/sass/print.scss", "public/css")
     .sourceMaps(true, "source-map")
     .copy("resources/images/*.*", "public/images")
     .copy("./node_modules/simplelightbox/dist/*.*", "public/vendor/simplelightbox");

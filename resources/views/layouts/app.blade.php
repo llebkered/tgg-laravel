@@ -18,6 +18,7 @@
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/print.css') }}" media="print">
     @yield('header_extras')
 </head>
 
