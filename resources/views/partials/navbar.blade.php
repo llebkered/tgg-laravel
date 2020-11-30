@@ -26,9 +26,9 @@
                 Contact Us
             </a>
 
-            <a class="navbar-item" href="{{ route('products') }}">
+            {{-- <a class="navbar-item" href="{{ route('products') }}">
                 Products
-            </a>
+            </a> --}}
 
         </div>
 
