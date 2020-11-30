@@ -21,6 +21,7 @@
         "laravel/framework": "^8.0",
         "laravel/jetstream": "^1.1",
         "laravel/sanctum": "^2.6",
+        "laravel/telescope": "^4.3",
         "laravel/tinker": "^2.0",
         "spatie/laravel-honeypot": "^2.3",
         "spatie/laravel-medialibrary": "^8.0.0",

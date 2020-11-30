@@ -168,7 +168,7 @@ class BackendBlockController extends Controller
             // store filename and image object
             Storage::disk('public')->put('images/blocks/' . $basename . '.jpg', $photo);
             // add new image path to page
-            $block->background_image = $path;
+            $data['background_image'] = $path;
         }
 
         $block->update($data);
