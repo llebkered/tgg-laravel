@@ -139,9 +139,23 @@ class BackendBlockController extends Controller
 
         if ($request->file('background_image')) {
 
+
+            // $rules = [
+            //     'name' => 'required',
+            //     'email' => 'required|email',
+            //     'message' => 'required|max:250',
+            // ];
+        
+            // $customMessages = [
+            //     'required' => 'The :attribute field is required.'
+            // ];
+        
+            // $this->validate($request, $rules, $customMessages);
+
+
             // validate the uploaded file
             $validation = $request->validate([
-                'background_image' => 'required|file|image|mimes:jpeg,png,gif,webp|max:4096'
+                'background_image' => 'alpha_dash|required|file|image|mimes:jpeg,png,gif,webp|max:4096'
                 // for multiple file uploads
                 // 'photo.*' => 'required|file|image|mimes:jpeg,png,gif,webp|max:2048'
             ]);

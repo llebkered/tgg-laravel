@@ -12,7 +12,7 @@
                     <li><a href="{{ route('ferns') }}">Ferns</a></li>
                     <li><a href="{{ route('paulownia') }}">Paulownia</a></li>
                     <li><a href="{{ route('contact') }}">Contact Us</a></li>
-                    <li><a href="{{ route('products') }}">Products</a></li>
+                    {{-- <li><a href="{{ route('products') }}">Products</a></li> --}}
                 </ul>
             </div>
             <div class="column is-half">
