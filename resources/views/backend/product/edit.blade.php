@@ -25,6 +25,7 @@
 
         <div class="columns mb-6">
             <div class="column">
+            
                 {{ $product->image}}
             </div>
             <div class="column">

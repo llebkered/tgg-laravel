@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration
             $table->string('image')->nullable();
             $table->text('description')->nullable();
             $table->boolean('published')->nullable();
+            $table->boolean('stocked')->nullable();
             $table->timestamps();
         });
     }

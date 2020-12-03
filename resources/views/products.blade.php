@@ -22,7 +22,7 @@
                 <div class="column">
 
                     <h2>{{ $product->title }}</h2>
-                    <div class="gallery products-grid">
+                    {{-- <div class="gallery products-grid">
                         @foreach ($product->getMedia('images') as $image)
                         <a href="{{ $image->getUrl('large') }}">
                             <div class="photo">
@@ -30,11 +30,12 @@
                             </div>
                         </a>
                         @endforeach
-                    </div>
+                    </div> --}}
 
                     <div>{!! $product->description !!}</div>
                 </div>
                 <div class="column is-one-third has-background-light">
+                    @if ($product->stocked)
                     <h3>Packs</h3>
                     @foreach ($product->variations as $variation)
                     <article class="mb-6">
@@ -50,6 +51,10 @@
                         </form>
                     </article>
                     @endforeach
+                    @else
+                    <h3>Out of Stock</h3>
+                    <p>This item is currently out of stock.</p>
+                    @endif
                 </div>
             </div>
         </div>

@@ -46,6 +46,9 @@ class BackendProductController extends Controller
             'description' => 'required'
         ]);
 
+        $data['published'] = $request->published;
+        $data['stocked'] = $request->stocked;
+
         $product = Product::create($data);
 
         return redirect()->route('backend.products.edit', $product->id)
@@ -94,6 +97,8 @@ class BackendProductController extends Controller
             'description' => 'required'
         ]);
 
+        $data['published'] = $request->published;
+        $data['stocked'] = $request->stocked;
     
         if ($request->image) {
             $product->addMediaFromRequest('image')->toMediaCollection('images');

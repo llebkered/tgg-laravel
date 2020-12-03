@@ -93,6 +93,18 @@
             Not Published
         </label>
     </div>
+
+    <div class="control">
+        <span class="has-text-weight-bold">In Stock: </span>
+        <label class="radio">
+            <input type="radio" name="stocked" value="1" {{ ($product->stocked =='1') ? 'checked' :''}}>
+            In Stock
+        </label>
+        <label class="radio">
+            <input type="radio" name="stocked" value="0" {{ ($product->stocked =='0') ? 'checked' :''}}>
+            Not In Stock
+        </label>
+    </div>
 </div>
 
 <div class="content mb-6">
@@ -115,21 +127,5 @@
         </div>
     </div>
 
-    <div class="content">
-        <div class="columns is-multiline ">
-            @foreach ($images as $image)
-            <div class="column is-4">
-                <div class="card">
-                    <div class="card-image">
-                        <figure class="image">
-                            <img src="{{ $image->getUrl('thumb') }}" alt="{{ $image->getUrl('thumb') }}">
-                        </figure>
-                    </div>
-                    <div class="content">
-                    </div>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
+    @include('backend.product.image-form')
 </div>
