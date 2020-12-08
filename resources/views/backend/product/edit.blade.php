@@ -23,23 +23,23 @@
         @csrf
         @include('backend.product.form')
 
-        <div class="columns mb-6">
+        {{-- <div class="columns mb-6">
             <div class="column">
-            
-                {{ $product->image}}
+           
             </div>
             <div class="column">
                 @if ($product->image)
                 <img src="{{ asset( 'storage/' . $product->image) }}" alt="">
                 @endif
             </div>
-        </div>
+        </div> --}}
 
         <div class="content mb-6">
             <button class="button is-primary" type="submit">Submit</button>
         </div>
-
     </form>
+
+    @include('backend.product.image-gallery')
 
     <form class="is-pulled-right" action="{{ route('backend.products.destroy', $product->id) }}" method="POST">
         @method('DELETE')

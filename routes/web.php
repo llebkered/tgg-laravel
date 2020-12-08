@@ -17,6 +17,7 @@ use App\Http\Controllers\Backend\BackendUserController;
 use App\Http\Controllers\Backend\BackendBlockController;
 use App\Http\Controllers\Backend\BackendOrderController;
 use App\Http\Controllers\Backend\BackendPlantController;
+use App\Http\Controllers\Backend\MediaLibraryController;
 use App\Http\Controllers\Backend\BackendProductController;
 use App\Http\Controllers\Backend\BackendVariationController;
 
@@ -93,6 +94,8 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
 
     Route::resource('/orders', BackendOrderController::class , ['as' => 'backend', 'only' => ['index', 'edit','update']]);
     Route::get('/orders/{order}/sendshippedemail', [BackendOrderController::class, 'sendOrderShippedEmail'])->name('backend.orders.sendshippedemail');
+
+    Route::get('/medialibary/{mediaId}/delete',[ MediaLibraryController::class, 'delete']);
 
     Route::resource('/pages', BackendPageController::class , ['as' => 'backend']);
 

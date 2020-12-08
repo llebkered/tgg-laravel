@@ -108,24 +108,49 @@
 </div>
 
 <div class="content mb-6">
-    <div class="columns has-text-weight-bold mb-6">Image</div>
-    <div class="columns">
-        <div class="columns">
-            <div class="file">
-                <label class="file-label">
-                    <input class="file-input" type="file" name="image">
-                    <span class="file-cta">
-                        <span class="file-icon">
-                            <i class="fas fa-upload"></i>
-                        </span>
-                        <span class="file-label">
-                            Choose a file…
-                        </span>
-                    </span>
-                </label>
+    <h4>Add Image To Gallery</h4>
+    <div class="columns mb-6">
+        <div class="column has-text-centered">
+            <div class="control uploader">
+                <span class="material-icons">upload</span>
+                <span> Add image</span>
+                <input type="file" name="image" accept="image/*" onchange="showMyImage(this)" value=""
+                    class="button button is-link chooseFile" />
             </div>
         </div>
+        <!-- Image preview -->
+        <div class="field column">
+            <img id="thumbnail" class="image is-128x128" src="" alt="image-preview-here" /> </div>
     </div>
-
-    @include('backend.product.image-form')
 </div>
+
+
+@section('footer_extras')
+<script>
+    //function for displaying the image upload preview
+
+function showMyImage(fileInput) {
+  var files = fileInput.files;
+  for (var i = 0; i < files.length; i++) {
+    var file = files[i];
+    var imageType = /image.*/;
+    if (!file.type.match(imageType)) {
+      continue;
+    }
+    var img = document.getElementById("thumbnail");
+    img.file = file;
+    var reader = new FileReader();
+    reader.onload = (function(aImg) {
+      return function(e) {
+        aImg.src = e.target.result;
+      };
+    })(img);
+    reader.readAsDataURL(file);
+  }
+}
+
+</script>
+
+
+
+@endsection
