@@ -45,6 +45,9 @@
                                 <textarea class="textarea is-medium" name="message">{{ old('message') }}</textarea>
                             </div>
                         </div>
+                        <div class="g-recaptcha" data-sitekey="6LcN_sESAAAAAOWD5PSJ1y_QePb-delgio5edjnF"></div>
+                        <br/>
+
                         <div class="control">
                             <button type="submit"
                                 class="button is-link is-fullwidth has-text-weight-medium is-medium">Send
@@ -57,5 +60,11 @@
     </div>
 </section>
 
+@endsection
+
+
+@section('header_extras')
+<!-- recaptcha -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 @endsection
 
