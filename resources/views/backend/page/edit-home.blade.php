@@ -91,9 +91,9 @@
 </section>
 
 
-<hr>
+{{-- <hr> --}}
 
-<section class="section has-background-black has-text-warning">
+{{-- <section class="section has-background-black has-text-warning">
     <div class="container content">
         <h2 class="">Section</h2>
         <p>
@@ -112,9 +112,9 @@
         margin-right: 8px;
         width: 24px;
     }
-</style>
+</style> --}}
 
-<section class='content panel px-2 py-2 mb-6'>
+{{-- <section class='content panel px-2 py-2 mb-6'>
     <h2>Hero</h2>
     <div class="panel px-2 py-2 mb-4">
         <div class="columns">
@@ -213,7 +213,7 @@
             <button class="button is-primary">New block</button>
         </div>
     </div>
-</div>
+</div> --}}
 
 @endsection
 
