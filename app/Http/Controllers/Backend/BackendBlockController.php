@@ -131,45 +131,34 @@ class BackendBlockController extends Controller
             ]
         );
 
+      
+
         if ($request->input('deleteimage') == "on") {
             $data['background_image'] = null;
             $oldfile = $block->background_image;
-            Storage::delete($oldfile);
+            Storage::disk('public')->delete($oldfile);
         }
 
         if ($request->file('background_image')) {
-
-
-            // $rules = [
-            //     'name' => 'required',
-            //     'email' => 'required|email',
-            //     'message' => 'required|max:250',
-            // ];
-        
-            // $customMessages = [
-            //     'required' => 'The :attribute field is required.'
-            // ];
-        
-            // $this->validate($request, $rules, $customMessages);
-
-
+           
             // validate the uploaded file
             $validation = $request->validate([
-                'background_image' => 'alpha_dash|required|file|image|mimes:jpeg,png,gif,webp|max:4096'
+                'background_image' => 'required|file|image|mimes:jpeg,png,gif,webp|max:4096'
                 // for multiple file uploads
                 // 'photo.*' => 'required|file|image|mimes:jpeg,png,gif,webp|max:2048'
             ]);
-
+            
             // remove old image
             $oldfile = $block->background_image;
-            Storage::delete($oldfile);
+            Storage::disk('public')->delete($oldfile);
 
             $file      = $validation['background_image'];
             $fileinfo = pathinfo($file->getClientOriginalName()); // no method for getting file name without extension?
             $extension = Str::lower($file->getClientOriginalExtension());
             $basename = Str::slug($fileinfo['filename']);
-            $filename  = $basename . '.' . $extension;
+            $filename  =  $basename . '.' . $extension;
             $path      = $file->storeAs('images/blocks', $filename);
+
 
             // Resize & crop image
             $photo = Image::make($file)
@@ -180,7 +169,7 @@ class BackendBlockController extends Controller
                 ->encode('jpg', 80);
                 
             // store filename and image object
-            Storage::disk('public')->put('images/blocks' . $basename . '.jpg', $photo);
+            Storage::disk('public')->put('images/blocks/' . $basename . '.jpg', $photo);
             
             // add new image path to page
             $data['background_image'] = $path;

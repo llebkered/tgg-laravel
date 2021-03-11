@@ -67,7 +67,11 @@
                 <div class="columns">
                     <div class="column">
                         <div class="file">
-                            <label class="file-label">
+                            <label class="custom-file-label" for="background_image">Select file</label>
+                            <input type="file" name="background_image" class="custom-file-input" id="chooseFile">
+                            
+                            
+                            {{-- <label class="file-label" for="background_image">
                                 <input class="file-input" type="file" name="background_image">
                                 <span class="file-cta">
                                     <span class="file-icon">
@@ -77,7 +81,7 @@
                                         Choose a file…
                                     </span>
                                 </span>
-                            </label>
+                            </label> --}}
                         </div>
                     </div>
                     @if ($block->background_image)

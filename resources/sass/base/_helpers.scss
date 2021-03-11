@@ -86,6 +86,7 @@
 
 .has-background-off-white {
     background-color: $off-white;
+  
 }
 
 .has-background-slate-grey {
@@ -94,24 +95,46 @@
 
 .has-text-dark-green {
     color: $dark-green;
+    a {
+        color: $off-white; 
+    }
+
 }
 
 .has-text-tgg-accent1 {
     color: $tgg-accent1;
+    a {
+        color: $tgg-accent1; 
+    }
+
 }
 
 .has-text-tgg-accent2 {
     color: $tgg-accent2;
+    a {
+        color: $tgg-accent2; 
+    }
+
 }
 
 .has-text-light-green {
     color: $light-green;
+    a {
+        color: $light-green; 
+    }
+
 }
 
 .has-text-off-white {
     color: $off-white;
+    a {
+        color: $off-white; 
+    }
 }
 
 .has-text-slate-grey {
     color: $slate-grey;
+    a {
+        color: $slate-grey; 
+    }
 }
