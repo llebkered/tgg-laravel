@@ -21,8 +21,6 @@ use App\Http\Controllers\Backend\MediaLibraryController;
 use App\Http\Controllers\Backend\BackendProductController;
 use App\Http\Controllers\Backend\BackendVariationController;
 
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -87,21 +85,22 @@ Route::prefix('checkout')->group(function () {
 Route::get('/backend/login', [BackendAuthController::class, 'index'])->name('backend.login');
 Route::post('/backend/login', [BackendAuthController::class, 'login']);
 // middleware('App\Http\Middleware\AdminAccessMiddleware') ['auth:sanctum', 'verified']
+
 Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function () {
     Route::get('/', [BackendController::class, 'index'])->name('backend.index');
 
-    Route::resource('/blocks', BackendBlockController::class , ['as' => 'backend', 'only' => ['create','delete','edit','show','store','update','destroy']]);
+    Route::resource('/blocks', BackendBlockController::class, ['as' => 'backend', 'only' => ['create','delete','edit','show','store','update','destroy']]);
 
-    Route::resource('/orders', BackendOrderController::class , ['as' => 'backend', 'only' => ['index', 'edit','update']]);
+    Route::resource('/orders', BackendOrderController::class, ['as' => 'backend', 'only' => ['index', 'edit','update']]);
     Route::get('/orders/{order}/sendshippedemail', [BackendOrderController::class, 'sendOrderShippedEmail'])->name('backend.orders.sendshippedemail');
 
-    Route::get('/medialibary/{mediaId}/delete',[ MediaLibraryController::class, 'delete']);
+    Route::get('/medialibary/{mediaId}/delete', [ MediaLibraryController::class, 'delete']);
 
-    Route::resource('/pages', BackendPageController::class , ['as' => 'backend']);
+    Route::resource('/pages', BackendPageController::class, ['as' => 'backend']);
 
-    Route::resource('/plants', BackendPlantController::class , ['as' => 'backend']);
+    Route::resource('/plants', BackendPlantController::class, ['as' => 'backend']);
 
-    Route::resource('/products', BackendProductController::class , ['as' => 'backend']);
+    Route::resource('/products', BackendProductController::class, ['as' => 'backend']);
 
     Route::get('/variations/create/{product}', [BackendVariationController::class, 'create'])->name('backend.variations.create');
     Route::post('/variations', [BackendVariationController::class, 'store'])->name('backend.variations.store');
@@ -115,40 +114,34 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
 
 
 
-
-// Route::get('/clear', function() {
-//     Artisan::call('cache:clear');s
-//     // Artisan::call('route:clear');
-//     // Artisan::call('config:clear');
-//     // Artisan::call('view:clear');
-//     return "All is cleared";
-// });
-
-
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
 
 
-//Clear configurations:
-Route::get('/config-clear', function() {
-    $status = Artisan::call('config:clear');
-    return '<h1>Configurations cleared</h1>';
-});
 
-//Clear cache:
-Route::get('/cache-clear', function() {
-    $status = Artisan::call('cache:clear');
-    return '<h1>Cache cleared</h1>';
-});
+Route::middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function () {
+   
+   //Clear configurations:
+    Route::get('/config-clear', function () {
+        $status = Artisan::call('config:clear');
+        return '<h1>Configurations cleared</h1>';
+    });
 
-//Clear configuration cache:
-Route::get('/config-cache', function() {
-    $status = Artisan::call('config:Cache');
-    return '<h1>Configurations cache cleared</h1>';
-});
+    //Clear cache:
+    Route::get('/cache-clear', function () {
+        $status = Artisan::call('cache:clear');
+        return '<h1>Cache cleared</h1>';
+    });
 
-Route::get('/link', function() {
-    $status = Artisan::call('storage:link');
-    return '<h1>Symlinks created</h1>';
+    //Clear configuration cache:
+    Route::get('/config-cache', function () {
+        $status = Artisan::call('config:Cache');
+        return '<h1>Configurations cache cleared</h1>';
+    });
+
+    Route::get('/link', function () {
+        $status = Artisan::call('storage:link');
+        return '<h1>Symlinks created</h1>';
+    });
 });
