@@ -1,5 +1,6 @@
 <div class="content mb-6">
     <div class="field">
+        <input type="hidden" name="id" value="{{ old('id') ? old('id') : $plant->id }}">
         <label class="label" for="title">Common Name</label>
         <div class="control">
             <input class="input" name="title" type="text" placeholder="common name"
@@ -69,9 +70,10 @@
         </div>
         <div class="column">
             <div class="select">
-                <select name="plant_category_id">
+                <select name="plantcategory_id">
                     @foreach ($plant_categories as $item)
-                    <option value="{{ $item->id}}" {{ ($item->id == $plant->plantcategory_id) ? ' selected' : '' }}>{{ $item->title }}</option>
+                    <option value="{{ $item->id}}" {{ ($item->id == $plant->plantcategory_id) ? ' selected' : '' }}>
+                        {{ $item->title }}</option>
                     @endforeach
                 </select>
             </div>
@@ -84,17 +86,8 @@
     <div class="columns">
         <div class="columns">
             <div class="file">
-                <label class="file-label">
-                    <input class="file-input" type="file" name="image">
-                    <span class="file-cta">
-                        <span class="file-icon">
-                            <i class="fas fa-upload"></i>
-                        </span>
-                        <span class="file-label">
-                            Choose a file…
-                        </span>
-                    </span>
-                </label>
+                <label class="custom-file-label" for="featured_image">Featured Image</label>
+                <input type="file" name="featured_image" class="custom-file-input" id="featured_image">
             </div>
         </div>
     </div>
@@ -104,4 +97,3 @@
     </div>
     @enderror
 </div>
-

@@ -7,6 +7,7 @@
 
 @section('content')
 
+
 <section class="hero is-info welcome is-small mb-6">
     <div class="hero-body">
         <div class="container">
@@ -23,21 +24,23 @@
 <section>
 
     <div class="container">
-        <form action="{{ route('backend.plants.update', $plant->id) }}" method="POST">
+        <form action="{{ route('backend.plants.update', $plant->id) }}" method="POST" enctype="multipart/form-data">
             @method('PUT')
             @csrf
 
             @include('backend.plant.form')
 
             <div class="columns mb-6">
+
+                @if ( $plant->getFirstMedia('featured_image') )
                 <div class="column">
-                    {{ $plant->image}}
+                    {{ $plant->getFirstMedia('featured_image') }}
                 </div>
                 <div class="column">
-                    @if ($plant->image)
-                    <img src="{{ asset( 'storage/' . $plant->image) }}" alt="">
-                    @endif
+                    <label for="delete_image">Delete image</label>
+                    <input type="checkbox" name="delete_image" id="delete_image">
                 </div>
+                @endif
             </div>
 
             <button class="button is-primary">Update Plant</button>

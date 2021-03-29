@@ -48,7 +48,19 @@ class BackendPlantController extends Controller
             'description' => 'required'
         ]);
 
-        Plant::create($plant);
+        $data = $request->only(
+            [
+                'title',
+                'botanical_name',
+                'description',
+                'image',
+                'published',
+                'promoted',
+                'plantcategory_id'
+            ]
+        );
+
+        Plant::create($data);
 
         return redirect()->route('backend.plants.index')
             ->with('success_message', 'Plant has been created successfully.');
@@ -75,6 +87,10 @@ class BackendPlantController extends Controller
      */
     public function edit(Plant $plant)
     {
+        $plant->getFirstMedia('featured_image');
+
+        // return $plant;
+        
         $plant_categories = PlantCategory::where('published', '=', '1')->get();
 
         return view('backend.plant.edit', compact('plant', 'plant_categories'));
@@ -89,15 +105,38 @@ class BackendPlantController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $plant = Plant::find($id);
         $plant_categories = PlantCategory::where('published', '=', '1')->get();
 
-        $data = $request->validate([
+        $request->validate([
             'title' => 'required',
             'botanical_name' => 'required',
             'description' => 'required'
         ]);
+        $data = $request->only(
+            [
+                'id',
+                'title',
+                'botanical_name',
+                'description',
+                'image',
+                'published',
+                'promoted',
+                'plantcategory_id'
+            ]
+        );
+
+
+        if ($request->delete_image) {
+            $plant->clearMediaCollection('featured_image');
+        }
+
+        if ($request->file()) {
+            $plant->addMediaFromRequest('featured_image')->toMediaCollection('featured_image');
+            return back()
+                ->with('success', 'Featured image has been updated.');
+        }
+
 
         $plant->update($data);
 

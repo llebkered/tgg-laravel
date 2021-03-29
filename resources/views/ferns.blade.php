@@ -16,13 +16,12 @@
             @foreach ($ferns as $fern)
             <div class="column is-full-mobile is-half-tablet is-one-third-desktop is-one-quarter-widescreen">
                 <div class="card">
-                    @if ($fern->image)
                     <div class="card-image">
                         <figure class="image  is-4by3">
-                            <img src="{{ asset('storage/' . $fern->image ) }}" alt="{{ $fern->title}}">
+                            <img src="{{ $fern->getFirstMediaUrl('featured_image', 'medium') }}"
+                                alt="{{ $fern->title }}" loading="lazy">
                         </figure>
                     </div>
-                    @endif
                     <div class="card-content">
                         <div class="content">
                             <h3>{{ $fern->title}}</h3>
@@ -38,6 +37,7 @@
         </div>
         {{ $ferns->links('partials.pagination') }}
     </div>
+    
 </section>
 
 @endsection
