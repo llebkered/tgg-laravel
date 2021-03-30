@@ -136,9 +136,16 @@ Route::middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function (
 
     //Clear configuration cache:
     Route::get('/config-cache', function () {
-        $status = Artisan::call('config:Cache');
+        $status = Artisan::call('config:cache');
         return '<h1>Configurations cache cleared</h1>';
     });
+
+    //Clear routes:
+    Route::get('/route-clear', function () {
+        $status = Artisan::call('route:clear');
+        return '<h1>Routes cleared</h1>';
+    });
+
 
     Route::get('/link', function () {
         $status = Artisan::call('storage:link');
