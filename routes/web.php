@@ -147,6 +147,11 @@ Route::middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function (
     });
 
 
+    Route::get('/media-regenerate', function () {
+        $status = Artisan::call('medialibrary:regenerate --only-missing');
+        return '<h1>Routes cleared</h1>';
+    });
+
     Route::get('/link', function () {
         $status = Artisan::call('storage:link');
         return '<h1>Symlinks created</h1>';

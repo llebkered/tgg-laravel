@@ -26,7 +26,9 @@ class Plant extends Model implements HasMedia
                 ->registerMediaConversions(function (Media $media) {
                     $this
                     ->addMediaConversion('medium')
-                    ->crop(Manipulations::CROP_CENTER, 470, 350);
+                    ->crop(Manipulations::CROP_CENTER, 470, 350)
+                    ->nonOptimized() //for shared hosts
+                    ->nonQueued(); //for shared hosts;
                 });
     }
 }
