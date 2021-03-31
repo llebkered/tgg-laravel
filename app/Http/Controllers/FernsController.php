@@ -11,7 +11,7 @@ class FernsController extends Controller
     public function index(){
         $page = Page::where('slug', '=', 'ferns')->first();
 
-        $ferns = Plant::where('plantcategory_id', '=', '1')->paginate(24);
+        $ferns = Plant::where('plantcategory_id', '=', '1')->orderBy('botanical_name', 'ASC')->paginate(24);
 
         return view('ferns', compact(['page']))->with('ferns', $ferns);
     }
