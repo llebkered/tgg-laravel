@@ -26,10 +26,12 @@ html {
  */
 a {
     color: $brand-color;
-    text-decoration: none;
+    text-decoration: underline;
 
     @include on-event {
         color: $text-color;
         text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 1px;
     }
 }
