@@ -14,8 +14,6 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Mail;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
-
-
 class CheckoutController extends Controller
 {
     public function index()
@@ -39,6 +37,7 @@ class CheckoutController extends Controller
 
         //create customer
         $customer = Customer::create($data);
+        
         // Store in session
         $customerId = $request->session()->put('customer', $customer->id);
 
@@ -62,7 +61,6 @@ class CheckoutController extends Controller
 
     public function delivery()
     {
-
         $page = Page::where('slug', '=', 'checkout')->first();
         return view('checkout.delivery', compact('page'));
     }
@@ -146,12 +144,12 @@ class CheckoutController extends Controller
             return redirect()->route('checkout.card', compact('page'))->with('danger_message', 'Sorry. Something went wrong with your credit card payment. Please check your number, expiry, cvc and try again.');
         }
 
+        
         return view('checkout.charge', compact('page'));
     }
 
     public function directdeposit(Request $request)
     {
-
         $page = Page::where('slug', '=', 'checkout')->first();
         // update order status to invoiced
         $order = Order::where('id', '=', $request->session()->get('order'))->first();
@@ -184,7 +182,6 @@ class CheckoutController extends Controller
 
     public function thankyou(Request $request)
     {
-
         $page = Page::where('slug', '=', 'thankyou')->first();
         // update order status to paid
         $order = Order::where('id', '=', $request->session()->get('order'))->first();
@@ -220,7 +217,6 @@ class CheckoutController extends Controller
 
     public function getDescription()
     {
-
         $description = '';
         foreach (Cart::content() as $row) {
             $description = $description . $row->name . ' <br> ';

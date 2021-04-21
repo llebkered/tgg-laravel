@@ -31,14 +31,14 @@
                                 <label for="name" class="label">Name On Card</label>
                                 <div class="control">
                                     <input name="name" class="input is-medium" type="text" placeholder="Name On Card"
-                                        value={{ $customer->name }}>
+                                        value="{{ $customer->name }}">
                                 </div>
                             </div>
                             <div class="field">
                                 <label for="number" class="label">Card Number</label>
                                 <div class="control">
                                     <input name="number" class="input is-medium" type="text" placeholder="Card Number"
-                                        value={{ old('number')}}>
+                                        value="{{ old('number')}}">
                                 </div>
                             </div>
                             <div class="field">
@@ -76,7 +76,7 @@
                                         <label for="cvc" class="label">CVC</label>
                                         <div class="control">
                                             <input name="cvc" class="input is-medium" type="text" placeholder="CVC"
-                                                value={{ old('cvc')}}>
+                                                value="{{ old('cvc')}}">
                                         </div>
                                     </div>
                                 </div>

@@ -31,21 +31,21 @@
                                 <label for="name" class="label">Name</label>
                                 <div class="control">
                                     <input name="name" class="input is-medium" type="text" placeholder="Name"
-                                        value={{ old('name')}}>
+                                        value="{{ old('name')}}">
                                 </div>
                             </div>
                             <div class="field">
                                 <label for="email" class="label">Email</label>
                                 <div class="control">
                                     <input name="email" class="input is-medium" type="email" placeholder="Email"
-                                        value={{ old('email')}}>
+                                        value="{{ old('email')}}">
                                 </div>
                             </div>
                             <div class="field">
                                 <label for="phone" class="label">Phone</label>
                                 <div class="control">
                                     <input name="phone" class="input is-medium" type="text" placeholder="Phone"
-                                        value={{ old('phone')}}>
+                                        value="{{ old('phone')}}">
                                 </div>
                             </div>
                             <input type="hidden" name="user_id" value="">
