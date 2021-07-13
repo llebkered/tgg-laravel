@@ -3,7 +3,7 @@
 @section('content')
 
 <section class="section content">
-    <div class="container is-fluid">
+    <div class="container is-max-widescreen">
         <h1>{{ $page['title']}}</h1>
         {!! $page['body'] !!}
     </div>
@@ -11,7 +11,7 @@
 
 <section class="section">
 
-    <div class="container is-fluid">
+    <div class="container is-max-widescreen">
         <div class="columns is-multiline is-mobile">
             @foreach ($ferns as $fern)
             <div class="column is-full-mobile is-half-tablet is-one-third-desktop is-one-quarter-widescreen">
@@ -37,7 +37,7 @@
         </div>
         {{ $ferns->links('partials.pagination') }}
     </div>
-    
+
 </section>
 
 @endsection

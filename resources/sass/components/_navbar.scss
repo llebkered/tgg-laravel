@@ -1,8 +1,21 @@
 .navbar {
+  
     a {
         text-decoration: none;
         @include on-event {
             text-decoration: underline;
         }
+    }
+
+ 
+}
+
+
+@media screen and (min-width: map-get($breakpoints , medium)) {
+.navbar {
+    &-item{
+
+        padding: 0 0.5rem;  
+        }  
     }
 }

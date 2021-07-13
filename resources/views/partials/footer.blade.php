@@ -1,5 +1,5 @@
 <footer class="footer">
-    <div class="containeris-fluid">
+    <div class="container is-max-widescreen">
         <div class="columns">
             <div class="column">
                 <h3>{{ config('app.name', 'TGG') }}</h3>

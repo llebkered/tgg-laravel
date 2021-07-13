@@ -3,11 +3,13 @@
     background-size: cover; {{ $block->background_attachment }}"
     @endif
     >
-    <div class=" content columns">
-        <div
-            class="column px-6 py-6 {{$block->content_background}} {{$block->content_width}} {{$block->content_position}}">
-            @if ($block->heading) <h2>{{ $block->heading }}</h2> @endif
-            {!! $block->content !!}
+    <div class="container is-max-widescreen">
+        <div class=" content columns">
+            <div
+                class="column px-6 py-6 {{$block->content_background}} {{$block->content_width}} {{$block->content_position}}">
+                @if ($block->heading) <h2>{{ $block->heading }}</h2> @endif
+                {!! $block->content !!}
+            </div>
         </div>
     </div>
 </div>

@@ -1,6 +1,5 @@
 <header class="header">
-    <div class="container is-fluid header__container">
-
+    <div class="container is-max-widescreen header__container">
         <div class="header__logo"><a href="{{ route('home')}}">
                 <img src="{{ asset('images/logo.svg') }}" alt="{{ config('app.name', 'Laravel') }}"></a>
         </div>
