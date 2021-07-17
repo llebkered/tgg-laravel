@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -24,30 +25,43 @@ class Product extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this
-        ->addMediaCollection('images')
-        ->withResponsiveImages()
-        ->onlyKeepLatest(6);
+            ->addMediaCollection('featured_image')
+            ->acceptsMimeTypes(['image/jpeg'])
+            ->singleFile()
+                ->registerMediaConversions(function (Media $media) {
+                    $this
+                    ->addMediaConversion('medium')
+                    ->crop(Manipulations::CROP_CENTER, 960, 480)
+                    ->nonOptimized() //for shared hosts
+                    ->nonQueued(); //for shared hosts;
+                });
+        
+       
+        // $this
+        //     ->addMediaCollection('gallery')
+        //     ->withResponsiveImages()
+        //     ->onlyKeepLatest(6);
     }
 
-    public function registerMediaConversions(Media $media = null): void
-    {
+    // public function registerMediaConversions(Media $media = null): void
+    // {
        
         
-        $this->addMediaConversion('thumb')
-            ->width(360)
-            ->height(360);
-        // ->sharpen(10);
+    //     $this->addMediaConversion('thumb')
+    //         ->width(360)
+    //         ->height(360);
+    //     // ->sharpen(10);
 
               
-        $this->addMediaConversion('medium')
-            ->width(540)
-            ->height(540);
-        // ->sharpen(10);
+    //     $this->addMediaConversion('medium')
+    //         ->width(540)
+    //         ->height(540);
+    //     // ->sharpen(10);
 
                       
-        $this->addMediaConversion('large')
-            ->width(960)
-            ->height(960);
-        // ->sharpen(10);
-    }
+    //     $this->addMediaConversion('large')
+    //         ->width(960)
+    //         ->height(960);
+    //     // ->sharpen(10);
+    // }
 }

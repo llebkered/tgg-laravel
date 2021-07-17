@@ -30,16 +30,29 @@
             <div class="column">
                 @if ($product->image)
                 <img src="{{ asset( 'storage/' . $product->image) }}" alt="">
-                @endif
-            </div>
+        @endif
+        </div>
         </div> --}}
+        <div class="columns mb-6">
 
+            @if ( $product->getFirstMedia('featured_image') )
+            <div class="column">
+                {{ $product->getFirstMedia('featured_image') }}
+            </div>
+            <div class="column">
+                <label for="delete_image">Delete image</label>
+                <input type="checkbox" name="delete_image" id="delete_image">
+            </div>
+            @endif
+        </div>
         <div class="content mb-6">
             <button class="button is-primary" type="submit">Submit</button>
         </div>
     </form>
 
-    @include('backend.product.image-gallery')
+    {{-- @include('backend.product.image-gallery') --}}
+
+
 
     <form class="is-pulled-right" action="{{ route('backend.products.destroy', $product->id) }}" method="POST">
         @method('DELETE')

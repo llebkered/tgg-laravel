@@ -12088,6 +12088,10 @@ body {
   color: rgba(255, 255, 255, 0.2);
 }
 
+.navbar {
+  height: 3rem;
+  min-height: 3rem;
+}
 .navbar a {
   text-decoration: none;
 }
@@ -12125,6 +12129,10 @@ body {
 
 #parallax-2 hr {
   background: #ec42e1;
+}
+
+.product {
+  margin-bottom: 5rem;
 }
 
 p img,

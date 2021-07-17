@@ -108,6 +108,23 @@
 </div>
 
 <div class="content mb-6">
+    <div class="columns has-text-weight-bold mb-6">Featured Image</div>
+    <div class="columns">
+        <div class="columns">
+            <div class="file">
+                <label class="custom-file-label" for="featured_image">Featured Image</label>
+                <input type="file" name="featured_image" class="custom-file-input" id="featured_image">
+            </div>
+        </div>
+    </div>
+    @error('image')
+    <div class="notification is-danger is-light">
+        <p>{{ $message }}</p>
+    </div>
+    @enderror
+</div>
+
+{{-- <div class="content mb-6">
     <h4>Add Image To Gallery</h4>
     <div class="columns mb-6">
         <div class="column has-text-centered">
@@ -122,32 +139,32 @@
         <div class="field column">
             <img id="thumbnail" class="image is-128x128" src="" alt="image-preview-here" /> </div>
     </div>
-</div>
+</div> --}}
 
 
 @section('footer_extras')
 <script>
     //function for displaying the image upload preview
 
-function showMyImage(fileInput) {
-  var files = fileInput.files;
-  for (var i = 0; i < files.length; i++) {
-    var file = files[i];
-    var imageType = /image.*/;
-    if (!file.type.match(imageType)) {
-      continue;
-    }
-    var img = document.getElementById("thumbnail");
-    img.file = file;
-    var reader = new FileReader();
-    reader.onload = (function(aImg) {
-      return function(e) {
-        aImg.src = e.target.result;
-      };
-    })(img);
-    reader.readAsDataURL(file);
-  }
-}
+// function showMyImage(fileInput) {
+//   var files = fileInput.files;
+//   for (var i = 0; i < files.length; i++) {
+//     var file = files[i];
+//     var imageType = /image.*/;
+//     if (!file.type.match(imageType)) {
+//       continue;
+//     }
+//     var img = document.getElementById("thumbnail");
+//     img.file = file;
+//     var reader = new FileReader();
+//     reader.onload = (function(aImg) {
+//       return function(e) {
+//         aImg.src = e.target.result;
+//       };
+//     })(img);
+//     reader.readAsDataURL(file);
+//   }
+// }
 
 </script>
 

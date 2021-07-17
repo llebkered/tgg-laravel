@@ -20,8 +20,11 @@
         <div class="product">
             <div class="columns">
                 <div class="column">
-
                     <h2>{{ $product->title }}</h2>
+                    @if ( $product->getFirstMediaUrl('featured_image') )
+                    <img src="{{ $product->getFirstMediaUrl('featured_image','medium') }}" alt="{{ $product->title }}">
+                    @endif
+                   
                     {{-- <div class="gallery products-grid">
                         @foreach ($product->getMedia('images') as $image)
                         <a href="{{ $image->getUrl('large') }}">

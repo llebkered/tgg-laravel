@@ -1,5 +1,6 @@
 .navbar {
-  
+  height: 3rem;
+  min-height: 3rem;
     a {
         text-decoration: none;
         @include on-event {

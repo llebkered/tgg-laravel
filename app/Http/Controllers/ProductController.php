@@ -19,7 +19,8 @@ class ProductController extends Controller
 
         $products = Product::where('published', '=', '1')->with('variations')->get();
 
-        return view('products', compact(['page','products']));
+        
+        return view('products')->with(["page" => $page, "products" => $products]);
     }
 
     /**

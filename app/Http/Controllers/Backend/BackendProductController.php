@@ -75,9 +75,9 @@ class BackendProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $images =  $product->getMedia('images');
+        $product->getFirstMedia('featured_image');
       
-        return view('backend.product.edit', compact('product','images'));
+        return view('backend.product.edit', compact('product'));
     }
 
     /**
@@ -100,8 +100,14 @@ class BackendProductController extends Controller
         $data['published'] = $request->published;
         $data['stocked'] = $request->stocked;
     
-        if ($request->image) {
-            $product->addMediaFromRequest('image')->toMediaCollection('images');
+        if ($request->delete_image) {
+            $product->clearMediaCollection('featured_image');
+        }
+
+        if ($request->file()) {
+            $product->addMediaFromRequest('featured_image')->toMediaCollection('featured_image');
+            return back()
+                ->with('success', 'Featured image has been updated.');
         }
         
         $product->update($data);
@@ -117,7 +123,7 @@ class BackendProductController extends Controller
      */
     public function destroy($id)
     {
-        Product::clearMediaCollection('images');
+        // Product::clearMediaCollection('images');
         Product::destroy($id);
         return redirect()->route('backend.products.index')->with('success_message', 'Product has been deleted.');
     }

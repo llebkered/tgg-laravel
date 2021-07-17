@@ -1,7 +1,7 @@
 <div class="content">
     <h4>Image Gallery</h4>
     <div class="columns is-multiline ">
-      
+
         @if ($images)
         @forelse ($images as $image)
         <div class="column is-4">
@@ -17,7 +17,7 @@
             </div>
         </div>
         @empty($images)
-             <p>No images in gallery.</p>
+        <p>No images in gallery.</p>
         @endempty
         @endforeach
         @endif
