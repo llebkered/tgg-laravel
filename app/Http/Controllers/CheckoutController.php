@@ -32,7 +32,9 @@ class CheckoutController extends Controller
         $data = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
-            'phone' => ['required', 'regex:/^(?:\+?61|0)[2-478](?:[ -]?[0-9]){8}$/']
+            'phone' => ['required', 'regex:/^(\+?\(61\)|\(\+?61\)|\+?61|\(0[1-9]\)|0[1-9])?( ?-?[0-9]){7,9}$/']
+            // /^(\+?\(61\)|\(\+?61\)|\+?61|\(0[1-9]\)|0[1-9])?( ?-?[0-9]){7,9}$/gm
+            // 'regex:/^(?:\+?61|0)[2-478](?:[ -]?[0-9]){8}$/'
         ]);
 
         //create customer
