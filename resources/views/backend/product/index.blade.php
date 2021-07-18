@@ -18,9 +18,19 @@
             <a href="{{ route('backend.products.create') }}" class="button is-primary">Add new product</a>
         </div>
         <div class="column">
-            <div style="display: flex; align-items: center; gap: 1rem; justify-content: center;">
-                Shop is @if (option('shop')) open <span class="material-icons">done</span> @else closed <span class="material-icons">closed</span> @endif
-                <a href="{{ route('backend.shop.toggle') }}" class="button is-link"> toggle &nbsp; <span class="material-icons">sync_alt</span></a>
+            <div class="is-flex is-justify-content-flex-end is-align-items-center"> 
+                {{-- style="display: flex; align-items: center; gap: 1rem; justify-content: center;" --}}
+                
+                @if (option('shop'))
+                <span class="material-icons">done</span> Shop is open &nbsp;
+                <a href="{{ route('backend.shop.toggle') }}" class="button is-link is-outlined">Close shop</a>
+                @else
+                <span class="material-icons">closed</span>Shop is closed  &nbsp;
+                <a href="{{ route('backend.shop.toggle') }}" class="button is-link is-outlined"> Open shop</a>
+                @endif
+
+                
+                
             </div>
         </div>
     </div>
