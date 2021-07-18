@@ -13,7 +13,17 @@
 </section>
 
 <div class="mb-6">
-    <a href="{{ route('backend.products.create') }}" class="button is-primary">Add new product</a>
+    <div class="columns">
+        <div class="column">
+            <a href="{{ route('backend.products.create') }}" class="button is-primary">Add new product</a>
+        </div>
+        <div class="column">
+            <div style="display: flex; align-items: center; gap: 1rem; justify-content: center;">
+                Shop is @if (option('shop')) open <span class="material-icons">done</span> @else closed <span class="material-icons">closed</span> @endif
+                <a href="{{ route('backend.shop.toggle') }}" class="button is-link"> toggle &nbsp; <span class="material-icons">sync_alt</span></a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <section class="panel mb-6">

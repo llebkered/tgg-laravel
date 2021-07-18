@@ -26,11 +26,11 @@
                 <a class="navbar-item" href="{{ route('contact') }}">
                     Contact Us
                 </a>
-
-                {{-- <a class="navbar-item" href="{{ route('products') }}">
-                Products
-                </a> --}}
-
+                @if ( option('shop')  )
+                <a class="navbar-item" href="{{ route('products') }}">
+                    Products
+                </a>
+                @endif
             </div>
 
             <div class="navbar-end">

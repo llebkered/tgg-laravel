@@ -102,6 +102,12 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
 
     Route::resource('/products', BackendProductController::class, ['as' => 'backend']);
 
+    Route::get('/shop/toggle', function () {
+        $option = (option('shop')) ? 0 : 1 ;
+        option(['shop' => $option ]);
+        return back();
+        })->name('backend.shop.toggle');
+
     Route::get('/variations/create/{product}', [BackendVariationController::class, 'create'])->name('backend.variations.create');
     Route::post('/variations', [BackendVariationController::class, 'store'])->name('backend.variations.store');
     Route::get('/variations/{variation}/edit', [BackendVariationController::class, 'edit'])->name('backend.variations.edit');

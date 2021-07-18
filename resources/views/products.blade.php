@@ -16,6 +16,7 @@
 
 <section class="section content">
     <div class="container is-max-widescreen">
+        @if (option('shop'))
         @foreach ($products as $product)
         <div class="product">
             <div class="columns">
@@ -24,7 +25,7 @@
                     @if ( $product->getFirstMediaUrl('featured_image') )
                     <img src="{{ $product->getFirstMediaUrl('featured_image','medium') }}" alt="{{ $product->title }}">
                     @endif
-                   
+
                     {{-- <div class="gallery products-grid">
                         @foreach ($product->getMedia('images') as $image)
                         <a href="{{ $image->getUrl('large') }}">
@@ -62,17 +63,24 @@
         </div>
     </div>
     @endforeach
+
+    @else
+
+    <!-- shop is closed -->
+    <h2>Store closed</h2>
+    <p>Our online shop is closed. It will reopen in new season.</p>
+
+    @endif
     </div>
 
 </section>
 
-
 @endsection
 
-@section('footer_extras')
+{{-- @section('footer_extras')
 <script src="{{ asset('public/vendor/simplelightbox/simple-lightbox.js') }}"></script>
 <script>
     var lightbox = new SimpleLightbox('.gallery a', { /* options */ });   
 </script>
 
-@endsection
+@endsection --}}
