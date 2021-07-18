@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="container is-fluid mt-6">
+<div class="container is-max-widescreen mt-6">
     <nav class="breadcrumb" aria-label="breadcrumbs">
         <ul>
             <li><a href="#">Contact</a></li>
@@ -14,7 +14,7 @@
 </div>
 
 <section class="section content">
-    <div class="container is-fluid">
+    <div class="container is-max-widescreen">
         <h1>Thank You</h1>
         {{-- <h1>{{ $page['title']}}</h1>
         {!! $page['body'] !!} --}}
@@ -30,14 +30,14 @@
                 <td>
                     {{ $item->name }}
                 </td>
-                <td  class="has-text-right">
+                <td class="has-text-right">
                     ${{ $item->price }}
                 </td>
             </tr>
             @endforeach
             <tr>
                 <td></td>
-            <td class="has-text-right">Total: ${{ $order->total }}</td>
+                <td class="has-text-right">Total: ${{ $order->total }}</td>
             </tr>
         </table>
 

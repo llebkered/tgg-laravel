@@ -55,7 +55,7 @@ class CheckoutController extends Controller
         $orderDetails['phone'] = $request->post('phone');
 
         $order = Order::create($orderDetails);
-        // Store order Id ins session
+        // Store order Id in session
         $request->session()->put('order', $order->id);
 
         return redirect()->route('checkout.delivery', compact('page'));

@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="container is-fluid mt-6">
+<div class="container  is-max-widescreen mt-6">
     <nav class="breadcrumb" aria-label="breadcrumbs">
         <ul>
             <li><a href="#">Contact</a></li>
@@ -14,7 +14,7 @@
 </div>
 
 <section class="section content">
-    <div class="container is-fluid">
+    <div class="container  is-max-widescreen">
         <h1>{{ $page['title']}}</h1>
         {{-- <h1>{{ $page['title']}}</h1>
         {!! $page['body'] !!} --}}
