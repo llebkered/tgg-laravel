@@ -12088,10 +12088,6 @@ body {
   color: rgba(255, 255, 255, 0.2);
 }
 
-.navbar {
-  height: 3rem;
-  min-height: 3rem;
-}
 .navbar a {
   text-decoration: none;
 }
@@ -12099,11 +12095,6 @@ body {
   text-decoration: underline;
 }
 
-@media screen and (min-width: 768px) {
-  .navbar-item {
-    padding: 0 0.5rem;
-  }
-}
 #parallax-1 {
   background-color: #555b6e;
   background: url(../images/bg-front-igloo.jpg);

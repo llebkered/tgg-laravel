@@ -16,7 +16,7 @@
 
 <section class="section content">
     <div class="container is-max-widescreen">
-        @if (option('shop'))
+        {{-- @if (option('shop')) --}}
         @foreach ($products as $product)
         <div class="product">
             <div class="columns">
@@ -64,13 +64,13 @@
     </div>
     @endforeach
 
-    @else
+    {{-- @else
 
     <!-- shop is closed -->
     <h2>Store closed</h2>
     <p>Our online shop is closed. It will reopen in new season.</p>
 
-    @endif
+    @endif --}}
     </div>
 
 </section>

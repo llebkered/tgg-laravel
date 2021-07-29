@@ -1,6 +1,6 @@
 .navbar {
-  height: 3rem;
-  min-height: 3rem;
+//   height: 3rem;
+//   min-height: 3rem;
     a {
         text-decoration: none;
         @include on-event {
@@ -12,11 +12,11 @@
 }
 
 
-@media screen and (min-width: map-get($breakpoints , medium)) {
-.navbar {
-    &-item{
+// @media screen and (min-width: map-get($breakpoints , medium)) {
+// .navbar {
+//     &-item{
 
-        padding: 0 0.5rem;  
-        }  
-    }
-}
+//         // padding: 0 0.5rem;  
+//         }  
+//     }
+// }

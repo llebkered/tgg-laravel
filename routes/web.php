@@ -106,7 +106,7 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
         $option = (option('shop')) ? 0 : 1 ;
         option(['shop' => $option ]);
         return back();
-        })->name('backend.shop.toggle');
+    })->name('backend.shop.toggle');
 
     Route::get('/variations/create/{product}', [BackendVariationController::class, 'create'])->name('backend.variations.create');
     Route::post('/variations', [BackendVariationController::class, 'store'])->name('backend.variations.store');
@@ -162,4 +162,11 @@ Route::middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function (
         $status = Artisan::call('storage:link');
         return '<h1>Symlinks created</h1>';
     });
+
+    // Route::get('/vendor/publish', function () {
+    //     $status = Artisan::call('vendor:publish --provider="Appstract\Options\OptionsServiceProvider"');
+    //     return '<h1>Vendor published </h1>';
+    // });
+
+  
 });
