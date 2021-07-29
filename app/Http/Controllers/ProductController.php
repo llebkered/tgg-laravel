@@ -20,7 +20,7 @@ class ProductController extends Controller
         $products = Product::where('published', '=', '1')->with('variations')->get();
 
         
-        return view('products')->with(["page" => $page, "products" => $products]);
+        return view('products.index')->with(["page" => $page, "products" => $products]);
     }
 
     /**
@@ -50,11 +50,15 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($slug)
     {
-        //
+        $page = Page::where('slug', '=', 'products')->first();
+        $product = Product::where('slug', '=', $slug)->with('variations')->first();
+        $page->title = $product->title;
+        return view('products.show')->with(["page" => $page, "product" => $product]);
     }
 
+   
     /**
      * Show the form for editing the specified resource.
      *

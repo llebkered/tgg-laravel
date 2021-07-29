@@ -54,6 +54,7 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 Route::get('/ferns', [FernsController::class, 'index'])->name('ferns');
 Route::get('/paulownia', [PaulowniaController::class, 'index'])->name('paulownia');
 Route::get('/products', [ProductController::class, 'index'])->name('products');
+Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
 
 
 // Route::prefix('admin')->group(function () {
