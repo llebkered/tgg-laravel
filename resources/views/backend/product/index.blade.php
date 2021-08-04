@@ -21,15 +21,14 @@
             <div class="is-flex is-justify-content-flex-end is-align-items-center"> 
                 {{-- style="display: flex; align-items: center; gap: 1rem; justify-content: center;" --}}
                 
-                @if (option('shop'))
+                {{-- @if (option('shop')) 
                 <span class="material-icons">done</span> Shop is open &nbsp;
                 <a href="{{ route('backend.shop.toggle') }}" class="button is-link is-outlined">Close shop</a>
                 @else
                 <span class="material-icons">closed</span>Shop is closed  &nbsp;
                 <a href="{{ route('backend.shop.toggle') }}" class="button is-link is-outlined"> Open shop</a>
                 @endif
-
-                
+                --}}             
                 
             </div>
         </div>
