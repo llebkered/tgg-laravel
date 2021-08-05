@@ -45,6 +45,8 @@
     <h2>Packs</h2>
     <div class="columns">
         @foreach ($product->variations as $variation)
+
+        @if ($variation->is_published)
         <div class="column">
             <h3>{{ $variation->title }} </h3>
             <p>{!! $variation->description !!} </p>
@@ -57,6 +59,8 @@
                 <button type="submit" class="button is-primary is-outlined">Add to cart</button>
             </form>
         </div>
+        @endif
+
         @endforeach
         @else
         <h2>Out of Stock</h2>

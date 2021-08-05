@@ -17,8 +17,7 @@ class ProductController extends Controller
     {
         $page = Page::where('slug', '=', 'products')->first();
 
-        $products = Product::where('published', '=', '1')->with('variations')->get();
-
+        $products = Product::where('published', '=', '1')->with('variations')->get();       
         
         return view('products.index')->with(["page" => $page, "products" => $products]);
     }

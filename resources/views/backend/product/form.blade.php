@@ -11,6 +11,9 @@
                 <div class="card-content">
                     <div class="content">
                         <h3>{{ $variation->title }}</h3>
+                        @if (!$variation->is_published)
+                        <div class="has-text-info">Out of stock</div>
+                        @endif
                         <h4>Description</h4>
                         <div>{!! $variation->description !!}</div>
                         <div class="my-3"><strong>Price: </strong> ${{ $variation->price }}</div>

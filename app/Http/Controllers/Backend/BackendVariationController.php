@@ -39,7 +39,6 @@ class BackendVariationController extends Controller
      */
     public function store(Request $request)
     {
-
         $data = $request->validate([
             'title' => 'required',
             'price' => 'required|numeric',
@@ -47,10 +46,11 @@ class BackendVariationController extends Controller
             'product_id' => 'numeric'
         ]);
 
+        $data['is_published'] = $request->is_published;
+
         Variation::create($data);
 
         return redirect()->route('backend.products.edit', $data['product_id']);
-
     }
 
     /**
@@ -91,7 +91,8 @@ class BackendVariationController extends Controller
             'price' => 'required|numeric',
             'description' => 'required'
         ]);
-
+        $data['is_published'] = $request->is_published;
+        
         $variation->update($data);
 
         return redirect()->route('backend.products.show', $variation->product->id)->with('success_message', 'Product varation has been updated');

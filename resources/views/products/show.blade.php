@@ -33,6 +33,7 @@
             @if ($product->stocked)
             <h3>Packs</h3>
             @foreach ($product->variations as $variation)
+            @if ($variation->is_published)
             <article class="mb-6">
                 <h4>{{ $variation->title }} </h4>
                 <p>{!! $variation->description !!} </p>
@@ -45,6 +46,7 @@
                     <button type="submit" class="button is-primary is-outlined">Add to cart</button>
                 </form>
             </article>
+            @endif
             @endforeach
             @else
             <h3>Out of Stock</h3>

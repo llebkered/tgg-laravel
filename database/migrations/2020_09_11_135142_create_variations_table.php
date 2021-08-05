@@ -21,6 +21,7 @@ class CreateVariationsTable extends Migration
             $table->string('image')->nullable();
             $table->text('description')->nullable();
             $table->integer('price');
+            $table->boolean('is_published')->nullable();
             $table->timestamps();
         });
     }
