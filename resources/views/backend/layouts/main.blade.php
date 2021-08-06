@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title> {{ config('app.name', 'Laravel') }} - Admin</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
@@ -19,17 +19,19 @@
 <body>
     <div id="app">
 
-            <div class="columns">
-                <div class="column is-2">
-                    @include('backend.partials.sidenav')
-                </div>
-                <div class="column is-10">
-                    <div class="container">
-                        @include('backend.partials.flash-message')
-                        @yield('content')
-                    </div>
+        <div class="columns">
+            <div class="column is-2">
+                @auth
+                @include('backend.partials.sidenav')
+                @endauth
+            </div>
+            <div class="column is-10">
+                <div class="container">
+                    @include('backend.partials.flash-message')
+                    @yield('content')
                 </div>
             </div>
+        </div>
 
     </div>
     <script async type="text/javascript" src="{{ asset('js/bulma.js') }}"></script>
