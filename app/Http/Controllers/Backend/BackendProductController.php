@@ -75,7 +75,8 @@ class BackendProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $product->getFirstMedia('featured_image');
+        // $product->getFirstMedia('featured_image');
+        // $product->getMedia('gallery');
       
         return view('backend.product.edit', compact('product'));
     }

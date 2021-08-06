@@ -48,7 +48,7 @@
         <form class="is-pulled-right" action="{{ route('backend.plants.destroy', $plant->id) }}" method="POST">
             @method('DELETE')
             @csrf
-            <button class="button is-danger is-outlined">Delete Plant</button>
+            <button class="button is-danger is-outlined" onclick="return confirm('Are you sure you want to delete this?')">Delete Plant</button>
         </form>
     </div>
 

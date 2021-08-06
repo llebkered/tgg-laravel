@@ -110,22 +110,7 @@
     </div>
 </div>
 
-<div class="content mb-6">
-    <div class="columns has-text-weight-bold mb-6">Featured Image</div>
-    <div class="columns">
-        <div class="columns">
-            <div class="file">
-                <label class="custom-file-label" for="featured_image">Featured Image</label>
-                <input type="file" name="featured_image" class="custom-file-input" id="featured_image">
-            </div>
-        </div>
-    </div>
-    @error('image')
-    <div class="notification is-danger is-light">
-        <p>{{ $message }}</p>
-    </div>
-    @enderror
-</div>
+
 
 {{-- <div class="content mb-6">
     <h4>Add Image To Gallery</h4>

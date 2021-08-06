@@ -35,4 +35,4 @@ mix.js(["resources/js/app.js","resources/js/bulma.js","resources/js/menu.js"], "
     .sass("resources/sass/print.scss", "public/css")
     .sourceMaps(true, "source-map")
     .copy("resources/images/*.*", "public/images")
-    .copy("./node_modules/simplelightbox/dist/*.*", "public/vendor/simplelightbox");
+    .copy("./node_modules/@fancyapps/ui/dist/*.*", "public/vendor/fancyapps");

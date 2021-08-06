@@ -1,26 +1,25 @@
-<div class="content">
-    <h4>Image Gallery</h4>
-    <div class="columns is-multiline ">
+<section class="box content">
+    <h3>Image Gallery</h3>
 
-        @if ($images)
-        @forelse ($images as $image)
-        <div class="column is-4">
+    <p class="mb-6"><a href="{{ route('backend.productgallery.create', $product->id)}}" class="button is-primary">Add new image</a> </p>
+   
+    <div class="box">
+    <div class="columns is-multiline is-mobile">
+        @foreach ($product->getMedia('gallery') as $key => $item)
+        <div class="column is-one-quarter-desktop">
             <div class="card">
-                <div class="card-image">
-                    <figure class="image">
-                        <img src="{{ asset($image->getUrl('thumb')) }}" alt="{{ $image->getUrl('thumb') }}">
-                    </figure>
+                <div class="card-image mb-4">
+                    <img src="{{ $item->getUrl('thumb') }}" alt="thumbnail image" class="image is-fullwidth ">
                 </div>
-                <div class="content">
-                    <a href="/backend/medialibary/{{ $image->id }}/delete" class="button is-danger is-small">delete</a>
+              
+                <div class="has-text-centered ">
+                    <a href="{{ url("backend/products/$product->id/gallery/$item->id") }}" class="button is-danger is-outlined mb-4" onclick="return confirm('Are you sure you want to delete this?')">delete</a>
                 </div>
+            
             </div>
-        </div>
-        @empty($images)
-        <p>No images in gallery.</p>
-        @endempty
-        @endforeach
-        @endif
 
+        </div>
+        @endforeach
     </div>
-</div>
+
+</section>

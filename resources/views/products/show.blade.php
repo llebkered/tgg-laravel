@@ -1,9 +1,8 @@
 @extends('layouts.app')
 
 @section('header_extras')
-<link href="{{ asset('public/vendor/simplelightbox/simple-lightbox.min.css') }}" rel="stylesheet">
+<link href="{{ asset('/vendor/fancyapps/fancybox.css') }}" rel="stylesheet">
 @endsection
-
 
 @section('content')
 
@@ -17,43 +16,55 @@
                 <img src="{{ $product->getFirstMediaUrl('featured_image','medium') }}" alt="{{ $product->title }}">
                 @endif
 
-                {{-- <div class="gallery products-grid">
-                @foreach ($product->getMedia('images') as $image)
-                <a href="{{ $image->getUrl('large') }}">
-                <div class="photo">
-                    <img src="{{ $image->getUrl('thumb') }}" alt="{{ $image->getUrl('thumb') }}" title="" />
-                </div>
-                </a>
-                @endforeach
-            </div> --}}
+                <div class="mb-6">{!! $product->description !!}</div>
 
-            <div>{!! $product->description !!}</div>
+                @if ( $product->getFirstMediaUrl('gallery') )
+                <h2>Gallery</h2>
+                <div class="columns">
+                    @foreach ($product->getMedia('gallery') as $item)
+                    <div class="column is-one-quarter-desktop">
+                        <div class="card">
+                            <div class="card-image mb-4">
+                                <img data-fancybox="demo" data-src="{{ $item->getUrl('medium') }}"
+                                    src="{{ $item->getUrl('thumb') }}" alt="thumbnail image"
+                                    class="image is-fullwidth is-clickable">
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                @endif
+
+            </div>
+            <div class="column is-one-third has-background-light">
+                @if ($product->stocked)
+                <h2>Packs</h2>
+                @foreach ($product->variations as $variation)
+                @if ($variation->is_published)
+                <article class="mb-6">
+                    <h3>{{ $variation->title }} </h3>
+                    <p>{!! $variation->description !!} </p>
+                    <p>${{ number_format($variation->price, 2) }} </p>
+                    <form action="{{ route('cart.store') }}" method="POST">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="id" value="{{ $variation->id}}">
+                        <input type="hidden" name="name" value="{{ $product->title ." - ".$variation->title }}">
+                        <input type="hidden" name="price" value="{{ $variation->price }}">
+                        <button type="submit" class="button is-primary is-outlined">Add to cart</button>
+                    </form>
+                </article>
+                @endif
+                @endforeach
+                @else
+                <h2>Out of Stock</h2>
+                <p>This item is currently out of stock.</p>
+                @endif
+            </div>
         </div>
-        <div class="column is-one-third has-background-light">
-            @if ($product->stocked)
-            <h3>Packs</h3>
-            @foreach ($product->variations as $variation)
-            @if ($variation->is_published)
-            <article class="mb-6">
-                <h4>{{ $variation->title }} </h4>
-                <p>{!! $variation->description !!} </p>
-                <p>${{ number_format($variation->price, 2) }} </p>
-                <form action="{{ route('cart.store') }}" method="POST">
-                    {{ csrf_field() }}
-                    <input type="hidden" name="id" value="{{ $variation->id}}">
-                    <input type="hidden" name="name" value="{{ $product->title ." - ".$variation->title }}">
-                    <input type="hidden" name="price" value="{{ $variation->price }}">
-                    <button type="submit" class="button is-primary is-outlined">Add to cart</button>
-                </form>
-            </article>
-            @endif
-            @endforeach
-            @else
-            <h3>Out of Stock</h3>
-            <p>This item is currently out of stock.</p>
-            @endif
-        </div>
-    </div>
     </div>
 </section>
+@endsection
+
+@section('footer_extras')
+<script src="{{ asset('vendor/fancyapps/fancybox.umd.js') }}" rel="stylesheet"></script>
 @endsection

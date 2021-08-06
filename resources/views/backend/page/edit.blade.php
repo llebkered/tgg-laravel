@@ -42,7 +42,7 @@
     <form class="is-pulled-right" action="{{ route('backend.pages.destroy', $page->id) }}" method="POST">
         @method('DELETE')
         @csrf
-        <button class="button is-danger">Delete Page</button>
+        <button class="button is-danger" onclick="return confirm('Are you sure you want to delete this?')">Delete Page</button>
     </form>
 
 </section>

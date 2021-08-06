@@ -34,7 +34,8 @@
 
 </section>
 
+@endsection
 
-
+@section('footer_extras')
 
 @endsection

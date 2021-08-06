@@ -30,17 +30,27 @@ class Product extends Model implements HasMedia
             ->singleFile()
                 ->registerMediaConversions(function (Media $media) {
                     $this
+                        ->addMediaConversion('medium')
+                        ->crop(Manipulations::CROP_CENTER, 960, 480)
+                        ->nonOptimized() //for shared hosts
+                        ->nonQueued(); //for shared hosts;
+                });
+        
+       
+        $this
+            ->addMediaCollection('gallery')
+            ->registerMediaConversions(function (Media $media) {
+                $this
                     ->addMediaConversion('medium')
                     ->crop(Manipulations::CROP_CENTER, 960, 480)
                     ->nonOptimized() //for shared hosts
                     ->nonQueued(); //for shared hosts;
-                });
-        
-       
-        // $this
-        //     ->addMediaCollection('gallery')
-        //     ->withResponsiveImages()
-        //     ->onlyKeepLatest(6);
+                $this
+                    ->addMediaConversion('thumb')
+                    ->crop(Manipulations::CROP_CENTER, 240, 240)
+                    ->nonOptimized()
+                    ->nonQueued();
+            });
     }
 
     // public function registerMediaConversions(Media $media = null): void

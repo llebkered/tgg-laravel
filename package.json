@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "@creativebulma/bulma-tooltip": "^1.2.0",
+        "@fancyapps/ui": "^4.0.0-beta.0",
         "bulma": "^0.9.0",
         "gutenberg-css": "^0.6.1",
         "simplelightbox": "^2.5.0"

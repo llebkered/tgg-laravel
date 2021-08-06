@@ -23,47 +23,30 @@
         @csrf
         @include('backend.product.form')
 
-        {{-- <div class="columns mb-6">
-            <div class="column">
-           
-            </div>
-            <div class="column">
-                @if ($product->image)
-                <img src="{{ asset( 'storage/' . $product->image) }}" alt="">
-        @endif
-        </div>
-        </div> --}}
-        <div class="columns mb-6">
+        @include('backend.product.image-featured')
 
-            @if ( $product->getFirstMedia('featured_image') )
-            <div class="column">
-                {{ $product->getFirstMedia('featured_image') }}
-            </div>
-            <div class="column">
-                <label for="delete_image">Delete image</label>
-                <input type="checkbox" name="delete_image" id="delete_image">
-            </div>
-            @endif
-        </div>
+        
         <div class="content mb-6">
-            <button class="button is-primary" type="submit">Submit</button>
+            <button class="button is-primary is-large" type="submit">Update Product</button>
         </div>
     </form>
-
-    {{-- @include('backend.product.image-gallery') --}}
-
-
-
+@include('backend.product.image-gallery')
     <form class="is-pulled-right" action="{{ route('backend.products.destroy', $product->id) }}" method="POST">
         @method('DELETE')
         @csrf
-        <button class="button is-danger">Delete Product</button>
+        <button class="button is-danger"  onclick="return confirm('Are you sure you want to delete this?')">Delete Product</button>
     </form>
 
+   
+
 </section>
+
+
 
 @endsection
 
 @section('footer_extras')
+<script>
 
+</script>
 @endsection

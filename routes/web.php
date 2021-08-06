@@ -19,6 +19,7 @@ use App\Http\Controllers\Backend\BackendOrderController;
 use App\Http\Controllers\Backend\BackendPlantController;
 use App\Http\Controllers\Backend\MediaLibraryController;
 use App\Http\Controllers\Backend\BackendProductController;
+use App\Http\Controllers\Backend\ProductGalleryController;
 use App\Http\Controllers\Backend\BackendVariationController;
 
 /*
@@ -102,6 +103,10 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
     Route::resource('/plants', BackendPlantController::class, ['as' => 'backend']);
 
     Route::resource('/products', BackendProductController::class, ['as' => 'backend']);
+
+    Route::get('/products/{id}/gallery',[ ProductGalleryController::class, 'create'])->name('backend.productgallery.create');
+    Route::post('/products/{id}/gallery',[ ProductGalleryController::class, 'store']);
+    Route::get('/products/{product}/gallery/{id}',[ ProductGalleryController::class, 'destroy']);
 
     Route::get('/shop/toggle', function () {
         $option = (option('shop')) ? 0 : 1 ;

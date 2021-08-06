@@ -19,7 +19,7 @@
 
 <section>
     <form action="{{ route('backend.blocks.update', $block->id)}}" method="POST" enctype="multipart/form-data">
-        @method('PUT')    
+        @method('PUT')
         @csrf
         @include('backend.block.form')
         <div class="content mb-6">
@@ -30,7 +30,8 @@
     <form class="is-pulled-right" action="{{ route('backend.blocks.destroy', $block->id) }}" method="POST">
         @method('DELETE')
         @csrf
-        <button class="button is-danger is-outlined">Delete Block</button>
+        <button class="button is-danger is-outlined"
+            onclick="return confirm('Are you sure you want to delete this?')">Delete Block</button>
     </form>
 
 </section>
