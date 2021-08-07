@@ -16,6 +16,10 @@
                 <img src="{{ $product->getFirstMediaUrl('featured_image','medium') }}" alt="{{ $product->title }}">
                 @endif
 
+                @if ($product->code)
+                <p><strong>Code: </strong> {{$product->code }}</p>
+                @endif
+
                 <div class="mb-6">{!! $product->description !!}</div>
 
                 @if ( $product->getFirstMediaUrl('gallery') )

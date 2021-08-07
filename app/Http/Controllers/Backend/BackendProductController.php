@@ -43,7 +43,8 @@ class BackendProductController extends Controller
         $data = $request->validate([
             'title' => 'required',
             'slug' => 'required|alpha_dash|unique:products,slug',
-            'description' => 'required'
+            'code' => 'alpha_dash',
+            'description' => 'required',
         ]);
 
         $data['published'] = $request->published;
@@ -95,6 +96,7 @@ class BackendProductController extends Controller
         $data = $request->validate([
             'title' => 'required',
             'slug' => 'required|alpha_dash',
+            'code' => 'present',
             'description' => 'required'
         ]);
 
