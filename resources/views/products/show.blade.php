@@ -9,35 +9,38 @@
 <section class="section">
     <div class="content container is-max-widescreen">
         <h1>{{ $product->title }}</h1>
+
+        @if ( $product->getFirstMediaUrl('gallery') )
+        <div class="columns">
+            @foreach ($product->getMedia('gallery') as $item)
+            <div class="column ">
+                <div class="card">
+                    <div class="card-image mb-4">
+                        <img data-fancybox="demo" 
+                            data-src="{{ $item->getUrl('large') }}" 
+                            srcset="{{ $item->getUrl('thumb') }} 120w,
+                                     {{$item->getUrl('medium') }} 480w" 
+                            src=" {{$item->getUrl('thumb') }}" alt="thumbnail image"
+                            class="image is-fullwidth is-clickable">
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        @endif
+
         <div class="columns">
             <div class="column">
 
-                @if ( $product->getFirstMediaUrl('featured_image') )
+                {{-- @if ( $product->getFirstMediaUrl('featured_image') )
                 <img src="{{ $product->getFirstMediaUrl('featured_image','medium') }}" alt="{{ $product->title }}">
-                @endif
+                @endif --}}
 
                 @if ($product->code)
                 <p><strong>Code: </strong> {{$product->code }}</p>
                 @endif
 
                 <div class="mb-6">{!! $product->description !!}</div>
-
-                @if ( $product->getFirstMediaUrl('gallery') )
-                <h2>Gallery</h2>
-                <div class="columns">
-                    @foreach ($product->getMedia('gallery') as $item)
-                    <div class="column is-one-quarter-desktop">
-                        <div class="card">
-                            <div class="card-image mb-4">
-                                <img data-fancybox="demo" data-src="{{ $item->getUrl('medium') }}"
-                                    src="{{ $item->getUrl('thumb') }}" alt="thumbnail image"
-                                    class="image is-fullwidth is-clickable">
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-                @endif
 
             </div>
             <div class="column is-one-third has-background-light">

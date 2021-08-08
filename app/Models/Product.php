@@ -31,7 +31,7 @@ class Product extends Model implements HasMedia
                 ->registerMediaConversions(function (Media $media) {
                     $this
                         ->addMediaConversion('medium')
-                        ->crop(Manipulations::CROP_CENTER, 960, 480)
+                        ->crop(Manipulations::CROP_CENTER, 960, 593)
                         ->nonOptimized() //for shared hosts
                         ->nonQueued(); //for shared hosts;
                 });
@@ -41,13 +41,18 @@ class Product extends Model implements HasMedia
             ->addMediaCollection('gallery')
             ->registerMediaConversions(function (Media $media) {
                 $this
+                    ->addMediaConversion('large')
+                    ->crop(Manipulations::CROP_CENTER, 1200, 742)
+                    ->nonOptimized() //for shared hosts
+                    ->nonQueued(); //for shared hosts;
+                $this
                     ->addMediaConversion('medium')
-                    ->crop(Manipulations::CROP_CENTER, 960, 480)
+                    ->crop(Manipulations::CROP_CENTER, 480, 297)
                     ->nonOptimized() //for shared hosts
                     ->nonQueued(); //for shared hosts;
                 $this
                     ->addMediaConversion('thumb')
-                    ->crop(Manipulations::CROP_CENTER, 240, 240)
+                    ->crop(Manipulations::CROP_CENTER, 240, 148)
                     ->nonOptimized()
                     ->nonQueued();
             });

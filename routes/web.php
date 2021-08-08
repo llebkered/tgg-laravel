@@ -160,8 +160,13 @@ Route::middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function (
 
 
     Route::get('/media-regenerate', function () {
-        $status = Artisan::call('medialibrary:regenerate --only-missing');
-        return '<h1>Routes cleared</h1>';
+        $status = Artisan::call('media-library:regenerate --only-missing');
+        return '<h1>Missing Media Regenerated</h1>';
+    });
+
+    Route::get('/media-regenerate-all', function () {
+        $status = Artisan::call('media-library:regenerate');
+        return '<h1>All Media Regenerated</h1>';
     });
 
     Route::get('/link', function () {
