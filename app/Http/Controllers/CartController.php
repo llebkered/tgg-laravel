@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Page;
 use NumberFormatter;
+use App\Models\Variation;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
@@ -24,7 +25,19 @@ class CartController extends Controller
 
         // dd( $gst );
 
-        return view('cart', compact('page'));
+        // Get products fore each cart item
+        $variations = [];
+        $cart = Cart::content();
+        // dd($cart);
+         if (count($cart)>0) {
+            foreach ($cart as $item){
+                $cartItems[] = $item->id;
+            }
+            
+            $variations = Variation::find($cartItems);
+         }
+      
+        return view('cart', compact('page'))->with('variations', $variations);
     }
 
     /**

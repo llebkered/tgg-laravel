@@ -34,10 +34,10 @@
             <p>{!! Str::words($product->description, 50, '...') !!} </p>
 
             <p><a href="{{url("/product/$product->slug")}}" class="button is-link is-outlined">More about
-                    {{ $product->title }}
-                    ></a></p>
+                    {{ $product->title }} & purchase >
+                    </a></p>
 
-            @if ($product->stocked)
+            {{-- @if ($product->stocked)
             <h2>Packs</h2>
             <div class="columns">
                 @foreach ($product->variations as $variation)
@@ -62,7 +62,7 @@
                 <h2>Out of Stock</h2>
                 <p>This item is currently out of stock.</p>
             </div>
-            @endif
+            @endif --}}
     </div>
     </article>
     @endforeach

@@ -110,7 +110,7 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
 
     Route::get('/shop/toggle', function () {
         $option = (option('shop')) ? 0 : 1 ;
-        option(['shop' => $option ]);
+        option(['shop' => $option ]); 
         return back();
     })->name('backend.shop.toggle');
 

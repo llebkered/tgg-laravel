@@ -14,10 +14,17 @@
         <!-- Cart -->
         <p>{{ Cart::count() }} @if (Cart::count() > 1) items @else item @endif in Shopping Cart</p>
 
+
+
+
+
+
+
         <table class="table is-hoverable">
             <thead>
                 <tr>
                     <th>Product</th>
+                    <th></th>
                     <th></th>
                     <th class="has-text-right">Price</th>
                     <th class="has-text-right">Subtotal</th>
@@ -26,8 +33,12 @@
             </thead>
 
             <tbody>
+                @php $i = 0 @endphp
                 @foreach(Cart::content() as $row)
                 <tr>
+                    <td>
+                        <img src="{{ $variations[$i]->product->getFirstMedia('featured_image')->getUrl('thumb') }}" alt="{{ $row->name }}">
+                    </td>
                     <td>
                         <p><strong>{{ $row->name }}</strong></p>
                         <p>{{ ($row->options->has('size') ? $row->options->size : '') }}</p>
@@ -52,6 +63,7 @@
 
                         </td>
                 </tr>
+                @php $i++ @endphp
                 @endforeach
             </tbody>
 

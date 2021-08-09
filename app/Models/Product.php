@@ -29,12 +29,23 @@ class Product extends Model implements HasMedia
             ->acceptsMimeTypes(['image/jpeg'])
             ->singleFile()
                 ->registerMediaConversions(function (Media $media) {
+                   
                     $this
-                        ->addMediaConversion('medium')
-                        ->crop(Manipulations::CROP_CENTER, 960, 593)
+                        ->addMediaConversion('large')
+                        ->crop(Manipulations::CROP_CENTER, 1200, 742)
                         ->nonOptimized() //for shared hosts
                         ->nonQueued(); //for shared hosts;
-                });
+                    $this
+                        ->addMediaConversion('medium')
+                        ->crop(Manipulations::CROP_CENTER, 480, 297)
+                        ->nonOptimized() //for shared hosts
+                        ->nonQueued(); //for shared hosts;
+                    $this
+                        ->addMediaConversion('thumb')
+                        ->crop(Manipulations::CROP_CENTER, 240, 148)
+                        ->nonOptimized()
+                        ->nonQueued();
+            });
         
        
         $this
