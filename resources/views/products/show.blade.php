@@ -48,7 +48,7 @@
                     @if ($variation->is_published)
                     <div class="column">
                         <h3>{{ $variation->title }} </h3>
-                        <p>{!! $variation->description !!} </p>
+                        <div>{!! $variation->description !!} </div>
                         <p>${{ number_format($variation->price, 2) }} </p>
                         <form action="{{ route('cart.store') }}" method="POST">
                             {{ csrf_field() }}
