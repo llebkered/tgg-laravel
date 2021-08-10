@@ -18,10 +18,8 @@
                     src="{{ $product->getFirstMediaUrl('featured_image','thumb') }}" alt="{{ $product->title }}"
                     class="image is-fullwidth is-clickable" loading="lazy">
                 @endif
-
                 <div class="columns is-multiline mt-0">
                     @if ( $product->getFirstMediaUrl('gallery') )
-
                     @foreach ($product->getMedia('gallery') as $item)
                     <div class="column is-half">
                         <img data-fancybox="demo" data-src="{{ $item->getUrl('large') }}" srcset="{{$item->getUrl('medium') }} 480w,
@@ -31,7 +29,6 @@
                             class="image is-fullwidth is-clickable" loading="lazy">
                     </div>
                     @endforeach
-
                     @endif
                 </div>
             </div>
@@ -46,7 +43,7 @@
                     <div class="column">
                         <h3>{{ $variation->title }} </h3>
                         <div>{!! $variation->description !!} </div>
-                        <p>${{ number_format($variation->price, 2) }} </p>
+                        <div>${{ number_format($variation->price, 2) }} </div>
                         <form action="{{ route('cart.store') }}" method="POST">
                             {{ csrf_field() }}
                             <input type="hidden" name="id" value="{{ $variation->id}}">
@@ -56,12 +53,12 @@
                         </form>
                     </div>
                     @endif
-
                     @endforeach
                     @else
-                    <h2>Out of Stock</h2>
-                    <p>This item is currently out of stock.</p>
-
+                    <div class="column">
+                        <h2>Out of Stock</h2>
+                        <p>This item is currently out of stock.</p>
+                    </div>
                     @endif
                 </div>
             </div>

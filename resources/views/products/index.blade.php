@@ -17,6 +17,7 @@
 <section class="section content">
     <div class="container is-max-widescreen">
          {{-- @if (option('shop')) --}}
+       {{-- shop  {!! Option::get('shop') !!} --}}
         @foreach ($products as $key => $product)
         <article class="mb-6">
             <h2><a href="{{url("/product/$product->slug")}}" class="has-text-black">{{ $product->title }}</a></h2>
