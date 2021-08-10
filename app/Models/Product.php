@@ -32,17 +32,17 @@ class Product extends Model implements HasMedia
                    
                     $this
                         ->addMediaConversion('large')
-                        ->crop(Manipulations::CROP_CENTER, 1200, 742)
+                        ->crop(Manipulations::CROP_CENTER, 1200, 1200)
                         ->nonOptimized() //for shared hosts
                         ->nonQueued(); //for shared hosts;
                     $this
                         ->addMediaConversion('medium')
-                        ->crop(Manipulations::CROP_CENTER, 480, 297)
+                        ->crop(Manipulations::CROP_CENTER, 480, 480)
                         ->nonOptimized() //for shared hosts
                         ->nonQueued(); //for shared hosts;
                     $this
                         ->addMediaConversion('thumb')
-                        ->crop(Manipulations::CROP_CENTER, 240, 148)
+                        ->crop(Manipulations::CROP_CENTER, 240, 240)
                         ->nonOptimized()
                         ->nonQueued();
             });
@@ -53,17 +53,22 @@ class Product extends Model implements HasMedia
             ->registerMediaConversions(function (Media $media) {
                 $this
                     ->addMediaConversion('large')
-                    ->crop(Manipulations::CROP_CENTER, 1200, 742)
+                    ->crop(Manipulations::CROP_CENTER, 1200, 1200)
                     ->nonOptimized() //for shared hosts
                     ->nonQueued(); //for shared hosts;
                 $this
                     ->addMediaConversion('medium')
-                    ->crop(Manipulations::CROP_CENTER, 480, 297)
+                    ->crop(Manipulations::CROP_CENTER, 480, 480)
                     ->nonOptimized() //for shared hosts
                     ->nonQueued(); //for shared hosts;
                 $this
                     ->addMediaConversion('thumb')
-                    ->crop(Manipulations::CROP_CENTER, 240, 148)
+                    ->crop(Manipulations::CROP_CENTER, 240, 240)
+                    ->nonOptimized()
+                    ->nonQueued();
+                $this
+                    ->addMediaConversion('tiny')
+                    ->crop(Manipulations::CROP_CENTER, 120, 120)
                     ->nonOptimized()
                     ->nonQueued();
             });

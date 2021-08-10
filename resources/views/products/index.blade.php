@@ -16,68 +16,43 @@
 
 <section class="section content">
     <div class="container is-max-widescreen">
-        {{-- @if (option('shop')) --}}
+         {{-- @if (option('shop')) --}}
         @foreach ($products as $key => $product)
-        @if ( $key > 0)
-        <hr> @endif
-        <article>
+        <article class="mb-6">
             <h2><a href="{{url("/product/$product->slug")}}" class="has-text-black">{{ $product->title }}</a></h2>
-            @if ( $product->getFirstMediaUrl('featured_image') )
-            <a href="{{url("/product/$product->slug")}}"><img
-                    src="{{ $product->getFirstMediaUrl('featured_image','medium') }}" alt="{{ $product->title }}"></a>
-            @endif
-
-            @if ($product->code)
-            <p><strong>Code: </strong> {{$product->code }}</p>
-            @endif
-
-            <p>{!! Str::words($product->description, 50, '...') !!} </p>
-
-            <p><a href="{{url("/product/$product->slug")}}" class="button is-link is-outlined">More about
-                    {{ $product->title }} & purchase >
-                    </a></p>
-
-            {{-- @if ($product->stocked)
-            <h2>Packs</h2>
             <div class="columns">
-                @foreach ($product->variations as $variation)
 
-                @if ($variation->is_published)
-                <div class="column">
-                    <h3>{{ $variation->title }} </h3>
-                    <p>{!! $variation->description !!} </p>
-                    <p>${{ number_format($variation->price, 2) }} </p>
-                    <form action="{{ route('cart.store') }}" method="POST">
-                        {{ csrf_field() }}
-                        <input type="hidden" name="id" value="{{ $variation->id}}">
-                        <input type="hidden" name="name" value="{{ $product->title ." - ".$variation->title }}">
-                        <input type="hidden" name="price" value="{{ $variation->price }}">
-                        <button type="submit" class="button is-primary is-outlined">Add to cart</button>
-                    </form>
+                <div class="column is-3">
+                    @if ( $product->getFirstMediaUrl('featured_image') )
+                    <a href="{{url("/product/$product->slug")}}"><img
+                            src="{{ $product->getFirstMediaUrl('featured_image','thumb') }}"
+                            alt="{{ $product->title }}"></a>
+                    @endif
                 </div>
-                @endif
+                <div class="column">
+                    @if ($product->code)
+                    <p><strong>Code: </strong> {{$product->code }}</p>
+                    @endif
 
-                @endforeach
-                @else
-                <h2>Out of Stock</h2>
-                <p>This item is currently out of stock.</p>
+                    <p>{!! Str::words($product->description, 50, '...') !!} </p>
+
+                    <p><a href="{{url("/product/$product->slug")}}" class="button is-link is-outlined">More about
+                            {{ $product->title }} & purchase >
+                        </a></p>
+                </div>
             </div>
-            @endif --}}
+        </article>
+        @endforeach
+        {{-- @else
+
+        <!-- shop is closed -->
+        <h2>Store closed</h2>
+        <p>Our online shop is closed. It will reopen in new season.</p>
+
+        @endif --}}
+
     </div>
-    </article>
-    @endforeach
-
-    {{-- @else
-
-    <!-- shop is closed -->
-    <h2>Store closed</h2>
-    <p>Our online shop is closed. It will reopen in new season.</p>
-
-    @endif --}}
-    </div>
-
-</section>
-
+</section>    
 @endsection
 
 {{-- @section('footer_extras')
