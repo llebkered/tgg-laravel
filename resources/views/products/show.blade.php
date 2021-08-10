@@ -12,8 +12,7 @@
         <div class="columns">
             <div class="column is-3">
                 @if ( $product->getFirstMediaUrl('featured_image') )
-                <img data-fancybox="demo" data-src="{{ $product->getFirstMediaUrl('featured_image','large') }}"
-                    srcset="{{$product->getFirstMediaUrl('featured_image','medium') }} 480w,
+                <img data-fancybox="demo" data-src="{{ $product->getFirstMediaUrl('featured_image','large') }}" srcset="{{$product->getFirstMediaUrl('featured_image','medium') }} 480w,
                             {{$product->getFirstMediaUrl('featured_image','thumb') }}  240w"
                     sizes="(min-width: 800px) 20vw, 100vw"
                     src="{{ $product->getFirstMediaUrl('featured_image','thumb') }}" alt="{{ $product->title }}"
@@ -25,13 +24,11 @@
 
                     @foreach ($product->getMedia('gallery') as $item)
                     <div class="column is-half">
-                        <img data-fancybox="demo" data-src="{{ $item->getUrl('large') }}" 
-                            srcset="{{$item->getUrl('medium') }} 480w,
+                        <img data-fancybox="demo" data-src="{{ $item->getUrl('large') }}" srcset="{{$item->getUrl('medium') }} 480w,
                                     {{$item->getUrl('thumb') }}  240w,
-                                    {{$item->getUrl('tiny') }}  120w" 
-                            sizes="(min-width: 800px) 10vw, 100vw"
-                            src="{{$item->getUrl('tiny') }}"
-                            alt="thumbnail image" class="image is-fullwidth is-clickable" loading="lazy">
+                                    {{$item->getUrl('tiny') }}  120w" sizes="(min-width: 800px) 10vw, 100vw"
+                            src="{{$item->getUrl('tiny') }}" alt="thumbnail image"
+                            class="image is-fullwidth is-clickable" loading="lazy">
                     </div>
                     @endforeach
 
@@ -64,8 +61,9 @@
                     @else
                     <h2>Out of Stock</h2>
                     <p>This item is currently out of stock.</p>
+
+                    @endif
                 </div>
-                @endif
             </div>
         </div>
     </div>

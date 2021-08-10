@@ -23,23 +23,23 @@
 </head>
 
 <body>
-    <div id="app">
-
-        @include('partials.header')
-
-        @include('partials.navbar')
-
-        @include('partials.flash-message')
-
-        @if (isset($slot))
-        {{ $slot }}
-        @endif
 
 
-        @yield('content')
+    @include('partials.header')
 
-        @include('partials.footer')
-    </div>
+    @include('partials.navbar')
+
+    @include('partials.flash-message')
+
+    @if (isset($slot))
+    {{ $slot }}
+    @endif
+
+
+    @yield('content')
+
+    @include('partials.footer')
+
 </body>
 
 </html>
