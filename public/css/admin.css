@@ -1,19 +1,2 @@
-html,
-body {
-  font-size: 16px;
-  background: #ecf0f3;
-}
-
-.side-menu {
-  background-color: #dce4e9;
-  height: 100%;
-  padding: 0.5rem;
-}
-.side-menu__header {
-  background-color: #cdd7df;
-  padding: 0.5rem;
-}
-.side-menu .material-icons {
-  margin-right: 0.5rem;
-}
+body,html{font-size:16px;background:#ecf0f3}.side-menu{background-color:#dce4e9;height:100%;padding:.5rem}.side-menu__header{background-color:#cdd7df;padding:.5rem}.side-menu .material-icons{margin-right:.5rem}
 /*# sourceMappingURL=admin.css.map*/
