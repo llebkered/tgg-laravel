@@ -1,8 +1,8 @@
 @extends('backend.layouts.main')
 
 @section('header_extras')
-<script src="{{ asset('public/js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
-<script src="{{ asset('public/js/tinymcesettings.js') }}" referrerpolicy="origin"></script>
+<script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
+<script src="{{ asset('js/tinymcesettings.js') }}" referrerpolicy="origin"></script>
 @endsection
 
 @section('content')
@@ -24,14 +24,7 @@
         @include('backend.page.form')
 
         <div class="columns mb-6">
-            <div class="column">
-                {{ $page->image}}
-            </div>
-            <div class="column">
-                @if ($page->image)
-                <img src="{{ asset( 'storage/' . $page->image) }}" alt="">
-                @endif
-            </div>
+            @include('backend.page.image-gallery')
         </div>
 
         <div class="content mb-6">

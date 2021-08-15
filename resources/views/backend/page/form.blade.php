@@ -81,38 +81,4 @@
     </div>
 </div>
 
-<div class="content mb-6">
-    <div class="columns has-text-weight-bold mb-6">Image</div>
-    <div class="columns">
-        <div class="columns">
-            <div class="file">
-                <label class="file-label">
-                    <input class="file-input" type="file" name="image">
-                    <span class="file-cta">
-                        <span class="file-icon">
-                            <span class="material-icons">arrow_circle_up</span>
-                        </span>
-                        <span class="file-label">
-                            Choose a file…
-                        </span>
-                    </span>
-                </label>
-            </div>
-        </div>
-        @if ($page->image)
-        <div class="columns">
-            <div class="column is-4 is-pulled-right ">
-                <label class="checkbox has-text-danger" for="deleteimage">
-                    <input type="checkbox" name="deleteimage">
-                    Delete image
-                </label>
-            </div>
-        </div>
-        @endif
-    </div>
-    @error('image')
-    <div class="notification is-danger is-light">
-        <p>{{ $message }}</p>
-    </div>
-    @enderror
-</div>
+

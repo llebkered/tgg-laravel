@@ -14,6 +14,7 @@ use App\Http\Controllers\Backend\BackendController;
 use App\Http\Controllers\Backend\BackendAuthController;
 use App\Http\Controllers\Backend\BackendPageController;
 use App\Http\Controllers\Backend\BackendUserController;
+use App\Http\Controllers\Backend\PageGalleryController;
 use App\Http\Controllers\Backend\BackendBlockController;
 use App\Http\Controllers\Backend\BackendOrderController;
 use App\Http\Controllers\Backend\BackendPlantController;
@@ -99,6 +100,9 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
     Route::get('/medialibary/{mediaId}/delete', [ MediaLibraryController::class, 'delete']);
 
     Route::resource('/pages', BackendPageController::class, ['as' => 'backend']);
+    Route::get('/pages/{id}/gallery',[ PageGalleryController::class, 'create'])->name('backend.pagegallery.create');
+    Route::post('/pages/{id}/gallery',[ PageGalleryController::class, 'store']);
+    Route::get('/pages/{page}/gallery/{id}',[ PageGalleryController::class, 'destroy']);
 
     Route::resource('/plants', BackendPlantController::class, ['as' => 'backend']);
 
