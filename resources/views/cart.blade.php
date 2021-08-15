@@ -14,12 +14,6 @@
         <!-- Cart -->
         <p>{{ Cart::count() }} @if (Cart::count() > 1) items @else item @endif in Shopping Cart</p>
 
-
-
-
-
-
-
         <table class="table is-hoverable">
             <thead>
                 <tr>
@@ -93,6 +87,10 @@
         @include('partials.cart-empty')
 
         @endif
+
+        <div class="continue-shopping">
+            <a href="{{ route('products') }}" class="button is-link is-outlined">continue shopping</a>
+        </div>
     </div>
 </section>
 
