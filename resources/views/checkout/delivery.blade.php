@@ -20,12 +20,11 @@
 
         {{-- {!! $page['body'] !!} --}}
 
-
         @if (Cart::count() > 0)
         <div class="columns is-multiline">
-            <div class="column is-8 is-offset-2 register">
+            <div class="column register">
                 <div class="columns">
-                    <div class="column left">
+                    <div class="column is-4">
                         <h2>Delivery Details</h2>
                         <form action="" method="POST">
                             {{ csrf_field() }}
@@ -35,14 +34,24 @@
                                     <input name="line1" class="input is-medium" type="text" placeholder="Address Line 1"
                                         value="{{ old('line1')}}">
                                 </div>
+                                @error('address')
+                                <div class="message is-danger">
+                                    <div class="message-body">{{ $errors->first('address') }}</div>
+                                </div>
+                                @enderror
                             </div>
 
                             <div class="field">
                                 <label for="line2" class="label">Address Line 2</label>
                                 <div class="control">
-                                    <input name="line2" class="input is-medium" type="email"
+                                    <input name="line2" class="input is-medium" type="text"
                                         placeholder="Address Line 2" value="{{ old('line2')}}">
                                 </div>
+                                @error('line2')
+                                <div class="message is-danger">
+                                    <div class="message-body">{{ $errors->first('line2') }}</div>
+                                </div>
+                                @enderror
                             </div>
 
                             <div class="field">
@@ -51,6 +60,11 @@
                                     <input name="city" class="input is-medium" type="text"
                                         placeholder="City / Town / Suburb" value="{{ old('city')}}">
                                 </div>
+                                @error('city')
+                                <div class="message is-danger">
+                                    <div class="message-body">{{ $errors->first('city') }}</div>
+                                </div>
+                                @enderror
                             </div>
 
                             <div class="field">
@@ -59,6 +73,11 @@
                                     <input name="postcode" class="input is-medium" type="text" placeholder="Postcode"
                                         value="{{ old('postcode')}}">
                                 </div>
+                                @error('postcode')
+                                <div class="message is-danger">
+                                    <div class="message-body">{{ $errors->first('postcode') }}</div>
+                                </div>
+                                @enderror
                             </div>
 
                             <div class="field">
@@ -84,8 +103,8 @@
 
                         </form>
                     </div>
-                    <div class="column right">
-                        <img src="https://source.unsplash.com/random/400x400/?nature" alt="">
+                    <div class="column is-offset-1 is-7">
+                        @include('partials.carousel')
                     </div>
                 </div>
             </div>

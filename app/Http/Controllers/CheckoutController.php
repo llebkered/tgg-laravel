@@ -20,7 +20,7 @@ class CheckoutController extends Controller
     {
         $page = Page::where('slug', '=', 'checkout')->first();
 
-        return view('checkout.index', compact('page'));
+        return view('checkout.index')->with(['page' => $page]);
     }
 
     public function contact(Request $request)
@@ -29,13 +29,32 @@ class CheckoutController extends Controller
 
         // gather name,email, phone
         // validate
-        $data = $request->validate([
+        $rules = [
             'name' => 'required',
             'email' => 'required|email',
-            'phone' => ['required', 'regex:/^(\+?\(61\)|\(\+?61\)|\+?61|\(0[1-9]\)|0[1-9])?( ?-?[0-9]){7,9}$/']
-            // /^(\+?\(61\)|\(\+?61\)|\+?61|\(0[1-9]\)|0[1-9])?( ?-?[0-9]){7,9}$/gm
-            // 'regex:/^(?:\+?61|0)[2-478](?:[ -]?[0-9]){8}$/'
-        ]);
+            'phone' => ['required', 'regex:/^(?:\+?(61))? ?(?:\((?=.*\)))?(0?[2-57-8])\)? ?(\d\d(?:[- ](?=\d{3})|(?!\d\d[- ]?\d[- ]))\d\d[- ]?\d[- ]?\d{3})$/']
+        ];
+    
+        $customMessages = [
+            'required' => 'The :attribute field can not be blank.',
+            'phone.regex' => 'The phone number must be a valid Australian number. eg 03 7010 1234 or 0491 570 006'
+        ];
+    
+        $data = $this->validate($request, $rules, $customMessages);
+
+
+        // $data = $request->validate([
+        //     'name' => 'required',
+        //     'email' => 'required|email',
+        //     'phone' => ['required', 'regex:/^(?:\+?(61))? ?(?:\((?=.*\)))?(0?[2-57-8])\)? ?(\d\d(?:[- ](?=\d{3})|(?!\d\d[- ]?\d[- ]))\d\d[- ]?\d[- ]?\d{3})$/']
+        //     // regex:/^(\+?\(61\)|\(\+?61\)|\+?61|\(0[1-9]\)|0[1-9])?( ?-?[0-9]){7,9}$/
+        //     // /^(\+?\(61\)|\(\+?61\)|\+?61|\(0[1-9]\)|0[1-9])?( ?-?[0-9]){7,9}$/gm
+        //     // 'regex:/^(?:\+?61|0)[2-478](?:[ -]?[0-9]){8}$/'
+        //     // /^(?:\+?(61))? ?(?:\((?=.*\)))?(0?[2-57-8])\)? ?(\d\d(?:[- ](?=\d{3})|(?!\d\d[- ]?\d[- ]))\d\d[- ]?\d[- ]?\d{3})$/gm
+        // ]);
+
+
+
 
         //create customer
         $customer = Customer::create($data);
@@ -58,13 +77,13 @@ class CheckoutController extends Controller
         // Store order Id in session
         $request->session()->put('order', $order->id);
 
-        return redirect()->route('checkout.delivery', compact('page'));
+        return redirect()->route('checkout.delivery')->with(['page' => $page]);
     }
 
     public function delivery()
     {
         $page = Page::where('slug', '=', 'checkout')->first();
-        return view('checkout.delivery', compact('page'));
+        return view('checkout.delivery')->with(['page' => $page]);
     }
 
     public function deliverypost(Request $request)
@@ -72,11 +91,25 @@ class CheckoutController extends Controller
         $page = Page::where('slug', '=', 'checkout')->first();
 
         // Validate
-        $request->validate([
+        // $request->validate([
+        //     'line1' => 'required',
+        //     'postcode' => ['required', 'size:4', 'regex:/[2-5]\d\d\d|[0][2,7,8,9]\d\d/'], // 2-5NNN. 0[2,8,09]NN ie not WA or Tas
+        //     'city' => 'required'
+        // ]);
+
+        $rules = [
+           
             'line1' => 'required',
             'postcode' => ['required', 'size:4', 'regex:/[2-5]\d\d\d|[0][2,7,8,9]\d\d/'], // 2-5NNN. 0[2,8,09]NN ie not WA or Tas
-            'city' => 'required'
-        ]);
+            'city' => 'required'];
+    
+        $customMessages = [
+            'required' => 'The :attribute field can not be blank.',
+            'postcode.size' => 'The post code must be a 4 digit number (not 6XXX or 7XXX)',
+            'postcode.regex' => 'The post code can not be from Tasmania or Western Australia'
+        ];
+    
+        $this->validate($request, $rules, $customMessages);
 
         $data = $request->post();
 
@@ -94,7 +127,7 @@ class CheckoutController extends Controller
 
         $order->save();
 
-        return redirect()->route('checkout.card', compact('page'));
+        return redirect()->route('checkout.card')->with(['page' => $page]);
     }
 
 
@@ -105,7 +138,7 @@ class CheckoutController extends Controller
         $customer = Customer::where('id', '=', $request->session()->get('customer'))->first();
 
         $year = date('Y');
-        return view('checkout.card', compact(['page', 'year', 'customer']));
+        return view('checkout.card', compact(['year', 'customer']))->with(['page' => $page]);
     }
 
 
@@ -147,7 +180,7 @@ class CheckoutController extends Controller
         }
 
         
-        return view('checkout.charge', compact('page'));
+        return view('checkout.charge')->with(['page' => $page]);
     }
 
     public function directdeposit(Request $request)

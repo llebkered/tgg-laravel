@@ -1,10 +1,5 @@
 @extends('layouts.app')
 
-@section('header_extras')
-<link href="{{ asset('/vendor/fancyapps/fancybox.css') }}" rel="stylesheet">
-<link href="{{ asset('/vendor/fancyapps/carousel.css') }}" rel="stylesheet">
-@endsection
-
 @section('content')
 
 <section class="section content">
@@ -103,38 +98,3 @@
 
 @endsection
 
-@section('footer_extras')
-
-@section('footer_extras')
-<script src="{{ asset('vendor/fancyapps/fancybox.umd.js') }}" rel="stylesheet"></script>
-<script src="{{ asset('vendor/fancyapps/carousel.umd.js') }}" rel="stylesheet"></script>
-<script>
-    const myCarousel = new Carousel(document.querySelector("#myCarousel"), {  // Your options go here
-    });
-</script>
-@endsection
-{{-- <script>
-    (function(){
-        const classname = document.querySelectorAll('.quantity')
-        Array.from(classname).forEach(function(element) {
-            element.addEventListener('change', function() {
-                const id = element.getAttribute('data-id')
-                const productQuantity = element.getAttribute('data-productQuantity')
-                axios.patch(`/cart/${id}`, {
-                    quantity: this.value,
-                    productQuantity: productQuantity
-                })
-                .then(function (response) {
-                    // console.log(response);
-                    window.location.href = '{{ route('cart.index') }}'
-})
-.catch(function (error) {
-// console.log(error);
-window.location.href = '{{ route('cart.index') }}'
-});
-})
-})
-})();
-</script> --}}
-
-@endsection

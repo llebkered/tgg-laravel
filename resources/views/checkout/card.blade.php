@@ -16,7 +16,7 @@
 <section class="section content">
     <div class="container  is-max-widescreen">
         <h1>{{ $page['title']}}</h1>
-        {{-- <h1>{{ $page['title']}}</h1>
+        {{-- <h1>{{ $page['title']}}</h1>s
         {!! $page['body'] !!} --}}
 
         @if (Cart::count() > 0)
