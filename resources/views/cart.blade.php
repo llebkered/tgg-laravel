@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
 <section class="section content">
     <div class="container is-max-widescreen">
 

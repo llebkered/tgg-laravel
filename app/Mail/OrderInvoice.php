@@ -31,7 +31,6 @@ class OrderInvoice extends Mailable
      */
     public function build()
     {
-
         return $this->to($this->order->email, $this->order->name)
         ->from('sales@toadgully.com.au')
         ->bcc('sales@toadgully.com.au')

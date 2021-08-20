@@ -45,7 +45,7 @@
                 <h1>Tax Invoice</h1>
             </td>
             <td>
-                <p><strong>ABN:</strong> {{ setting('site.abn') }}</p>
+                <p><strong>ABN:</strong>{{ setting('tgg.abn') }}</p>
                 <p>
                     <strong>Order: </strong>{{ $orderDetails->id }}
                 </p>

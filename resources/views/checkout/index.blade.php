@@ -63,7 +63,7 @@
                                     <input name="phone" class="input is-medium" type="text" placeholder="eg 03 7010 1234 or 0491 570 006"
                                         value="{{ old('phone')}}">
                                 </div>
-                                <p class="help">Note:  This should be Australian formatted landline or mobile number.</p>
+                                <p class="help">Note:  This should be Australian formatted landline (including area code) or mobile number.</p>
                                 @error('phone')
                                 <div class="message is-danger">
                                     <div class="message-body">{{ $errors->first('phone') }}</div>

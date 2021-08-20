@@ -205,7 +205,7 @@ class CheckoutController extends Controller
                 ->attachData($pdf->output(), "invoice.pdf");
         });
 
-        // // destroy cart
+        // destroy cart
         Cart::destroy();
 
         // Forget order & customer
@@ -240,7 +240,7 @@ class CheckoutController extends Controller
 
         // Mail::send(new OrderPaid($emailOrder));
 
-        // // destroy cart
+        // destroy cart
         Cart::destroy();
 
         // Forget order & customer

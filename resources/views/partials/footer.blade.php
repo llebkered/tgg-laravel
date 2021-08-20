@@ -3,7 +3,7 @@
         <div class="columns">
             <div class="column">
                 <h3>{{ config('app.name', 'TGG') }}</h3>
-                <p>ABN 61 173 928 602</p>
+                <p>ABN {{ config('tgg.abn', '61 173 928 602') }}
                 <p>{{ now("Australia/Melbourne")->format('h:i A T') }}</p>
             </div>
             <div class="column">
