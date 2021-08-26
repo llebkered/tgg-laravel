@@ -200,6 +200,7 @@ class CheckoutController extends Controller
 
         Mail::send('emails.orders.invoice', compact('orderDetails'), function ($message) use ($orderDetails, $pdf) {
             $message->to($orderDetails["email"], $orderDetails["name"])
+                ->bcc('sales@toadgully.com.au')
                 ->subject($orderDetails["subject"])
                 ->attachData($pdf->output(), "invoice.pdf");
         });

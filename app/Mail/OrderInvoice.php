@@ -32,9 +32,21 @@ class OrderInvoice extends Mailable
     public function build()
     {
         return $this->to($this->order->email, $this->order->name)
-        ->from('sales@toadgully.com.au')
-        ->bcc('sales@toadgully.com.au')
+        ->from('sales@toadgully.com.au','Toad Gully Growers')
+        ->bcc('sales@toadgully.com.au', 'Toadgully Growers')
         ->subject('Order for Toad Gully Growers')
-        ->markdown('emails.orders.invoice');
+        // ->markdown('emails.orders.invoice');
+        ->view('emails.orders.invoice');
     }
 }
+
+// return $this->view('emails.test-mail')
+// ->from($address, $name)
+// ->cc($address, $name)
+// ->bcc($address, $name)
+// ->replyTo($address, $name)
+// ->subject($subject)
+// ->with([
+//   'CustomOption' => 'CustomValue',
+//   'CustomOption' => 'CustomValue'
+// ]);
