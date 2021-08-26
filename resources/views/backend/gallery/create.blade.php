@@ -11,24 +11,21 @@
     <div class="hero-body">
         <div class="container">
             <h1 class="title">
-                New gallery image for: <a href="{{url("backend/pages/$page->id")}}">{{ $page->title }}</a>
+                New gallery image for: <a href="{{url("backend/products/$product->id")}}">{{ $product->title }}</a>
             </h1>
         </div>
     </div>
 </section>
 
 <section>
-
-
-
     <div class="box">
-        <p class="mb-6"><a href="{{url("backend/pages/$page->id")}}" class="has-text-link">Back to
-                {{ $page->title }}</a></p>
+        <p class="mb-6"><a href="{{url("backend/products/$product->id")}}" class="has-text-link">Back to
+                {{ $product->title }}</a></p>
 
         <div class="columns is-multiline is-mobile">
             <div class="column is-one-quarter-desktop">
                 <div class="card">
-                    <form class="box" action="{{ route('backend.pagegallery.create', $page->id)}}" method="POST"
+                    <form class="box" action="{{ route('backend.productgallery.create', $product->id)}}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         <label class="custom-file-label label" for="gallery">Add Gallery Image</label>
@@ -41,7 +38,7 @@
                 </div>
 
             </div>
-            @foreach ($page->getMedia('gallery') as $key => $item)
+            @foreach ($product->getMedia('gallery') as $key => $item)
             <div class="column is-one-quarter-desktop">
                 <div class="card">
                     <div class="card-image mb-4">
@@ -49,8 +46,9 @@
                     </div>
 
                     <div class="has-text-centered ">
-                        <a href="{{ url("backend/pages/$page->id/gallery/$item->id") }}"
-                            class="button is-danger is-outlined mb-4" onclick="return confirm('Are you sure you want to delete this?')">delete</a>
+                        <a href="{{ url("backend/products/$product->id/gallery/$item->id") }}"
+                            class="button is-danger is-outlined mb-4"
+                            onclick="return confirm('Are you sure you want to delete this?')">delete</a>
                     </div>
 
                 </div>

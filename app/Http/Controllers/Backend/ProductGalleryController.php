@@ -38,6 +38,8 @@ class ProductGalleryController extends Controller
      */
     public function store(Request $request)
     {
+       
+        
         $product = Product::where('id', '=', $request->id)->first();
         
         if ($request->file()) {
