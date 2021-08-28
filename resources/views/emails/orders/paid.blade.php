@@ -218,7 +218,7 @@
                                 <td>
                                     <p>Dear {{ $orderDetails->name }},</p>
                                     <p>Thank your for your order.</p>
-                                    
+                                    <p>Your plants will be dispatched within a few business days from payment received and we will inform you with tracking.</p>
                                     <p>Thank you again for choosing us.</p>
 
                                     <p> Regards,<br />
