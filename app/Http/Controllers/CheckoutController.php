@@ -77,6 +77,8 @@ class CheckoutController extends Controller
         // Store order Id in session
         $request->session()->put('order', $order->id);
 
+        //Todo ?? Email order to tgg
+
         return redirect()->route('checkout.delivery')->with(['page' => $page]);
     }
 
@@ -200,11 +202,12 @@ class CheckoutController extends Controller
 
         Mail::send('emails.orders.invoice', compact('orderDetails'), function ($message) use ($orderDetails, $pdf) {
             $message->to($orderDetails["email"], $orderDetails["name"])
-                ->bcc('sales@toadgully.com.au')
+                // ->bcc('sales@toadgully.com.au')
                 ->subject($orderDetails["subject"])
                 ->attachData($pdf->output(), "invoice.pdf");
         });
 
+        // Todo ?? send direct deposit alert to TGG
         // destroy cart
         Cart::destroy();
 
@@ -237,7 +240,7 @@ class CheckoutController extends Controller
                 ->subject($orderDetails["subject"])
                 ->attachData($pdf->output(), "invoice.pdf");
         });
-
+        // Todo Send alert to TGG
         // Mail::send(new OrderPaid($emailOrder));
 
         // destroy cart

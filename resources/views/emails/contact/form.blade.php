@@ -1,14 +1,22 @@
-<h2>Contact Form Message</h2> <br><br>
+@component('mail::message')
 
-You have got an email from : {{ $name }} <br><br>
 
-User details: <br><br>
+# Contact Form Message
 
-Name: {{ $name }} <br>
-Email: {{ $email }} <br>
-Phone: {{ $phone }} <br>
-Subject: {{ $subject }} <br><br>
+You have got an email from : {{ $data['name'] }}
 
-Message: {{ $user_query }} <br><br>
+### User details:
 
-Thanks
+Name: {{ $data['name'] }} <br>
+Email: {{ $data['email'] }} <br>
+Phone: {{ $data['phone'] }} <br>
+Subject: {{ $data['subject'] }} <br><br>
+
+---
+## Message: 
+
+{{ $data['message'] }} 
+
+
+@endcomponent
+
