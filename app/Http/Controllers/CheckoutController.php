@@ -27,7 +27,6 @@ class CheckoutController extends Controller
     {
         $page = Page::where('slug', '=', 'checkout')->first();
 
-        // gather name,email, phone
         // validate
         $rules = [
             'name' => 'required',
@@ -41,20 +40,6 @@ class CheckoutController extends Controller
         ];
     
         $data = $this->validate($request, $rules, $customMessages);
-
-
-        // $data = $request->validate([
-        //     'name' => 'required',
-        //     'email' => 'required|email',
-        //     'phone' => ['required', 'regex:/^(?:\+?(61))? ?(?:\((?=.*\)))?(0?[2-57-8])\)? ?(\d\d(?:[- ](?=\d{3})|(?!\d\d[- ]?\d[- ]))\d\d[- ]?\d[- ]?\d{3})$/']
-        //     // regex:/^(\+?\(61\)|\(\+?61\)|\+?61|\(0[1-9]\)|0[1-9])?( ?-?[0-9]){7,9}$/
-        //     // /^(\+?\(61\)|\(\+?61\)|\+?61|\(0[1-9]\)|0[1-9])?( ?-?[0-9]){7,9}$/gm
-        //     // 'regex:/^(?:\+?61|0)[2-478](?:[ -]?[0-9]){8}$/'
-        //     // /^(?:\+?(61))? ?(?:\((?=.*\)))?(0?[2-57-8])\)? ?(\d\d(?:[- ](?=\d{3})|(?!\d\d[- ]?\d[- ]))\d\d[- ]?\d[- ]?\d{3})$/gm
-        // ]);
-
-
-
 
         //create customer
         $customer = Customer::create($data);
@@ -91,13 +76,6 @@ class CheckoutController extends Controller
     public function deliverypost(Request $request)
     {
         $page = Page::where('slug', '=', 'checkout')->first();
-
-        // Validate
-        // $request->validate([
-        //     'line1' => 'required',
-        //     'postcode' => ['required', 'size:4', 'regex:/[2-5]\d\d\d|[0][2,7,8,9]\d\d/'], // 2-5NNN. 0[2,8,09]NN ie not WA or Tas
-        //     'city' => 'required'
-        // ]);
 
         $rules = [
             'line1' => 'required',
@@ -200,14 +178,14 @@ class CheckoutController extends Controller
 
         $pdf = PDF::loadView('emails.orders.invoice', compact('orderDetails'));
 
+        // Send invoice to customer. bcc TGG
         Mail::send('emails.orders.invoice', compact('orderDetails'), function ($message) use ($orderDetails, $pdf) {
             $message->to($orderDetails["email"], $orderDetails["name"])
-                // ->bcc('sales@toadgully.com.au')
+                ->bcc('sales@toadgully.com.au')
                 ->subject($orderDetails["subject"])
                 ->attachData($pdf->output(), "invoice.pdf");
         });
 
-        // Todo ?? send direct deposit alert to TGG
         // destroy cart
         Cart::destroy();
 
@@ -233,10 +211,11 @@ class CheckoutController extends Controller
         $orderDetails['subject'] = "Toad Gully Growers Invoice";
 
 
-        $pdf = PDF::loadView('emails.orders.invoice', compact('orderDetails'));
+        $pdf = PDF::loadView('emails.orders.paid', compact('orderDetails'));
 
         Mail::send('emails.orders.paid', compact('orderDetails'), function ($message) use ($orderDetails, $pdf) {
             $message->to($orderDetails["email"], $orderDetails["name"])
+                ->bcc('sales@toadgully.com.au')
                 ->subject($orderDetails["subject"])
                 ->attachData($pdf->output(), "invoice.pdf");
         });

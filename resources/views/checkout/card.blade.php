@@ -21,7 +21,7 @@
 
         @if (Cart::count() > 0)
         <div class="columns is-multiline">
-            <div class="column is-8 is-offset-2 register">
+            <div class="column register">
                 <div class="columns">
                     <div class="column left card">
                         <h2>Credit Card</h2>
@@ -92,7 +92,9 @@
 
                         <div class="mt-6"><img src="{{ asset('/images/powered_by_dark_outline.svg')}}" alt=""></div>
                     </div>
-                    <div class="column is-1">Or</div>
+                    <div class="column is-2">
+                        <p class="is-size-2 has-text-centered">Or</p>  
+                    </div>
                     <div class="column right card">
                         <h2>Direct Deposit</h2>
                         <p>You can pay by direct deposit.</p>
