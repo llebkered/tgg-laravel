@@ -2,9 +2,10 @@
 
 namespace App\Libraries\Pin;
 
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Psr7;
 use GuzzleHttp;
+use Dotenv\Dotenv;
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Exception\ClientException;
 
 class PinPayments
 {
