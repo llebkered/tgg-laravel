@@ -97,7 +97,7 @@
                                         alt="Toad Gully Growers" />
 
                                     <p>
-                                        361 Stumpy Gully Road<br/>
+                                        361 Stumpy Gully Road<br />
                                         Balnarring, VIC 3926<br />
                                         ph (03) 5983 5688<br />
                                         email sales@toadgully.com.au
@@ -124,10 +124,10 @@
                                     <p><strong>Order Number: </strong> {{ $orderDetails->id }}</p>
                                 </td>
                                 <td class="has-text-right" align="right">
-                                    <p> {{ $orderDetails->name }} <br/>
-                                        {{ $orderDetails->address }} <br/>
+                                    <p> {{ $orderDetails->name }} <br />
+                                        {{ $orderDetails->address }} <br />
                                         {{ $orderDetails->city }} {{ $orderDetails->state }}
-                                        {{ $orderDetails->postcode }}<br/>
+                                        {{ $orderDetails->postcode }}<br />
                                         {{ $orderDetails->country }}</p>
                                     <p> </p>
                                 </td>
@@ -193,14 +193,22 @@
 
                                     <p>Your order has been shipped.</p>
 
-                                    <div class="content">
-
-                                        <p>Thank you again for choosing us.</p>
-
-                                        <p> Regards,<br/>
-                                            {{ config('app.name') }}
-                                        </p>
+                                    @if ($orderDetails->tracking)
+                                    <div><strong>Tracking Information: </strong>
+                                        {{$orderDetails->tracking}}
                                     </div>
+                                    @endif
+
+                                    @if ($orderDetails->message)
+                                    <p> {{$orderDetails->message}}</p>
+                                    @endif
+
+                                    <p>Thank you again for choosing us.</p>
+
+                                    <p> Regards,<br />
+                                        {{ config('app.name') }}
+                                    </p>
+
                                 </td>
                             </tr>
                         </table>

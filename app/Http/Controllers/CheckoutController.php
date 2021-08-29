@@ -152,6 +152,9 @@ class CheckoutController extends Controller
 
         if ($pinPayments->charge($charge)) {
             // payment success
+            // update order status to paid
+            $order->order_status_id = '3';
+            $order->save();
             return redirect()->route('checkout.thankyou', compact('page'))->with('success_message', 'Your payment has been successful.');
         } else {
             //payment didnt work

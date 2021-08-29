@@ -132,10 +132,11 @@ class BackendOrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Order::destroy($id);
+        return redirect()->route('backend.orders.index')->with('success_message', 'Order has been deleted.');
     }
 
-    public function sendOrderShippedEmail($id)
+    public function showOrderShippedEmail($id)
     {
         // send order email
         $orderDetails = Order::find($id);
@@ -144,6 +145,22 @@ class BackendOrderController extends Controller
 
         $orderDetails->products = $products;
 
+        return view('backend.order.orderShipped')->with('order', $orderDetails);
+    }
+
+    public function sendOrderShippedEmail($id, Request $request)
+    {
+        $orderDetails = Order::find($id);
+        $orderDetails->update($request->only(
+            [
+                'message',
+                'tracking'
+            ]
+        ));
+
+        $products = json_decode($orderDetails->cart);
+
+        $orderDetails->products = $products;
         $orderDetails['subject'] = "Order from Toad Gully Growers has been shipped";
 
         Mail::send('emails.orders.shipped', compact('orderDetails'), function ($message) use ($orderDetails) {

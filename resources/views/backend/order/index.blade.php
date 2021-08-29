@@ -29,7 +29,7 @@
     </div>
 </section>
 
-<section class="mb-6">
+{{-- <section class="mb-6">
     <div class="columns">
         <div class="column">
             <a href="" class="button is-primary">All Orders</a>
@@ -38,7 +38,7 @@
             <a href="" class="button is-primary">Open Orders</a>
         </div>
     </div>
-</section>
+</section> --}}
 
 <section class="mb-6">
     <div class="panel content">

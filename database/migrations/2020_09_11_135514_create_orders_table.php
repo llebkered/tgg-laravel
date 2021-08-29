@@ -31,6 +31,8 @@ class CreateOrdersTable extends Migration
             $table->text('cart')->nullable();
             $table->text('description')->nullable();
             $table->text('comments')->nullable();
+            $table->text('message')->nullable();
+            $table->text('tracking')->nullable();
             $table->decimal('tax',10,2)->nullable();
             $table->decimal('gst',10,2)->nullable();
             $table->decimal('total',10,2)->nullable();

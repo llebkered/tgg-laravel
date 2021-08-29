@@ -25,7 +25,7 @@
 </section>
 
 <section>
-    <div class="container">
+    {{-- <div class="container">
 
         <div class="columns has-background-light mb-6">
             <div class="column">
@@ -45,7 +45,7 @@
                 Address ID: {{ $order->address_id }}
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="container">
         <div class="columns has-background-light mb-6">
@@ -179,7 +179,20 @@
                     placeholder="Comments about order">{{ $order->comments}}</textarea>
             </div>
 
-            <button class="button is-primary">Update Order</button>
+            <div class="columns">
+                <div class="column">
+                    <button class="button is-primary">Update Order</button>
+                </div>
+                <div class="column">
+                    <form class="is-pulled-right" action="{{ route('backend.orders.destroy', $order->id) }}" method="POST">
+                        @method('DELETE')
+                        @csrf
+                        <button class="button is-danger is-pulled-right"  onclick="return confirm('Are you sure you want to delete this order?')">Delete Order</button>
+                    </form>
+                </div>
+            </div>
+
+            
         </form>
     </div>
 </section>
