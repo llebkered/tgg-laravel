@@ -92,12 +92,13 @@ Route::post('/backend/login', [BackendAuthController::class, 'login']);
 Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function () {
     Route::get('/', [BackendController::class, 'index'])->name('backend.index');
 
-    Route::resource('/blocks', BackendBlockController::class, ['as' => 'backend', 'only' => ['create','delete','edit','show','store','update','destroy']]);
+    Route::resource('/blocks', BackendBlockController::class, ['as' => 'backend', 'only' => ['create','delete','edit','show','store','update']]);
 
     Route::resource('/orders', BackendOrderController::class, ['as' => 'backend', 'only' => ['index', 'edit','update', 'destroy']]);
+
     Route::get('/orders/{order}/sendshippedemail', [BackendOrderController::class, 'showOrderShippedEmail'])->name('backend.orders.sendshippedemail');
     Route::post('/orders/{order}/sendshippedemail', [BackendOrderController::class, 'sendOrderShippedEmail']);
-
+    Route::get('/orders/{order}/delete', [BackendOrderController::class, 'destroy'])->name('backend.orders.delete');
     Route::get('/medialibary/{mediaId}/delete', [ MediaLibraryController::class, 'delete']);
 
     Route::resource('/pages', BackendPageController::class, ['as' => 'backend']);

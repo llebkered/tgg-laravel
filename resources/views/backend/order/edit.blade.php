@@ -184,11 +184,7 @@
                     <button class="button is-primary">Update Order</button>
                 </div>
                 <div class="column">
-                    <form class="is-pulled-right" action="{{ route('backend.orders.destroy', $order->id) }}" method="POST">
-                        @method('DELETE')
-                        @csrf
-                        <button class="button is-danger is-pulled-right"  onclick="return confirm('Are you sure you want to delete this order?')">Delete Order</button>
-                    </form>
+                    <a href="{{ route('backend.orders.delete', $order->id) }}" class="button is-danger is-pulled-right" onclick="return confirm('Are you sure you want to delete this order?')">Delete Order</a>
                 </div>
             </div>
 

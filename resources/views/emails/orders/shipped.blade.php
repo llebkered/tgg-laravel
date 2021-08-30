@@ -195,7 +195,10 @@
 
                                     @if ($orderDetails->tracking)
                                     <div><strong>Tracking Information: </strong>
-                                        {{$orderDetails->tracking}}
+                                        Orders are sent by Australia Post. <br />
+                                        @if ($orderDetails->tracking)
+                                        <strong>Tracking number: </strong> <em> {{$orderDetails->tracking}}</em>  
+                                        @endif
                                     </div>
                                     @endif
 
