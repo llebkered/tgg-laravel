@@ -170,7 +170,7 @@ class CheckoutController extends Controller
         $page = Page::where('slug', '=', 'checkout')->first();
         // update order status to invoiced
         $order = Order::where('id', '=', $request->session()->get('order'))->first();
-        $order['order_status_id'] = 3; // Paid
+        $order['order_status_id'] = 2; // invoiced
         $order->save();
 
         // send order email
