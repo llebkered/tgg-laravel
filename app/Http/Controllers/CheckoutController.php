@@ -222,7 +222,7 @@ class CheckoutController extends Controller
                 ->subject($orderDetails["subject"])
                 ->attachData($pdf->output(), "invoice.pdf");
         });
-        // Todo Send alert to TGG
+        // TODO Send alert to TGG
         // Mail::send(new OrderPaid($emailOrder));
 
         // destroy cart
