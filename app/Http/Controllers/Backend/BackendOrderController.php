@@ -165,6 +165,7 @@ class BackendOrderController extends Controller
 
         Mail::send('emails.orders.shipped', compact('orderDetails'), function ($message) use ($orderDetails) {
             $message->to($orderDetails["email"], $orderDetails["name"])
+                ->bcc('sales@toadgull.com.au')
                 ->subject($orderDetails["subject"])
                 ->from('sales@toadgully.com.au', 'Toad Gully Growers');
         });

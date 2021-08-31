@@ -201,9 +201,9 @@
                                         @endif
                                     </div>
                                     @endif
-
+                                    <p>Growing notes are supplied with the plants and can also be found on the <a href="https://toadgully.com.au/paulownia">Paulownia page</a> on our website.</p>
                                     @if ($orderDetails->message)
-                                    <p> {{$orderDetails->message}}</p>
+                                    <p> {!! $orderDetails->message !!}</p>
                                     @endif
 
                                     <p>Thank you again for choosing us.</p>

@@ -33,7 +33,7 @@
                         <img src="{{ $variations[$i]->product->getFirstMedia('featured_image')->getUrl('thumb') }}"
                             alt="{{ $row->name }}">
                     </td>
-                    <td>
+                    <td>{{ $variations[$i]->product->code }}
                         <p><strong>{{ $row->name }}</strong></p>
                         <p>{{ ($row->options->has('size') ? $row->options->size : '') }}</p>
                     </td>

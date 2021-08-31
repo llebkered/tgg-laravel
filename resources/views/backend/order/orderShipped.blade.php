@@ -1,5 +1,10 @@
 @extends('backend.layouts.main')
 
+@section('header_extras')
+<script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
+<script src="{{ asset('js/tinymcesettings.js') }}" referrerpolicy="origin"></script>
+@endsection
+
 @section('content')
 
 <section class="hero is-info welcome is-small mb-6">
@@ -88,7 +93,7 @@
                 <div class="column is-2"><label class="label" for="message">Message</label></div>
                 <div class="column">
                     <div class="control">
-                        <textarea class="textarea" name="message"
+                        <textarea class="tinymce textarea" cols="30" rows="10" name="message"
                             placeholder="optional message to customer">{{ old('message') ? old('message') : $order->message }}</textarea>
                     </div>
                 </div>

@@ -87,7 +87,7 @@
                             <div class="mt-6">
                                 <button class="button is-block is-primary is-fullwidth is-medium">Submit Card</button>
                             </div>
-
+                            <p class="help">We only accept Mastercard and Visa.</p>
                         </form>
 
                         <div class="mt-6"><img src="{{ asset('/images/powered_by_dark_outline.svg')}}" alt=""></div>

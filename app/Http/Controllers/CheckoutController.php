@@ -13,6 +13,7 @@ use App\Libraries\Pin\PinPayments;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Mail;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use App\Models\Variation;
 
 class CheckoutController extends Controller
 {
@@ -157,8 +158,8 @@ class CheckoutController extends Controller
             $order->save();
             return redirect()->route('checkout.thankyou', compact('page'))->with('success_message', 'Your payment has been successful.');
         } else {
-            //payment didnt work
-            return redirect()->route('checkout.card', compact('page'))->with('danger_message', 'Sorry. Something went wrong with your credit card payment. Please check your number, expiry, cvc and try again.');
+            //payment didn't work
+            return redirect()->route('checkout.card', compact('page'))->with('danger_message', 'Sorry. Something went wrong with your card payment. Please check your number, expiry, cvc, ensure you have sufficient funds and try again.');
         }
 
         
@@ -177,7 +178,6 @@ class CheckoutController extends Controller
         $orderDetails = $this->getOrderDetails($request);
 
         $orderDetails['subject'] = "Toad Gully Growers Invoice";
-
 
         $pdf = PDF::loadView('emails.orders.invoice', compact('orderDetails'));
 
@@ -204,7 +204,8 @@ class CheckoutController extends Controller
         $page = Page::where('slug', '=', 'thankyou')->first();
         // update order status to paid
         $order = Order::where('id', '=', $request->session()->get('order'))->first();
-        $order['order_status_id'] = 3; // Paid
+        // dd($order);
+        $order['order_status_id'] = 2; // Invoiced
         $order->save();
 
         $cart = json_decode($order['cart']);
@@ -212,7 +213,6 @@ class CheckoutController extends Controller
         // send order email
         $orderDetails = $this->getOrderDetails($request);
         $orderDetails['subject'] = "Toad Gully Growers Invoice";
-
 
         $pdf = PDF::loadView('emails.orders.paid', compact('orderDetails'));
 
@@ -255,6 +255,24 @@ class CheckoutController extends Controller
         $products = Cart::content();
 
         $order["products"] = $products;
+
+        // if (count($products)>0) {
+        //     foreach ($products as $item){
+        //         $cartItems[] = $item->id;
+        //     }
+            
+        //     $variations = Variation::find($cartItems);
+        //  }
+
+        
+        // TODO attach variations to product to get product code
+
+        //  foreach ($order['products'] as $item ) {
+        //      $item->code = $variations[ $item->id ];
+        //     dd($item);
+        //  }
+
+         
 
         return $order;
     }
