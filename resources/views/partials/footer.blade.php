@@ -4,15 +4,15 @@
             <div class="column">
                 <h3>{{ config('app.name', 'TGG') }}</h3>
                 <p>ABN {{ config('tgg.abn', '61 173 928 602') }}
-                <p>{{ now("Australia/Melbourne")->format('h:i A T') }}</p>
+                    <p>{{ now("Australia/Melbourne")->format('h:i A T') }}</p>
             </div>
             <div class="column">
                 <ul>
                     <li><a href="{{ route('home') }}">Home</a></li>
                     <li><a href="{{ route('ferns') }}">Ferns</a></li>
                     <li><a href="{{ route('paulownia') }}">Paulownia</a></li>
+                    <li><a href="{{ route('products') }}">Products</a></li>
                     <li><a href="{{ route('contact') }}">Contact Us</a></li>
-                    {{-- <li><a href="{{ route('products') }}">Products</a></li> --}}
                 </ul>
             </div>
             <div class="column is-half">

@@ -101,21 +101,31 @@
             </div>
 
             <div class="columns">
-                <div class="column is-2"><label class="label" for="name">Address</label></div>
+                <div class="column is-2"><label class="label" foline1">Address</label></div>
                 <div class="column">
                     <div class="control">
-                        <input class="input" name="address" id="address" type="text" placeholder="address"
-                            value="{{ old('address') ? old('address') : $order->address }}">
+                        <input class="input" name="line1" id="line1" type="text" placeholder="address"
+                            value="{{ old('line1') ? old('line1') : $order->line1 }}">
                     </div>
                 </div>
             </div>
 
             <div class="columns">
-                <div class="column is-2"><label class="label" for="name">Line 2</label></div>
+                <div class="column is-2"><label class="label" for="line2">Line 2</label></div>
                 <div class="column">
                     <div class="control">
                         <input class="input" name="line2" id="line2" type="text" placeholder="line2"
                             value="{{ old('line2') ? old('line2') : $order->line2 }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns">
+                <div class="column is-2"><label class="label" for="name">Phone</label></div>
+                <div class="column">
+                    <div class="control">
+                        <input class="input" name="phone" id="phone" type="text" placeholder="phone"
+                            value="{{ old('phone') ? old('phone') : $order->phone }}">
                     </div>
                 </div>
             </div>

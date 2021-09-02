@@ -19,9 +19,10 @@
         {{-- <h1>{{ $page['title']}}</h1>
         {!! $page['body'] !!} --}}
 
-        <h2>Your Order</h2>
+        <p class="is-size-4">Your order number is: <em>{{ $order->id }}</em></p>
         <p>{{ $order->name }}<br>
-            {{ $order->address }}<br>
+            @if ($order->line1){{$order->line1}}<br/> @endif
+            @if ($order->line2){{$order->line2}}<br/> @endif
             {{ $order->city }}, {{ $order->postcode }} {{ $order->state }}</p>
 
         <table class="table">
@@ -42,7 +43,8 @@
         </table>
 
         <div>
-            <p>To pay for this please direct deposit to:</p>
+            <p>Please include your order number ({{ $order->id }}) to help us find your payment.</p>
+            <p>Your plants will be dispatched within a few business days from payment received and we will inform you with tracking.</p>
 
             <p>
                 <strong>Bank: </strong> {{ config('bank.name') }}<br>

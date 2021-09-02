@@ -21,7 +21,8 @@
 
         <h2>Your Order</h2>
         <p>{{ $order->name }}<br>
-            {{ $order->address }}<br>
+            @if ($order->line1){{$order->line1}}<br/> @endif
+            @if ($order->line2){{$order->line2}}<br/> @endif
             {{ $order->city }}, {{ $order->postcode }} {{ $order->state }}</p>
 
         <table class="table">

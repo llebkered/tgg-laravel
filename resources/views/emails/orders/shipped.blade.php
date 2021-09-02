@@ -125,10 +125,12 @@
                                 </td>
                                 <td class="has-text-right" align="right">
                                     <p> {{ $orderDetails->name }} <br />
-                                        {{ $orderDetails->address }} <br />
+                                        @if ($orderDetails->line1){{$orderDetails->line1}}<br/> @endif
+                                        @if ($orderDetails->line2){{$orderDetails->line2}}<br/> @endif
                                         {{ $orderDetails->city }} {{ $orderDetails->state }}
                                         {{ $orderDetails->postcode }}<br />
                                         {{ $orderDetails->country }}</p>
+                                        {{ $orderDetails->phone }} <br />
                                     <p> </p>
                                 </td>
                             </tr>
@@ -197,11 +199,13 @@
                                     <div><strong>Tracking Information: </strong>
                                         Orders are sent by Australia Post. <br />
                                         @if ($orderDetails->tracking)
-                                        <strong>Tracking number: </strong> <em> {{$orderDetails->tracking}}</em>  
+                                        <strong>Tracking number: </strong> <em> {{$orderDetails->tracking}}</em>
                                         @endif
                                     </div>
                                     @endif
-                                    <p>Growing notes are supplied with the plants and can also be found on the <a href="https://toadgully.com.au/paulownia">Paulownia page</a> on our website.</p>
+                                    <p>Growing notes are supplied with the plants and can also be found on the <a
+                                            href="https://toadgully.com.au/paulownia">Paulownia page</a> on our website.
+                                    </p>
                                     @if ($orderDetails->message)
                                     <p> {!! $orderDetails->message !!}</p>
                                     @endif

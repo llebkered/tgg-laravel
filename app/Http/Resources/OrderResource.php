@@ -21,7 +21,7 @@ class OrderResource extends JsonResource
             'customer_id' => $this->customer_id,
             'order_status_id' => $this->order_status_id,
             'address_id' => $this->address_id,
-            'address' => $this->address,
+            'line1' => $this->line1,
             'line2' => $this->line2,
             'city' => $this->city,
             'state' => $this->state,

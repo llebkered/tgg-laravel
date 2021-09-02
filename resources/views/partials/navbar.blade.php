@@ -22,15 +22,14 @@
                 <a class="navbar-item" href="{{ route('paulownia') }}">
                     Paulownia
                 </a>
-
-                <a class="navbar-item" href="{{ route('contact') }}">
-                    Contact Us
-                </a>
-                {{-- @if ( option('shop')  )
                 <a class="navbar-item" href="{{ route('products') }}">
                     Products
                 </a>
-                @endif --}}
+                
+                <a class="navbar-item" href="{{ route('contact') }}">
+                    Contact Us
+                </a>
+
             </div>
 
             <div class="navbar-end">

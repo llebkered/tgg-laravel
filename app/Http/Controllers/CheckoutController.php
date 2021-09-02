@@ -80,6 +80,7 @@ class CheckoutController extends Controller
 
         $rules = [
             'line1' => 'required',
+            'line2' => '',
             'postcode' => ['required', 'size:4', 'regex:/[2-5]\d\d\d|[0][2,7,8,9]\d\d/'], // 2-5NNN. 0[2,8,09]NN ie not WA or Tas
             'city' => 'required'];
     
@@ -100,7 +101,8 @@ class CheckoutController extends Controller
         $address = Address::create($data);
 
         $order->address_id = $address->id;
-        $order->address = $address->line1;
+        $order->line1 = $address->line1;
+        $order->line2 = $address->line2;
         $order->city = $address->city;
         $order->postcode = $address->postcode;
         $order->state = $address->state;
@@ -136,7 +138,7 @@ class CheckoutController extends Controller
                 "expiry_year"  => $request->post('year'),
                 "cvc"  => $request->post('cvc'),
                 "name"  => $order->name,
-                "address_line1"  => $order->address,
+                "address_line1"  => $order->line1,
                 "address_line2" => $order->line2,
                 "address_city"  => $order->city,
                 "address_postcode"  => $order->postcode,
@@ -171,6 +173,12 @@ class CheckoutController extends Controller
         $page = Page::where('slug', '=', 'checkout')->first();
         // update order status to invoiced
         $order = Order::where('id', '=', $request->session()->get('order'))->first();
+
+        // Don't proceed if order is null
+        if (is_null($order)) {
+            return redirect('/cart');
+        }
+        
         $order['order_status_id'] = 2; // invoiced
         $order->save();
 
@@ -205,8 +213,8 @@ class CheckoutController extends Controller
         // update order status to paid
         $order = Order::where('id', '=', $request->session()->get('order'))->first();
         // dd($order);
-        $order['order_status_id'] = 2; // Invoiced
-        $order->save();
+        // $order['order_status_id'] = 2; // Invoiced
+        // $order->save();
 
         $cart = json_decode($order['cart']);
 

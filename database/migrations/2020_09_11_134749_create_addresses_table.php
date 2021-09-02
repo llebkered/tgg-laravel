@@ -17,7 +17,7 @@ class CreateAddressesTable extends Migration
             $table->id();
             $table->integer('customer_id');
             $table->boolean('billing_address')->nullable();
-            $table->string('line1');
+            $table->string('line1')->nullable();
             $table->string('line2')->nullable();
             $table->string('city');
             $table->string('state');

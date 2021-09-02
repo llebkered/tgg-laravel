@@ -34,9 +34,9 @@
                                     <input name="line1" class="input is-medium" type="text" placeholder="Address Line 1"
                                         value="{{ old('line1')}}">
                                 </div>
-                                @error('address')
+                                @error('line1')
                                 <div class="message is-danger">
-                                    <div class="message-body">{{ $errors->first('address') }}</div>
+                                    <div class="message-body">{{ $errors->first('line1') }}</div>
                                 </div>
                                 @enderror
                             </div>

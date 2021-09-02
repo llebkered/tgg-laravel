@@ -100,7 +100,7 @@ class BackendOrderController extends Controller
                 'order_status_id',
                 // 'address_id',
                 'name',
-                'address',
+                'line1',
                 'line2',
                 'city',
                 'state',
@@ -165,7 +165,7 @@ class BackendOrderController extends Controller
 
         Mail::send('emails.orders.shipped', compact('orderDetails'), function ($message) use ($orderDetails) {
             $message->to($orderDetails["email"], $orderDetails["name"])
-                ->bcc('sales@toadgull.com.au')
+                ->bcc('sales@toadgully.com.au')
                 ->subject($orderDetails["subject"])
                 ->from('sales@toadgully.com.au', 'Toad Gully Growers');
         });
