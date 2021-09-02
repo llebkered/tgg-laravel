@@ -10,14 +10,22 @@
     @foreach ($orders as $order)
     <tr>
         <td>{{ $order->id }}</td>
-       <td>{{ \Carbon\Carbon::parse($order->created_at)->timezone('Australia/Melbourne')}}</td>
+        <td>{{ \Carbon\Carbon::parse($order->created_at)->timezone('Australia/Melbourne')}}</td>
         <td>{{ $order->name }}</td>
         <td>
-            @if ($order->line1){{$order->line1}}<br/> @endif
-            @if ($order->line2){{$order->line2}}<br/> @endif
+            @if ($order->line1){{$order->line1}}<br /> @endif
+            @if ($order->line2){{$order->line2}}<br /> @endif
             {{ $order->city }}, {{ $order->state }} {{ $order->postcode }}</td>
         <td>
-            {{ $order->order_status->title }}
+            {{-- {{ $order->order_status->title }} --}}
+            {{ $order->order_status }}
+            {{-- @php
+            $status = (array)json_decode(json_encode($order->order_status));
+            // dd($status['title']);
+            @endphp
+            {{ $status['title'] }} --}}
+     
+
         </td>
         <td><a href="{{ route('backend.orders.edit', $order->id ) }}"
                 class="button is-link is-outlined is-small">edit</a></td>

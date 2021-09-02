@@ -220,9 +220,10 @@
                                 <td>
                                     <p>Dear {{ $orderDetails->name }},</p>
                                     <p>Thank your for your order.</p>
+                                    <p>Your order number is: {{ $orderDetails->id }}.</p>
                                     <p>Your plants will be dispatched within the next few business days and we will inform you with tracking.</p>
                                     <p>Thank you again for choosing us.</p>
-
+                                    <br />
                                     <p> Regards,<br />
                                         {{ config('app.name') }}
                                     </p>
