@@ -19,6 +19,8 @@
         <td>
             {{-- {{ $order->order_status->title }} --}}
             {{ $order->order_status }}
+            {{ $order->order_status_id }}
+            {{-- {{ $order_statuses[$order->order_status_id]->title }} --}}
             {{-- @php
             $status = (array)json_decode(json_encode($order->order_status));
             // dd($status['title']);

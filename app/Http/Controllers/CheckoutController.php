@@ -53,7 +53,7 @@ class CheckoutController extends Controller
         $orderDetails['order_status_id'] = 1;
         $orderDetails['cart'] = json_encode(Cart::content());
         $orderDetails['tax'] = Cart::tax();
-        $orderDetails['gst'] = (float)Cart::total() / 10;
+        $orderDetails['gst'] = number_format(str_replace(',', '', Cart::total())/10 , 2);//(float)Cart::total() / 10;
         $orderDetails['total'] = Cart::total();
         $orderDetails['name'] = $request->post('name');
         $orderDetails['email'] = $request->post('email');
@@ -264,6 +264,7 @@ class CheckoutController extends Controller
 
         $order["products"] = $products;
 
+        
         // if (count($products)>0) {
         //     foreach ($products as $item){
         //         $cartItems[] = $item->id;

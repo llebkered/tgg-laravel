@@ -28,7 +28,9 @@ class CartController extends Controller
         // Get products fore each cart item
         $variations = [];
         $cart = Cart::content();
-        // dd($cart);
+       
+        $gst = number_format(str_replace(',', '', Cart::total())/10 , 2);
+        
          if (count($cart)>0) {
             foreach ($cart as $item){
                 $cartItems[] = $item->id;
@@ -37,7 +39,7 @@ class CartController extends Controller
             $variations = Variation::find($cartItems);
          }
       
-        return view('cart', compact('page'))->with('variations', $variations);
+        return view('cart', compact('page'))->with(['variations'=> $variations, 'gst' => $gst]);
     }
 
     /**

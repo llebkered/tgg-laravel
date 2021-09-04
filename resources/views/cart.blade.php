@@ -16,12 +16,14 @@
         <table class="table is-hoverable">
             <thead>
                 <tr>
+                    <th></th>
                     <th>Product</th>
-                    <th></th>
-                    <th></th>
-                    <th class="has-text-right">Price</th>
+
+                    <th>Qty</th>
+                    <th>Each</th>
                     <th class="has-text-right">Subtotal</th>
-                    {{-- <th></th> --}}
+                    <th class="has-text-right"></th>
+                    <th></th>
                 </tr>
             </thead>
 
@@ -37,25 +39,23 @@
                         <p><strong>{{ $row->name }}</strong></p>
                         <p>{{ ($row->options->has('size') ? $row->options->size : '') }}</p>
                     </td>
-                    {{-- <td>{{ $row->qty  }} --}}
 
-                    {{-- <select class="quantity" data-id="{{ $row->rowId }}"
-                    data-productQuantity="{{ $row->model->quantity }}">
-                    @for ($i = 1; $i < 5 + 1 ; $i++) <option {{ $row->qty == $i ? 'selected' : '' }}>{{ $i }}</option>
-                        @endfor
-                        </select>
-                        </td>--}}
-                        <td><input type="hidden" name="qty" value="{{ $row->qty  }}"><input type="hidden" name="price"
-                                value="{{ $row->price }}"></td>
-                        <td class="has-text-right">${{ $row->total }}</td>
-                        <td class="has-text-right">
-                            <form action="{{ route('cart.destroy', $row->rowId)}}" method="POST">
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE')}}
-                                <button type="submit" class="button is-small is-danger is-outlined">Remove</button>
-                            </form>
+                    <td class="has-text-right"><input type="hidden" name="qty" value="{{ $row->qty  }}"><input type="hidden" name="price"
+                            value="{{ $row->price }}">
+                        {{ $row->qty  }}
+                    </td>
+                    <td class="has-text-right">
+                        ${{number_format($row->price ,2)  }}
+                    </td>
+                    <td class="has-text-right">${{ $row->total }}</td>
+                    <td class="has-text-right">
+                        <form action="{{ route('cart.destroy', $row->rowId)}}" method="POST">
+                            {{ csrf_field() }}
+                            {{ method_field('DELETE')}}
+                            <button type="submit" class="button is-small is-danger is-outlined">Remove</button>
+                        </form>
 
-                        </td>
+                    </td>
                 </tr>
                 @php $i++ @endphp
                 @endforeach
@@ -63,19 +63,25 @@
 
             <tfoot>
                 <tr>
-                    <td colspan="2">&nbsp;</td>
+                    <td colspan="3">&nbsp;</td> 
                     <td class="has-text-right">Subtotal</td>
                     <td class="has-text-right">${{Cart::subtotal()}}</td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 <tr>
-                    <td colspan="2">&nbsp;</td>
+                    <td colspan="3">&nbsp;</td>
                     <td class="has-text-right">GST</td>
-                    <td class="has-text-right">${{ number_format((float)Cart::total() / 10, 2)  }}</td>
+                    <td class="has-text-right">${{ $gst }}</td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 <tr>
-                    <td colspan="2">&nbsp;</td>
+                    <td colspan="3">&nbsp;</td>
                     <td class="has-text-right"><strong>Total</strong></td>
                     <td class="has-text-right"><strong>${{ Cart::total() }}</strong></td>
+                    <td></td>
+                    <td></td>
                 </tr>
             </tfoot>
         </table>
@@ -96,4 +102,3 @@
 
 
 @endsection
-

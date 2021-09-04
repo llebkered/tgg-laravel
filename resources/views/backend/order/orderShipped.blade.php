@@ -35,16 +35,24 @@
     <div class="container">
         <div class="box mb-6">
             <div class="columns">
-                <div class="column is-1"><strong>To:</strong></div>
+                <div class="column is-1"><strong>Name:</strong></div>
+                <div class="column">{{ $order->name}}</div>
+            </div>
+            <div class="columns">
+                <div class="column is-1"><strong>Email:</strong></div>
                 <div class="column">{{ $order->email}}</div>
             </div>
             <div class="columns">
                 <div class="column is-1"><strong>Address:</strong></div>
                 <div class="column">
-                    {{ $order->address}} <br>
+                    @if ($order->line1){{ $order->line1}} <br>@endif
                     @if ($order->line2) {{$order->line2}}<br>@endif
                     {{$order->city}},  {{$order->state}}  {{$order->postcode }} <br>
                 </div>
+            </div>
+            <div class="columns">
+                <div class="column is-1"><strong>Phone:</strong></div>
+                <div class="column">{{ $order->phone}}</div>
             </div>
             <div class="columns">
                 <div class="column is-1"><strong>Order:</strong></div>
@@ -52,16 +60,20 @@
                     <table class="table">
                         @foreach ($order->products as $item)
                         <tr>
+                            <td>{{ $item->qty }}</td>
                             <td>
                                 {{ $item->name }}
                             </td>
                             <td  class="has-text-right">
                                 ${{ $item->price }}
                             </td>
+                            <td class="has-text-right">
+                                ${{ $item->subtotal }}
+                            </td>
                         </tr>
                         @endforeach
                         <tr>
-                            <td></td>
+                            <td colspan="3"></td>
                         <td class="has-text-right">
                             <p>GST: ${{ $order->gst }}</p>
                             <p>Total: ${{ $order->total }}</p>   
