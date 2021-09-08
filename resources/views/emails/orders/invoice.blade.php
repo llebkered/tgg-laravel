@@ -86,33 +86,7 @@
                 <tr>
                     <td>
                         {{-- Heading and Logo --}}
-                        <table width="100%">
-                            <tr>
-                                <td class="v-align-top">
-                                    <img src="data:image/png;base64,{{base64_encode(file_get_contents(resource_path('images/email-logo.png')))}}"
-                                        alt="TGG Logo" />
-                                </td>
-                                <td class="v-align-top has-text-right" align="right">
-                                    <img src="data:image/png;base64,{{base64_encode(file_get_contents(resource_path('images/tgg-text.png')))}}"
-                                        alt="Toad Gully Growers" />
-
-                                    <p>
-                                        361 Stumpy Gully Road<br />
-                                        Balnarring, VIC 3926<br />
-                                        ph (03) 5983 5688<br />
-                                        email sales@toadgully.com.au
-                                    </p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <div class="margin-bottom">
-                                        <p> </p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
+                        @include('emails.partials.invoice-header')
                     </td>
                 </tr>
 
@@ -143,32 +117,7 @@
                 <tr>
                     <td>
                         {{-- Order recipient --}}
-                        <table width="100%">
-                            <tr>
-                                <td>
-                                    <p><strong>Order Number: </strong> {{ $orderDetails->id }}</p>
-                                </td>
-                                <td class="has-text-right" align="right">
-                                    <p> {{ $orderDetails->name }} <br />
-                                        @if ($orderDetails->line1){{$orderDetails->line1}}<br/> @endif
-                                        @if ($orderDetails->line2){{$orderDetails->line2}}<br/> @endif
-                                        {{ $orderDetails->city }} {{ $orderDetails->state }}
-                                        {{ $orderDetails->postcode }}<br />
-                                        {{ $orderDetails->country }}</p>
-                                        {{ $orderDetails->phone }} <br />
-                                    <p> </p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <div class="margin-bottom">
-                                        <p> </p>
-                                    </div>
-                                </td>
-                            </tr>
-
-                        </table>
+                        @include('emails.partials.order-recipient')
                     </td>
                 </tr>
                 <tr>
