@@ -1,29 +1,27 @@
 <table width="100%" class="full-width">
     <tr>
-        <td class="has-text-right" align="right"><strong>Qty &nbsp;&nbsp;</strong></td>
-        <td><strong>Item </strong> </td>
-        <td class="has-text-right" align="right"><strong>Price </strong></td>
-        <td class="has-text-right" align="right"><strong>Subtotal </strong> </td>
+        <th class="has-text-left" align="left" width="10%">Qty </th>
+        <th class="has-text-left" align="left" width="50%">Item</th>
+        <th width="20%" class="has-text-right" align="right">Price</th>
+        <th width="20%" class="has-text-right" align="right">Subtotal</th>
     </tr>
     @foreach ($orderDetails->products as $product)
     <tr>
-        <td class="has-text-right" align="right">{{$product->qty}} &nbsp; &nbsp;</td>
+        <td>{{$product->qty}}</td>
         <td>{{ $product->name }} &nbsp;</td>
         <td class="has-text-right" align="right">${{ number_format($product->price,2) }}</td>
-        <td class="has-text-right">${{ $product->subtotal }}</td>
+        <td class="has-text-right" align="right">${{ $product->subtotal }}</td>
     </tr>
     @endforeach
 
     <tr>
-        <td colspan="3"></td>
-        <td class="has-text-right" align="right">
-            <strong>GST: </strong> ${{ $orderDetails->gst }}
+        <td colspan="4" class="has-text-right" align="right">
+            <strong>GST: &nbsp;</strong> ${{ $orderDetails->gst }}
         </td>
     </tr>
     <tr>
-        <td colspan="3"></td>
-        <td class="has-text-right" align="right">
-            <strong>Total: </strong> ${{ $orderDetails->total }}
+        <td colspan="4" class="has-text-right" align="right">
+            <strong>Total: &nbsp;</strong> ${{ $orderDetails->total }}
         </td>
     </tr>
     <tr>
