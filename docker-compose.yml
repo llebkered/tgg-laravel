@@ -1,43 +1,68 @@
-version: "3.1"
+version: "3.7"
+
 services:
-    www:
-        build: .
-        ports: 
-            - "80:80"
-        volumes:
-            - ./www:/var/www/html/
-        links:
-            - db
-        networks:
-            - default
-    db:
-        image: mariadb:latest
-        ports: 
-            - "3306:3306"
-        command: --default-authentication-plugin=mysql_native_password
-        environment:
-            MYSQL_DATABASE: ${DB_DATABASE}
-            MYSQL_USER: ${DB_USERNAME}
-            MYSQL_PASSWORD: ${DB_PASSWORD}
-            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-        volumes:
-            - ./dump:/docker-entrypoint-initdb.d
-            - ./conf:/etc/mysql/conf.d
-            - persistent:/var/lib/mysql
-        networks:
-            - default
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        links: 
-            - db:db
-        ports:
-            - 8081:80
-        environment:
-            MYSQL_USER: ${DB_USERNAME}
-            MYSQL_PASSWORD: ${DB_PASSWORD}
-            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD} 
+  app:
+    build:
+      args:
+        user: tgg
+        uid: 1000
+      context: ./docker/php
+      dockerfile: Dockerfile
+    image: tgg
+    container_name: tgg-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - tgg
+
+  db:
+    platform: linux/x86_64
+    image: mysql:5.7
+    container_name: tgg-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - db:/var/lib/mysql
+      # - ./docker/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - tgg
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+      UPLOAD_LIMIT: 300M
+    restart: always
+    ports:
+      - 8081:80
+    networks:
+      - tgg
+    volumes:
+      - db:/var/lib/mysql
+
+networks:
+  tgg:
+    driver: bridge
+
 volumes:
-    persistent:
-
-
+  db:
+    driver: local
+  app:
+    driver: local
 
