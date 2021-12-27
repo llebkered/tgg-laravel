@@ -8,7 +8,7 @@ return [
      * value for this name will be discarded. Make sure this name does not
      * collide with a form field that is actually used.
      */
-    'name_field_name' => env('HONEYPOT_NAME', 'my_name'),
+    'name_field_name' => env('HONEYPOT_NAME', 'url'),
 
     /*
      * When this is activated there will be a random string added
@@ -28,7 +28,7 @@ return [
      * If the form is submitted faster than this amount of seconds
      * the form submission will be considered invalid.
      */
-    'amount_of_seconds' => env('HONEYPOT_SECONDS', 1),
+    'amount_of_seconds' => env('HONEYPOT_SECONDS', 10),
 
     /*
      * This class is responsible for sending a response to requests that

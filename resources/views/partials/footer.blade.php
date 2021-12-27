@@ -4,7 +4,7 @@
             <div class="column">
                 <h3>{{ config('app.name', 'TGG') }}</h3>
                 <p>ABN {{ config('tgg.abn', '61 173 928 602') }}
-                    <p>{{ now("Australia/Melbourne")->format('h:i A T') }}</p>
+                <p>{{ now("Australia/Melbourne")->format('h:i A T') }}</p>
             </div>
             <div class="column">
                 <ul>
@@ -25,4 +25,12 @@
     </div>
     <script src="{{ asset('js/menu.js') }}" defer></script>
     @yield('footer_extras')
+    {{-- <script src="https://cdn.jsdelivr.net/npm/luxon@2.2.0/build/global/luxon.min.js"></script>
+    <script>
+        import { DateTime } from "luxon";
+        var datetime = DateTime.now().setZone('Australia/Melbourne').toFormat('yyyy-MM-dd HH:mm:ss');
+        // document.getElementById("datetime").innerHTML = datetime;
+        // console.log(datetime);
+        console.log('hello');
+    </script> --}}
 </footer>

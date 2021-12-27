@@ -12,9 +12,16 @@
                 {!! $page->body !!}
             </div>
             <div class="column  has-background-light">
+                @if(session('message'))
+                <div class='alert alert-success'>
+                    {{ session('message') }}
+                </div>
+                @endif
+
                 <form action="" method="POST">
                     @csrf
                     @honeypot
+
                     <div class="field">
                         <label class="label">Name</label>
                         <div class="control">

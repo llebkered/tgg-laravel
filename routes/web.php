@@ -51,8 +51,10 @@ Route::group(['prefix' => 'admin'], function () {
 // Route::get('/', 'HomeController@index')->name('home');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/contact', [ContactController::class, 'index'])->name('contact');
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/get-in-touch', [ContactController::class, 'index'])->name('contact');
+Route::post('/get-in-touch', [ContactController::class, 'store'])->name('contact.store');
+// Route::middleware('throttle:1,1')->post('/contact', [ContactController::class, 'store'])->name('contact.store');
+// Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 Route::get('/ferns', [FernsController::class, 'index'])->name('ferns');
 Route::get('/paulownia', [PaulowniaController::class, 'index'])->name('paulownia');
 Route::get('/products', [ProductController::class, 'index'])->name('products');
@@ -116,7 +118,7 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
 
     Route::get('/shop/toggle', function () {
         $option = (option('shop')) ? 0 : 1 ;
-        option(['shop' => $option ]); 
+        option(['shop' => $option ]);
         return back();
     })->name('backend.shop.toggle');
 
@@ -139,7 +141,7 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']
 
 
 Route::middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function () {
-   
+
    //Clear configurations:
     Route::get('/config-clear', function () {
         $status = Artisan::call('config:clear');
@@ -185,5 +187,5 @@ Route::middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function (
     //     return '<h1>Vendor published </h1>';
     // });
 
-  
+
 });

@@ -8,6 +8,10 @@
 
 {{-- Body --}}
 {{ $slot }}
+body test text
+
+
+{{-- Subcopy --}}
 
 {{-- Subcopy --}}
 @isset($subcopy)

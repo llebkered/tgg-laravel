@@ -6,7 +6,10 @@ use App\Models\Page;
 use App\Models\Contact;
 use App\Mail\ContactMail;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\ContactFormRequest;
+use App\Notifications\ContactFormMessage;
 
 class ContactController extends Controller
 {
@@ -18,40 +21,17 @@ class ContactController extends Controller
     }
 
     // Store Contact Form data
-    public function store(Request $request)
+    public function store(ContactFormRequest $message, Contact $recipient)
     {
+        $recipient->notify(new ContactFormMessage($message));
 
-        // Form validation
-        $data = $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone' => '', //'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
-            'subject' => 'required',
-            'message' => 'required'
-        ]);
-
-
-        //  Store data in database
-        Contact::create($data);
-
-        //  Send mail to admin
-        // Mail::send('emails.contact.form', array(
-        //         'name' => $request->get('name'),
-        //         'email' => $request->get('email'),
-        //         'phone' => $request->get('phone'),
-        //         'subject' => $request->get('subject'),
-        //         'user_query' => $request->get('message'),
-        //     ), function ($message) use ($request) {
-        //         $message->from($request->email);
-        //         $message->to('sales@toadgully.com.au', 'Toadgully Growers')->subject($request->get('subject'));
-        //     });
-
-        Mail::to('sales@toadgully.com.au')
-            // ->cc('sales2@toadgully.com.au')
-            // ->cc('sales3@toadgully.com.au')
-            ->send(new ContactMail($data));
-
-        //
-        return back()->with('success_message', 'We have received your message and would like to thank you for writing to us.');
+        // store the message in the database
+        $recipient->name = $message->name;
+        $recipient->email = $message->email;
+        $recipient->subject = $message->subject;
+        $recipient->phone = $message->phone;
+        $recipient->message = $message->message;
+        $recipient->save();
+        return redirect()->back()->with('success_message', 'Thanks for your message! We will get back to you soon!');
     }
 }
