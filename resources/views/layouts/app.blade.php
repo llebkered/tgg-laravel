@@ -12,7 +12,8 @@
 
     @include('partials.head-meta')
 
-    {{-- <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.0/css/bulma.min.css" /> --}}
+    {{--
+    <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.0/css/bulma.min.css" /> --}}
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <!-- Styles -->
@@ -24,7 +25,6 @@
 
 <body>
 
-
     @include('partials.header')
 
     @include('partials.navbar')
@@ -34,7 +34,6 @@
     @if (isset($slot))
     {{ $slot }}
     @endif
-
 
     @yield('content')
 
