@@ -11,17 +11,23 @@ class PinPayments
 {
     public function charge($card)
     {
-        $client = new \GuzzleHttp\Client();
-      
+        $client = new \GuzzleHttp\Client(
+            [
+                'headers' => [ 'Content-Type' => 'application/json' ]
+            ]
+        );
+
         try {
-            $client->request('POST', 'https://' . config('pin.host') . '/1/charges', [
+            $res = $client->request('POST', 'https://' . config('pin.host') . '/1/charges', [
                 'auth' => [config('pin.secret'), ''],
                 'json' => $card
             ]);
+            return $res;
+
+        // Return error
         } catch (ClientException $e) {
-            return false;
+            return $e->getResponse();
         }
 
-        return true;
     }
 }

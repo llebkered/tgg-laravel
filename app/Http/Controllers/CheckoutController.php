@@ -34,17 +34,17 @@ class CheckoutController extends Controller
             'email' => 'required|email',
             'phone' => ['required', 'regex:/^(?:\+?(61))? ?(?:\((?=.*\)))?(0?[2-57-8])\)? ?(\d\d(?:[- ](?=\d{3})|(?!\d\d[- ]?\d[- ]))\d\d[- ]?\d[- ]?\d{3})$/']
         ];
-    
+
         $customMessages = [
             'required' => 'The :attribute field can not be blank.',
             'phone.regex' => 'The phone number must be a valid Australian number. eg 03 7010 1234 or 0491 570 006'
         ];
-    
+
         $data = $this->validate($request, $rules, $customMessages);
 
         //create customer
         $customer = Customer::create($data);
-        
+
         // Store in session
         $customerId = $request->session()->put('customer', $customer->id);
 
@@ -53,7 +53,7 @@ class CheckoutController extends Controller
         $orderDetails['order_status_id'] = 1;
         $orderDetails['cart'] = json_encode(Cart::content());
         $orderDetails['tax'] = Cart::tax();
-        $orderDetails['gst'] = number_format(str_replace(',', '', Cart::total())/10 , 2);//(float)Cart::total() / 10;
+        $orderDetails['gst'] = number_format(str_replace(',', '', Cart::total())/10, 2);//(float)Cart::total() / 10;
         $orderDetails['total'] = Cart::total();
         $orderDetails['name'] = $request->post('name');
         $orderDetails['email'] = $request->post('email');
@@ -83,13 +83,13 @@ class CheckoutController extends Controller
             'line2' => '',
             'postcode' => ['required', 'size:4', 'regex:/[2-5]\d\d\d|[0][2,7,8,9]\d\d/'], // 2-5NNN. 0[2,8,09]NN ie not WA or Tas
             'city' => 'required'];
-    
+
         $customMessages = [
             'required' => 'The :attribute field can not be blank.',
             'postcode.size' => 'The post code must be a 4 digit number (WA and Tas not accepted.)',
             'postcode.regex' => 'Please check your postcode is correct. (WA and Tas not accepted.)'
         ];
-    
+
         $this->validate($request, $rules, $customMessages);
 
         $data = $request->post();
@@ -148,24 +148,33 @@ class CheckoutController extends Controller
             "description"  => $this->getDescription(),
             "amount" => (int)($order->total * 100),
             "email" => $order->email
-
         ];
 
-        $pinPayments = new PinPayments;
+        $pinPayments = new PinPayments();
+        $result = $pinPayments->charge($charge);
 
-        if ($pinPayments->charge($charge)) {
+        // Handle errors
+        // 400 - Card Payment Errors
+        // 401 - Authentication Errors
+        if (in_array($result->getStatusCode(), [400,401])) {
+            $errorMsg = json_decode($result->getBody());
+            $error = $errorMsg->error_description;
+            return redirect()->route('checkout.card', compact('page'))->with('danger_message', $error);
+        }
+
+        if ($result->getStatusCode() == 201) {
             // payment success
             // update order status to paid
             $order->order_status_id = '3';
             $order->save();
+
             return redirect()->route('checkout.thankyou', compact('page'))->with('success_message', 'Your payment has been successful.');
         } else {
             //payment didn't work
-            return redirect()->route('checkout.card', compact('page'))->with('danger_message', 'Sorry. Something went wrong with your card payment. Please check your number, expiry, cvc, ensure you have sufficient funds and try again.');
-        }
+            $error = json_decode($result->getBody())->messages[0]->message;
 
-        
-        return view('checkout.charge')->with(['page' => $page]);
+            return redirect()->route('checkout.card', compact('page'))->with('danger_message', $error);
+        }
     }
 
     public function directdeposit(Request $request)
@@ -178,7 +187,7 @@ class CheckoutController extends Controller
         if (is_null($order)) {
             return redirect('/cart');
         }
-        
+
         $order['order_status_id'] = 2; // invoiced
         $order->save();
 
@@ -256,7 +265,6 @@ class CheckoutController extends Controller
 
     protected function getOrderDetails(Request $request)
     {
-
         // get current order
         $order = Order::where('id', '=', $request->session()->get('order'))->first();
 
@@ -264,16 +272,16 @@ class CheckoutController extends Controller
 
         $order["products"] = $products;
 
-        
+
         // if (count($products)>0) {
         //     foreach ($products as $item){
         //         $cartItems[] = $item->id;
         //     }
-            
+
         //     $variations = Variation::find($cartItems);
         //  }
 
-        
+
         // TODO attach variations to product to get product code
 
         //  foreach ($order['products'] as $item ) {
@@ -281,7 +289,7 @@ class CheckoutController extends Controller
         //     dd($item);
         //  }
 
-         
+
 
         return $order;
     }
@@ -289,7 +297,6 @@ class CheckoutController extends Controller
     public function test()
     {
         $page = Page::where('slug', '=', 'thankyou')->first();
-
 
         $order = Order::where('id', '=', 14)->first();
         $cart = json_decode($order['cart']);
