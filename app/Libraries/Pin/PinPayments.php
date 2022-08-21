@@ -6,11 +6,14 @@ use GuzzleHttp;
 use Dotenv\Dotenv;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 class PinPayments
 {
     public function charge($card)
     {
+        // https://pinpayments.com/developers/api-reference/charges
+
         $client = new \GuzzleHttp\Client(
             [
                 'headers' => [ 'Content-Type' => 'application/json' ]
@@ -24,10 +27,14 @@ class PinPayments
             ]);
             return $res;
 
-        // Return error
+        // Return processing error
         } catch (ClientException $e) {
             return $e->getResponse();
         }
 
+        // Return server error
+        catch (ServerException $e) {
+            return $e->getResponse();
+        }
     }
 }

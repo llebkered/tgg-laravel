@@ -47,18 +47,11 @@
                                         <label for="month" class="label">Month</label>
                                         <div class="select">
                                             <select name="month">
-                                                <option value="01">Jan</option>
-                                                <option value="02">Feb</option>
-                                                <option value="03">Mar</option>
-                                                <option value="04">Apr</option>
-                                                <option value="05">May</option>
-                                                <option value="06">Jun</option>
-                                                <option value="07">Jan</option>
-                                                <option value="08">Aug</option>
-                                                <option value="09">Sep</option>
-                                                <option value="10">Oct</option>
-                                                <option value="11">Nov</option>
-                                                <option value="12">Dec</option>
+                                                @for ($i = 1; $i < 13; $i++)
+                                                <option value="{{ $i }}"  {{old('month') == $i ? 'selected' : ''}}>
+                                                    {{ date('F', mktime(0, 0, 0, $i, 10)); }}
+                                                </option>
+                                                @endfor
                                             </select>
                                         </div>
                                     </div>
@@ -66,8 +59,10 @@
                                         <label for="year" class="label">Year</label>
                                         <div class="select">
                                             <select name="year">
-                                                @for ($i = 0; $i < 5; $i++) <option value="{{ $year + $i }}">
-                                                    {{ $year + $i }}</option>
+                                                @for ($i = 0; $i < 5; $i++)
+                                                <option value="{{ $year + $i }}" {{old('year') == ($year + $i ) ? 'selected' : ''}}>
+                                                    {{ $year + $i }}
+                                                </option>
                                                     @endfor
                                             </select>
                                         </div>
@@ -93,7 +88,7 @@
                         <div class="mt-6"><img src="{{ asset('/images/powered_by_dark_outline.svg')}}" alt=""></div>
                     </div>
                     <div class="column is-2">
-                        <p class="is-size-2 has-text-centered">Or</p>  
+                        <p class="is-size-2 has-text-centered">Or</p>
                     </div>
                     <div class="column right card">
                         <h2>Direct Deposit</h2>

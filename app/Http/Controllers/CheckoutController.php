@@ -10,7 +10,7 @@ use App\Models\Customer;
 use App\Mail\OrderInvoice;
 use Illuminate\Http\Request;
 use App\Libraries\Pin\PinPayments;
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use App\Models\Variation;
@@ -154,12 +154,17 @@ class CheckoutController extends Controller
         $result = $pinPayments->charge($charge);
 
         // Handle errors
+        // 202 - Card Declined
         // 400 - Card Payment Errors
         // 401 - Authentication Errors
-        if (in_array($result->getStatusCode(), [400,401])) {
+        // 403 - Forbidden
+        // 404 - Not Found
+        // 422 - Invalid resource errors
+        // 502 - Pin Payments Errors
+        if (in_array($result->getStatusCode(), [202,400,401,403,404,422,502])) {
             $errorMsg = json_decode($result->getBody());
             $error = $errorMsg->error_description;
-            return redirect()->route('checkout.card', compact('page'))->with('danger_message', $error);
+            return redirect()->route('checkout.card', compact('page'))->with('danger_message', $error)->withInput();
         }
 
         if ($result->getStatusCode() == 201) {
