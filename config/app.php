@@ -182,6 +182,8 @@ return [
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
 
+        Barryvdh\DomPDF\ServiceProvider::class,
+
     ],
 
     /*
@@ -236,7 +238,8 @@ return [
 
         'Image' => Intervention\Image\Facades\Image::class,
 
-        'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class
+        'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class
 
     ],
 
