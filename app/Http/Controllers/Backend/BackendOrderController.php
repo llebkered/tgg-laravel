@@ -102,6 +102,7 @@ class BackendOrderController extends Controller
                 'name',
                 'line1',
                 'line2',
+                'email',
                 'city',
                 'state',
                 'postcode',
