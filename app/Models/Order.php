@@ -21,4 +21,8 @@ class Order extends Model
     {
         return $this->belongsTo(Customer::class);
     }
+
+    public function customerAddress(){
+        return $this->hasOneThrough(Customer::class, Address::class);
+    }
 }

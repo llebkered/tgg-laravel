@@ -11,6 +11,13 @@ class Customer extends Model
 
     protected $guarded = [];
 
+    // Relationships
+
+    public function address()
+    {
+        return $this->hasOne(Address::class);
+    }
+
     public function orders()
     {
         return $this->hasMany(Order::class);

@@ -43,14 +43,14 @@ class CheckoutController extends Controller
 
         $data = $this->validate($request, $rules, $customMessages);
 
-        //create customer
+        // create customer
         $customer = Customer::create($data);
 
         // Store in session
         $customerId = $request->session()->put('customer', $customer->id);
 
         // Create Order
-        $orderDetails['customer_id']  = $customerId;
+        // $orderDetails['customer_id']  = $request->session()->get('customer');
         $orderDetails['order_status_id'] = 1;
         $orderDetails['cart'] = json_encode(Cart::content());
         $orderDetails['tax'] = Cart::tax();
@@ -63,6 +63,10 @@ class CheckoutController extends Controller
         $order = Order::create($orderDetails);
         // Store order Id in session
         $request->session()->put('order', $order->id);
+
+        // Add customer info to order.
+        $order->customer()->associate($customer);
+        $order->save();
 
         //Todo ?? Email order to tgg
 
@@ -97,18 +101,9 @@ class CheckoutController extends Controller
 
         $order = Order::where('id', '=', $request->session()->get('order'))->first();
 
-        $data['customer_id'] = $request->session()->get('customer');
+        $data['customer_id'] = $order->customer_id;
 
         $address = Address::create($data);
-
-        $order->address_id = $address->id;
-        $order->line1 = $address->line1;
-        $order->line2 = $address->line2;
-        $order->city = $address->city;
-        $order->postcode = $address->postcode;
-        $order->state = $address->state;
-
-        $order->save();
 
         return redirect()->route('checkout.card')->with(['page' => $page]);
     }
