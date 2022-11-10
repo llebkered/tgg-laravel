@@ -65,6 +65,7 @@
                                     <p>Please include your order number ({{ $orderDetails->id }}) to help us find your payment.</p>
                                     <p>Your plants will be dispatched within a few business days from payment received and we will inform you with tracking.</p>
                                     <div>
+                                        <strong>Account name: </strong>Toad Gully Growers<br>
                                         <strong>Bank: </strong> {{ config('bank.name') }}<br>
                                         <strong>BSB: </strong> {{ config('bank.bsb') }}<br>
                                         <strong>Account: </strong> {{ config('bank.account') }}

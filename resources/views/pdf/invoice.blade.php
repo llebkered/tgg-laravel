@@ -32,6 +32,7 @@
     <p>To pay for this please direct deposit to:</p>
 
     <p>
+        <strong>Account name: </strong>Toad Gully Growers<br>
         <strong>Bank: </strong> {{ config('bank.name') }}<br>
         <strong>BSB: </strong> {{ config('bank.bsb') }}<br>
         <strong>Account: </strong> {{ config('bank.account') }}<br>
