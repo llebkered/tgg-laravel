@@ -62,14 +62,14 @@
                                 <td>
                                     <p>Dear {{ $orderDetails->name }},</p>
                                     <p>Thank your for your order. To pay for this please direct deposit to:</p>
-                                    <p>Please include your order number ({{ $orderDetails->id }}) to help us find your payment.</p>
-                                    <p>Your plants will be dispatched within a few business days from payment received and we will inform you with tracking.</p>
                                     <div>
                                         <strong>Account name: </strong>Toad Gully Growers<br>
                                         <strong>Bank: </strong> {{ config('bank.name') }}<br>
                                         <strong>BSB: </strong> {{ config('bank.bsb') }}<br>
                                         <strong>Account: </strong> {{ config('bank.account') }}
                                     </div>
+                                    <p>Please include your order number ({{ $orderDetails->id }}) to help us find your payment.</p>
+                                    <p>Your plants will be dispatched within a few business days from payment received and we will inform you with tracking.</p>
                                     <p>Thank you again for choosing us.</p>
 
                                     <p> Regards,<br />

@@ -21,8 +21,8 @@
 
         <p class="is-size-4">Your order number is: <em>{{ $order->id }}</em></p>
         <p>{{ $order->name }}<br>
-            @if ($order->line1){{$order->line1}}<br/> @endif
-            @if ($order->line2){{$order->line2}}<br/> @endif
+            @if ($order->line1){{$order->line1}}<br /> @endif
+            @if ($order->line2){{$order->line2}}<br /> @endif
             {{ $order->city }}, {{ $order->postcode }} {{ $order->state }}</p>
 
         <table class="table">
@@ -43,14 +43,15 @@
         </table>
 
         <div>
-            <p>Please include your order number ({{ $order->id }}) to help us find your payment.</p>
-            <p>Your plants will be dispatched within a few business days from payment received and we will inform you with tracking.</p>
-
-            <p>
+            <div>
                 <strong>Account name: </strong>Toad Gully Growers<br>
                 <strong>Bank: </strong> {{ config('bank.name') }}<br>
                 <strong>BSB: </strong> {{ config('bank.bsb') }}<br>
-                <strong>Account: </strong> {{ config('bank.account') }}<br>
+                <strong>Account: </strong> {{ config('bank.account') }}
+            </div>
+            <p>Please include your order number ({{ $order->id }}) to help us find your payment.</p>
+            <p>Your plants will be dispatched within a few business days from payment received and we will inform you
+                with tracking.</p>
         </div>
 
     </div>
