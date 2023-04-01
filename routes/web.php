@@ -43,9 +43,9 @@ use App\Http\Controllers\Backend\BackendVariationController;
 // })->name('dashboard');
 
 
-Route::group(['prefix' => 'admin'], function () {
-    Voyager::routes();
-});
+// Route::group(['prefix' => 'admin'], function () {
+//     Voyager::routes();
+// });
 
 
 // Route::get('/', 'HomeController@index')->name('home');
