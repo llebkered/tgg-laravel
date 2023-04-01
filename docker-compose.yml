@@ -21,7 +21,8 @@ services:
       - tgg
 
   db:
-    platform: linux/x86_64
+    # platform: linux/x86_64
+    platform: linux/amd64
     image: mysql:5.7
     container_name: tgg-db
     restart: unless-stopped
@@ -56,15 +57,15 @@ services:
     volumes:
       - db:/var/lib/mysql
 
-  selenium:
-    image: seleniarm/standalone-chromium
-    volumes:
-      - /dev/shm:/dev/shm
-    ports:
-      - "4444:4444"
-      - "7900:7900"
-    networks:
-      - tgg
+  # selenium:
+  #   image: seleniarm/standalone-chromium
+  #   volumes:
+  #     - /dev/shm:/dev/shm
+  #   ports:
+  #     - "4444:4444"
+  #     - "7900:7900"
+  #   networks:
+  #     - tgg
 
 
 networks:
