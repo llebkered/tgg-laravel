@@ -27,7 +27,8 @@ class HomeController extends Controller
     {
         $hero = Block::where('published', 1)
             ->where('hero', 1)
-            ->orderByRaw('RAND()')
+            // ->orderByRaw('RAND()')
+            ->inRandomOrder()
             ->first();
 
         $blocks = Block::where('published', 1)

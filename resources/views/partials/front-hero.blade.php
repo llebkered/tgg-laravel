@@ -1,4 +1,4 @@
-<section class=" {{ $hero->text_colour }} {{ $hero->background_colour }}" @if ($hero->background_image)
+<section class="{{ $hero->text_colour }} {{ $hero->background_colour }}" @if ($hero->background_image)
     style="background: url('{{ asset( 'storage/' . $hero->background_image )}}') no-repeat center center;
     background-size: cover; {{ $hero->background_attachment }}"
     @endif
