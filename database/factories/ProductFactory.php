@@ -22,8 +22,15 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
+        $title = $this->faker->sentence;
+
         return [
-            //
+            'title' => $this->faker->sentence,
+            'slug' => Str::slug($title, '-'),
+            'code' => Str::upper($this->faker->word),
+            'image' => $this->faker->imageUrl(),
+            'description' => $this->faker->paragraph,
+            'published' => $this->faker->boolean,
         ];
     }
 }

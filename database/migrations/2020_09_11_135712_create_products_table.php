@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->string('code')->nullable();
             $table->string('image')->nullable();
             $table->text('description')->nullable();
+            $table->boolean('stocked')->nullable();
             $table->boolean('published')->nullable();
             $table->timestamps();
         });

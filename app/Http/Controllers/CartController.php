@@ -17,7 +17,7 @@ class CartController extends Controller
      */
     public function index()
     {
-        $page= Page::where('slug', '=', 'cart')->first();
+        $page = Page::where('slug', '=', 'cart')->first();
 
         // $fmt = new NumberFormatter( 'en_AU', NumberFormatter::CURRENCY );
 
@@ -28,18 +28,18 @@ class CartController extends Controller
         // Get products fore each cart item
         $variations = [];
         $cart = Cart::content();
-       
-        $gst = number_format(str_replace(',', '', Cart::total())/10 , 2);
-        
-         if (count($cart)>0) {
-            foreach ($cart as $item){
+
+        $gst = number_format(str_replace(',', '', Cart::total()) / 10, 2);
+
+        if (count($cart) > 0) {
+            foreach ($cart as $item) {
                 $cartItems[] = $item->id;
             }
-            
+
             $variations = Variation::find($cartItems);
-         }
-      
-        return view('cart', compact('page'))->with(['variations'=> $variations, 'gst' => $gst]);
+        }
+
+        return view('cart', compact('page'))->with(['variations' => $variations, 'gst' => $gst]);
     }
 
     /**
@@ -62,7 +62,7 @@ class CartController extends Controller
     {
 
         Cart::add($request->id, $request->name, 1, $request->price);
-            // ->associate('App\Models\Product');
+        // ->associate('App\Models\Product');
 
         return redirect()->route('cart.index')->with('success_message', 'Item was added to your cart.');
     }

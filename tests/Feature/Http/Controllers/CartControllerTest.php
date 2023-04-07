@@ -15,17 +15,11 @@ class CartControllerTest extends TestCase
     /**
      *  @test
      */
-    public function test_contact_us_page_loads()
+    public function test_cart_page_loads()
     {
 
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
 
-        // Page::factory()->create([
-        //     'title' => 'Get In Touch',
-        //     'slug' => 'get-in-touch',
-        // ]);
-
-        // $response = $this->get('/get-in-touch');
         Page::factory()->create([
             'title' => 'Cart',
             'slug' => 'cart',

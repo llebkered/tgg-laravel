@@ -15,12 +15,12 @@ class CreateVariationsTable extends Migration
     {
         Schema::create('variations', function (Blueprint $table) {
             $table->id();
-            $table->integer('product_id');
-            $table->string('title');
+            $table->integer('product_id')->nullable();
+            $table->string('title')->nullable();
             $table->string('slug')->nullable();
             $table->string('image')->nullable();
             $table->text('description')->nullable();
-            $table->integer('price');
+            $table->integer('price')->nullable();
             $table->boolean('is_published')->nullable();
             $table->timestamps();
         });
