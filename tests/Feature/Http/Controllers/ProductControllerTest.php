@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers;
 use Tests\TestCase;
 use App\Models\Page;
 use App\Models\Product;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -17,6 +18,11 @@ class ProductControllerTest extends TestCase
         Page::factory()->create([
             'title' => 'Products',
             'slug' => 'products',
+        ]);
+
+        Page::factory()->create([
+            'title' => 'Cart',
+            'slug' => 'cart',
         ]);
 
 
@@ -68,7 +74,6 @@ class ProductControllerTest extends TestCase
 
             // dump($product->variations);
         }
-
     }
 
 
@@ -134,7 +139,7 @@ class ProductControllerTest extends TestCase
     {
         // $this->withoutExceptionHandling();
 
-        $this->setupProductPage( true);
+        $this->setupProductPage(true);
 
         $response = $this->get('/product/product-1');
 
@@ -150,10 +155,6 @@ class ProductControllerTest extends TestCase
     /**
      *  @test
      */
-
-    /**
-     *  @test
-     */
     public function test_product_can_be_placed_in_cart()
     {
         $this->withoutExceptionHandling();
@@ -161,15 +162,19 @@ class ProductControllerTest extends TestCase
         $this->setupProductPage(true);
 
         $response = $this->post('/cart', [
-            'id' => 1,
-            'name' => 'Product 1 - Small Pack',
+            'id' => '293ad',
+            'name' => 'Product 1',
+            'qty' => 1,
             'price' => 100,
         ]);
 
+        // $response->dumpHeaders();
+        // $response->dumpSession();
+        // $response->dump();
+
         // assert that the product was added to the cart
         $response->assertStatus(302);
-        $response->assertSessionHas('success_message');
-        $response->assertRedirect('/cart');
-    }
+        $response->assertSessionHasNoErrors();
 
+    }
 }

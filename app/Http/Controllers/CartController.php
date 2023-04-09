@@ -27,7 +27,7 @@ class CartController extends Controller
 
         // Get products fore each cart item
         $variations = [];
-        $cart = Cart::content();
+        $cart = Cart::instance('cart')->content();
 
         $gst = number_format(str_replace(',', '', Cart::total()) / 10, 2);
 
@@ -61,10 +61,16 @@ class CartController extends Controller
     public function store(Request $request)
     {
 
-        Cart::add($request->id, $request->name, 1, $request->price);
+        Cart::instance('cart')->add($request->id, $request->name, 1, $request->price);
         // ->associate('App\Models\Product');
 
-        return redirect()->route('cart.index')->with('success_message', 'Item was added to your cart.');
+        // redirect back to the cart page and display a success message
+        return back()->with('success_message', 'Item was added to your cart.');
+
+
+
+
+        //return redirect()->route('cart.index')->with('success_message', 'Item was added to your cart.');
     }
 
     /**

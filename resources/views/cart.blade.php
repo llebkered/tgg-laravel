@@ -9,9 +9,9 @@
         {!! $page->body !!}
         @endif
 
-        @if (Cart::count() > 0)
+        @if (Cart::instance('cart')->count() > 0)
         <!-- Cart -->
-        <p>{{ Cart::count() }} @if (Cart::count() > 1) items @else item @endif in Shopping Cart</p>
+        <p>{{ Cart::instance('cart')->count() }} @if (Cart::instance('cart')->count() > 1) items @else item @endif in Shopping Cart</p>
 
         <table class="table is-hoverable">
             <thead>
@@ -29,7 +29,7 @@
 
             <tbody>
                 @php $i = 0 @endphp
-                @foreach(Cart::content() as $row)
+                @foreach(Cart::instance('cart')->content() as $row)
                 <tr>
                     <td>
                         <img src="{{ $variations[$i]->product->getFirstMedia('featured_image')->getUrl('thumb') }}"
@@ -63,9 +63,9 @@
 
             <tfoot>
                 <tr>
-                    <td colspan="3">&nbsp;</td> 
+                    <td colspan="3">&nbsp;</td>
                     <td class="has-text-right">Subtotal</td>
-                    <td class="has-text-right">${{Cart::subtotal()}}</td>
+                    <td class="has-text-right">${{Cart::instance('cart')->subtotal()}}</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -79,7 +79,7 @@
                 <tr>
                     <td colspan="3">&nbsp;</td>
                     <td class="has-text-right"><strong>Total</strong></td>
-                    <td class="has-text-right"><strong>${{ Cart::total() }}</strong></td>
+                    <td class="has-text-right"><strong>${{ Cart::instance('cart')->total() }}</strong></td>
                     <td></td>
                     <td></td>
                 </tr>

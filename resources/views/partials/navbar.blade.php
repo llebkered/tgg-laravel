@@ -25,7 +25,7 @@
                 <a class="navbar-item" href="{{ route('products') }}">
                     Products
                 </a>
-                
+
                 <a class="navbar-item" href="{{ route('contact') }}">
                     Contact Us
                 </a>
@@ -35,8 +35,8 @@
             <div class="navbar-end">
 
                 <a class="navbar-item" href="{{ route('cart.index') }}">
-                    @if (Cart::count() > 0)
-                    <span class="tag is-info is-rounded is-size-6">{{ Cart::count() }}</span>
+                    @if (Cart::instance('cart')->count() > 0)
+                    <span class="tag is-info is-rounded is-size-6">{{ Cart::instance('cart')->count() }}</span>
                     @endif
                     <span class="mx-3">
                         <img src="{{ asset('images/cart-white.svg') }}" alt="Cart">
