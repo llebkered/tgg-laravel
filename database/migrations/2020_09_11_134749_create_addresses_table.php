@@ -19,10 +19,10 @@ class CreateAddressesTable extends Migration
             $table->boolean('billing_address')->nullable();
             $table->string('line1')->nullable();
             $table->string('line2')->nullable();
-            $table->string('city');
-            $table->string('state');
-            $table->string('postcode');
-            $table->string('country');
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
+            $table->string('postcode')->nullable();
+            $table->string('country')->default('Australia');
             $table->timestamps();
         });
     }

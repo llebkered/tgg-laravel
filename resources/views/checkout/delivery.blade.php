@@ -20,7 +20,7 @@
 
         {{-- {!! $page['body'] !!} --}}
 
-        @if (Cart::count() > 0)
+        @if (Cart::instance('cart')->count() > 0)
         <div class="columns is-multiline">
             <div class="column register">
                 <div class="columns">

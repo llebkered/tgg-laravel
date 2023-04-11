@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers;
 use Tests\TestCase;
 use App\Models\Page;
 use App\Models\Product;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -72,6 +73,58 @@ class CheckoutControllerTest extends TestCase
         }
     }
 
+    private function correctlyFillCart()
+    {
+        return $this->post('/cart', [
+            'id' => '293ad',
+            'name' => 'Product 1',
+            'qty' => 1,
+            'price' => 100,
+        ]);
+    }
+
+    private function correctlyFillCheckoutForm()
+    {
+        return $this->post('/checkout', [
+            'name' => 'John Doe',
+            'email' => 'john@test.com',
+            'phone' => '0491 570 000',
+        ]);
+    }
+
+    private function correctlyFillDeliveryForm()
+    {
+        return $this->post('/checkout/delivery', [
+            'line1' => '123 Test Street',
+            'city' => 'Testville',
+            'postcode' => '3000',
+            'state' => 'VIC',
+            'country' => 'Australia',
+        ]);
+    }
+
+    private function correctlyFillPaymentForm()
+    {
+        // return $this->post('/checkout/card', [
+        //     'name' => 'John Doe',
+        //     'number' => '4242424242424242',
+        //     'expiry_month' => '12',
+        //     'expiry_year' => '2026',
+        //     'cvc' => '123',
+        // ]);
+
+        // fake the payment gateway
+        Http::fake();
+
+        return Http::post('/checkout/card', [
+            'name' => 'John Doe',
+            'number' => '4242424242424242',
+            'expiry_month' => '12',
+            'expiry_year' => '2026',
+            'cvc' => '123',
+        ]);
+    }
+
     /**
      * @test
      */
@@ -84,5 +137,241 @@ class CheckoutControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * @test
+     */
+    public function test_cart_with_stocked_product_should_show_a_form()
+    {
+        $this->createCheckoutPage(true);
 
+        // add product to cart
+        $this->correctlyFillCart();
+
+        $response = $this->get('/checkout');
+        $response->assertSee('Contact Details');
+
+        // assert form fields
+        $response->assertSee('Name');
+        $response->assertSee('Email');
+        $response->assertSee('Phone');
+    }
+
+    /**
+     * @test
+     */
+    public function test_checkout_form_should_be_validated()
+    {
+        $this->createCheckoutPage(true);
+
+        // add product to cart
+        $this->correctlyFillCart();
+
+        $response = $this->post('/checkout', [
+            'name' => '',
+            'email' => '',
+            'phone' => '',
+        ]);
+
+        $response->assertSessionHasErrors('name');
+        $response->assertSessionHasErrors('email');
+        $response->assertSessionHasErrors('phone');
+    }
+
+    /**
+     * @test
+     */
+    public function test_checkout_form_should_be_validated_with_correct_error_messages()
+    {
+        $this->createCheckoutPage(true);
+
+        // add product to cart
+        $this->correctlyFillCart();
+
+        $response = $this->post('/checkout', [
+            'name' => '',
+            'email' => '',
+            'phone' => '',
+        ]);
+
+        $response->assertSessionHasErrors([
+            'name' => 'The name field can not be blank.',
+            'email' => 'The email field can not be blank.',
+            'phone' => 'The phone field can not be blank.',
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_checkout_correctly_filled_out_form_directs_to_delivery_form()
+    {
+        $this->createCheckoutPage(true);
+
+        // add product to cart
+        $this->correctlyFillCart();
+
+        $response = $this->correctlyFillCheckoutForm();
+
+        $response->assertRedirect('/checkout/delivery');
+    }
+
+    /**
+     * @test
+     */
+    public function test_delivery_form_should_show_after_contact_info()
+    {
+        $this->createCheckoutPage(true);
+
+        // add product to cart
+        $this->correctlyFillCart();
+
+        $this->correctlyFillCheckoutForm();
+
+        $response = $this->get('/checkout/delivery');
+
+        // check for form fields and title
+        $response->assertSee('Delivery Details');
+        $response->assertSee('Address');
+        $response->assertSee('Suburb');
+        $response->assertSee('Postcode');
+        $response->assertSee('State');
+    }
+
+    /**
+     * @test
+     */
+    public function test_delivery_form_should_be_validated()
+    {
+        $this->createCheckoutPage(true);
+
+        // add product to cart
+        $this->correctlyFillCart();
+
+        $this->correctlyFillCheckoutForm();
+
+        $response = $this->post('/checkout/delivery', [
+            'address' => '',
+            'suburb' => '',
+            'postcode' => '',
+            'state' => '',
+        ]);
+
+        $response->assertSessionHasErrors('line1');
+        $response->assertSessionHasErrors('city');
+        $response->assertSessionHasErrors('postcode');
+    }
+
+    /**
+     * @test
+     */
+    public function test_correct_delivery_form_should_redirect_to_payment()
+    {
+        // turn off exception handling
+        $this->withoutExceptionHandling();
+
+        $this->createCheckoutPage(true);
+
+        // add product to cart
+        $this->correctlyFillCart();
+
+        $this->correctlyFillCheckoutForm();
+
+        $response = $this->correctlyFillDeliveryForm();
+
+        $response->assertRedirect('/checkout/card');
+    }
+
+    /**
+     * @test
+     */
+    public function test_payment_form_should_show_after_delivery_form()
+    {
+        $this->createCheckoutPage(true);
+
+        // add product to cart
+        $this->correctlyFillCart();
+
+        $this->correctlyFillCheckoutForm();
+
+        $this->correctlyFillDeliveryForm();
+
+        $response = $this->get('/checkout/card');
+
+        // check for card form fields
+        $response->assertSee('Credit Card');
+        $response->assertSee('Card Number');
+        $response->assertSee('Month');
+        $response->assertSee('Year');
+        $response->assertSee('CVC');
+
+        // check for direct deposit
+        $response->assertSee('Direct Deposit');
+    }
+
+    /**
+     * @test
+     */
+    public function test_direct_deposit_link_should_show_correct_info()
+    {
+        $this->createCheckoutPage(true);
+
+        // add product to cart
+        $this->correctlyFillCart();
+
+        $this->correctlyFillCheckoutForm();
+
+        $this->correctlyFillDeliveryForm();
+
+        $response = $this->get('/checkout/directdeposit');
+
+        $response->assertSee('Your order number is');
+        $response->assertSee('John Doe');
+    }
+
+    /**
+     * @test
+     */
+    public function test_payment_form_should_be_validated()
+    {
+        $this->createCheckoutPage(true);
+
+        // add product to cart
+        $this->correctlyFillCart();
+
+        $this->correctlyFillCheckoutForm();
+
+        $this->correctlyFillDeliveryForm();
+
+        $response = $this->post('/checkout/card', [
+            'number' => '',
+            'month' => '',
+            'year' => '',
+            'cvc' => '',
+        ]);
+
+        $response->assertSessionHasErrors('number');
+        $response->assertSessionHasErrors('cvc');
+    }
+
+    /**
+     * @test
+     */
+    // public function test_correct_payment_form_should_redirect_to_confirmation()
+    // {
+    //     $this->createCheckoutPage(true);
+
+
+    //     // add product to cart
+    //     $this->correctlyFillCart();
+
+    //     $this->correctlyFillCheckoutForm();
+
+    //     $this->correctlyFillDeliveryForm();
+
+    //     $response = $this->correctlyFillPaymentForm();
+
+    //     $response->assertRedirect('/checkout/thankyou');
+
+    //     // dump($response->getContent());
+    // }
 }

@@ -13,6 +13,12 @@ class Address extends Model
 
     // Relationships
 
+    // address
+    public function order()
+    {
+        $this->belongsTo(Order::class);
+    }
+
     public function customer()
     {
         $this->belongsTo(Customer::class);

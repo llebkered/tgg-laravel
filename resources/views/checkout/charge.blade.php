@@ -19,7 +19,7 @@
         {{-- <h1>{{ $page['title']}}</h1>
         {!! $page['body'] !!} --}}
 <h1>Transaction</h1>
-        @if (Cart::count() > 0)
+        @if (Cart::instance('cart')->count() > 0)
 
         @php
         // var_dump($transaction);

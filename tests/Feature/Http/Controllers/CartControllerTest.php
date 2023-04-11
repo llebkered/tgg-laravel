@@ -69,8 +69,6 @@ class CartControllerTest extends TestCase
 
         $product->variations()->createMany($data);
 
-        // dump($product->variations);
-
     }
 
     /**
@@ -96,10 +94,26 @@ class CartControllerTest extends TestCase
 
         $this->createCartPage();
 
-        // Cart::add($request->id, $request->name, 1, $request->price);
+        // fake adding an item to the cart
+        $response = $this->post('/cart', [
+            'id' => '293ad',
+            'name' => 'Product 1',
+            'qty' => 1,
+            'price' => 100,
+        ]);
 
-        // Cart::add(['id' => 1, 'name' => 'Test item', 'qty' => 1, 'price' => 10.00]);
-        // $response = $this->get('/product/product-1');
+        // check if the cart page loads
+        $response->assertStatus(302);
+    }
+
+    /**
+     * @test
+     */
+    public function test_cart_can_remove_item()
+    {
+        // $this->withoutExceptionHandling();
+
+        $this->createCartPage();
 
         // fake adding an item to the cart
         $response = $this->post('/cart', [
@@ -112,40 +126,14 @@ class CartControllerTest extends TestCase
         // check if the cart page loads
         $response->assertStatus(302);
 
-        // check if cart page has the item
-        // $response = $this->get('/cart');
-        // $response->assertSee('Product 1');
+        // get cart first row id
+        $cart = Cart::instance('cart')->content()->first()->rowId;
 
+        // remove the item from the cart
+        $response = $this->delete('/cart/' . $cart);
 
-
-
-
-
-
-
-        // $response = $this->post('/cart', [
-        //     'id' => '293ad',
-        //     'name' => 'Product 1',
-        //     'qty' => 1,
-        //     'price' => 100,
-        // ]);
-
-
-
-        // $response->assertRedirect(route('cart.index'));
-
-        // $this->get(route('cart.index'))
-        //     ->assertSee('Product 1');
-
-
-        // $response = $this->get('/cart');
-        // $response->assertSee('Checkout');
-
-        // $response->dumpHeaders();
-        // $response->dumpSession();
-        // $response->dump();
-
-
-        // $response->assertStatus(302);
+        // check if the cart page loads
+        $response->assertStatus(302);
     }
+
 }

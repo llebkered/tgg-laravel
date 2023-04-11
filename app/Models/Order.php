@@ -17,6 +17,12 @@ class Order extends Model
         return $this->belongsTo('App\Models\OrderStatus'); //,'order_status_id'
     }
 
+    // address
+    public function address()
+    {
+        return $this->hasOne(Address::class);
+    }
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);
