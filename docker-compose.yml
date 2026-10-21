@@ -1,6 +1,7 @@
 version: "3.7"
 
 services:
+  # php
   app:
     build:
       args:
@@ -19,6 +20,15 @@ services:
       - ./:/var/www/html
     networks:
       - tgg
+
+  # litespeed
+  # php:
+  #   image: cmptstks/php:8.1-litespeed
+  #   ports:
+  #     - 80:80
+  #     - 7080:7080
+  #   volumes:
+  #     - ./:/var/www/html
 
   db:
     # platform: linux/x86_64
