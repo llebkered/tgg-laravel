@@ -25,7 +25,7 @@
                 <div class="columns">
                     <div class="column left card">
                         <h2>Credit Card</h2>
-                        <form action="" method="POST">
+                        <form action="" method="POST" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
                             {{ csrf_field() }}
                             <div class="field">
                                 <label for="name" class="label">Name On Card</label>
@@ -80,7 +80,7 @@
 
 
                             <div class="mt-6">
-                                <button class="button is-block is-primary is-fullwidth is-medium">Submit Card</button>
+                                <button type="submit" class="button is-block is-primary is-fullwidth is-medium">Submit Card</button>
                             </div>
 
                         </form>
