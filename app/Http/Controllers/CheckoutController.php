@@ -26,7 +26,7 @@ class CheckoutController extends Controller
 {
     public function index()
     {
-        $page = Page::where('slug', '=', 'checkout')->first();
+        $page = Page::where('slug', '=', 'checkout')->firstOrFail();
 
         return view('checkout.index')->with(['page' => $page]);
     }
@@ -81,7 +81,7 @@ class CheckoutController extends Controller
 
     public function delivery()
     {
-        $page = Page::where('slug', '=', 'checkout')->first();
+        $page = Page::where('slug', '=', 'checkout')->firstOrFail();
         return view('checkout.delivery')->with(['page' => $page]);
     }
 
@@ -126,7 +126,7 @@ class CheckoutController extends Controller
 
     public function card(Request $request)
     {
-        $page = Page::where('slug', '=', 'checkout')->first();
+        $page = Page::where('slug', '=', 'checkout')->firstOrFail();
 
         $customer = Customer::where('id', '=', $request->session()->get('customer'))->first();
 

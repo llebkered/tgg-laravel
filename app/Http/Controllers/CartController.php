@@ -17,7 +17,7 @@ class CartController extends Controller
      */
     public function index()
     {
-        $page = Page::where('slug', '=', 'cart')->first();
+        $page = Page::where('slug', '=', 'cart')->firstOrFail();
 
         // $fmt = new NumberFormatter( 'en_AU', NumberFormatter::CURRENCY );
 

@@ -15,7 +15,7 @@ class ContactController extends Controller
 {
     public function index()
     {
-        $page = Page::where('slug', '=', 'contact-us')->first();
+        $page = Page::where('slug', '=', 'contact-us')->firstOrFail();
 
         return view('contact', ['page' => $page]);
     }

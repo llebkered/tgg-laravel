@@ -9,7 +9,7 @@ class PaulowniaController extends Controller
 {
     public function index()
     {
-        $page = Page::where('slug', '=', 'paulownia')->first();
+        $page = Page::where('slug', '=', 'paulownia')->firstOrFail();
 
         return view('paulownia', compact('page'));
     }

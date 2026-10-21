@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Spatie\Image\Manipulations;
+use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -26,7 +26,7 @@ class Plant extends Model implements HasMedia
                 ->registerMediaConversions(function (Media $media) {
                     $this
                     ->addMediaConversion('medium')
-                    ->crop(Manipulations::CROP_CENTER, 470, 350)
+                    ->fit(Fit::Crop, 470, 350)
                     ->nonOptimized() //for shared hosts
                     ->nonQueued(); //for shared hosts;
                 });

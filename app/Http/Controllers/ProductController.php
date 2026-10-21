@@ -15,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $page = Page::where('slug', '=', 'products')->first();
+        $page = Page::where('slug', '=', 'products')->firstOrFail();
 
         $products = Product::where('published', '=', '1')->with('variations')->get();       
         
@@ -51,7 +51,7 @@ class ProductController extends Controller
      */
     public function show($slug)
     {
-        $page = Page::where('slug', '=', 'products')->first();
+        $page = Page::where('slug', '=', 'products')->firstOrFail();
         $product = Product::where('slug', '=', $slug)->with('variations')->first();
         $page->title = $product->title;
         return view('products.show')->with(["page" => $page, "product" => $product]);

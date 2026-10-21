@@ -10,7 +10,7 @@ class FernsController extends Controller
 {
     public function index()
     {
-        $page = Page::where('slug', '=', 'ferns')->first();
+        $page = Page::where('slug', '=', 'ferns')->firstOrFail();
 
         $ferns = Plant::where('plantcategory_id', '=', '1')->where('published', '=', '1')->orderBy('botanical_name', 'ASC')->paginate(24);
 

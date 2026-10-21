@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Spatie\Image\Manipulations;
+use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -23,17 +23,17 @@ class Page extends Model implements HasMedia
             ->registerMediaConversions(function (Media $media) {
                 $this
                     ->addMediaConversion('large')
-                    ->crop(Manipulations::CROP_CENTER, 1200, 1200)
+                    ->fit(Fit::Crop, 1200, 1200)
                     ->nonOptimized() //for shared hosts
                     ->nonQueued(); //for shared hosts;
                 $this
                     ->addMediaConversion('medium')
-                    ->crop(Manipulations::CROP_CENTER, 480, 480)
+                    ->fit(Fit::Crop, 480, 480)
                     ->nonOptimized() //for shared hosts
                     ->nonQueued(); //for shared hosts;
                 $this
                     ->addMediaConversion('thumb')
-                    ->crop(Manipulations::CROP_CENTER, 240, 240)
+                    ->fit(Fit::Crop, 240, 240)
                     ->nonOptimized()
                     ->nonQueued();
             });

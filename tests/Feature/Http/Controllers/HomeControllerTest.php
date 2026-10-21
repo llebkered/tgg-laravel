@@ -25,6 +25,18 @@ class HomeControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_home_page_loads_without_a_published_hero()
+    {
+        Block::factory()->create([
+            'hero' => true,
+            'published' => false,
+        ]);
+
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+    }
+
     private function createPage()
     {
         // create a page for ferns and insert it into the test database

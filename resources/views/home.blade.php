@@ -2,7 +2,7 @@
 
 @section('content')
 
-@include('partials.front-hero')
+@includeWhen($hero, 'partials.front-hero')
 
 @if ($blocks)
     @foreach ($blocks as $block)

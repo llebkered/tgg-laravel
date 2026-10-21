@@ -31,4 +31,11 @@ class FernControllerTest extends TestCase
         $response->assertViewIs('ferns');
         $response->assertViewHas('ferns');
     }
+
+    public function test_ferns_page_is_not_found_without_its_page_content()
+    {
+        $response = $this->get('/ferns');
+
+        $response->assertNotFound();
+    }
 }

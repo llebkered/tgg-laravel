@@ -64,20 +64,24 @@ Work on a dedicated branch and commit after each step, so any step can be revert
 
 1. Create an upgrade branch from `master`.
 2. Take a verified backup of the production database and uploaded files (Media Library and file manager storage).
-3. Run `php artisan test` and record the results as the baseline. Fix or document any tests that already fail.
+3. ~~Run `php artisan test` and record the results as the baseline.~~ Done: 32 tests passed (134 assertions) on Laravel 10 under PHP 8.3.
 4. Decide whether the Dusk browser tests are in scope. If they are, install `laravel/dusk` and get them passing on Laravel 10 first.
 5. Add feature tests for the key journeys if they do not exist yet: login and registration, adding to the cart, checkout, and file and image uploads.
-6. Confirm that the `larapack.io` repository and the private `llebkered/laravel-tinymce-simple-imageupload` package still resolve with `composer update --dry-run`. Replace or vendor them if they do not.
-7. Check whether `unisharp/laravel-filemanager`, `hardevine/shoppingcart`, `intervention/imagecache`, and `appstract/laravel-options` have releases that support Laravel 11 to 13. Choose replacements now for any that do not.
-8. Remove Doctrine DBAL while still on Laravel 10:
+6. ~~Confirm that the custom Composer repositories still resolve.~~ Done: `larapack.io` no longer works, and nothing required either repository, so both were removed.
+7. ~~Check package support for Laravel 11 to 13.~~ Done:
+   - `intervention/imagecache` was unused and abandoned, so it was removed.
+   - `appstract/laravel-options` stopped at Laravel 10. It was replaced with `App\Models\Option`, bound as `option`, so the `option()` helper still works.
+   - `unisharp/laravel-filemanager` is pinned to `^2.10` (v2.10.1), the last version that supports Intervention Image 2. Laravel 13 needs v2.13+, which requires Intervention Image 3, so the `Image::make()` calls in `BackendPageController` and `BackendBlockController` must be migrated before Phase 4.
+   - `hardevine/shoppingcart` 3.4 supports Laravel 11.
+8. ~~Remove Doctrine DBAL.~~ Done as part of the Laravel 11 update. The migration's `->change()` calls only needed `nullable`, so no other attributes had to be restated:
    - Rewrite `database/migrations/2017_04_11_000000_alter_post_nullable_fields_table.php` so that it no longer calls `getDoctrineSchemaManager()`, and make its `->change()` calls restate every column attribute to keep. Alternatively, run `php artisan schema:dump --prune` to squash the old migrations.
    - Remove `doctrine/dbal` from `composer.json`, run `composer update`, and run the tests.
-9. Pin `laravel/telescope` to the installed major version instead of `"*"`.
+9. ~~Pin `laravel/telescope`.~~ Done: `^5.0`.
 
 ### Phase 1: Runtime
 
 10. ~~Update the app image to PHP 8.3 and remove the PHP 7.4 root `Dockerfile`.~~ Done: `docker/php/Containerfile` is on PHP 8.3, and the image builds with `podman compose build`.
-11. Change the `php` constraint in `composer.json` to `^8.3`, run `composer update`, and run the tests on Laravel 10 under PHP 8.3.
+11. ~~Change the `php` constraint in `composer.json` to `^8.3`.~~ Done.
 12. Confirm that the production server can run PHP 8.3 with the required extensions (for example GD or Imagick, intl, mbstring, pdo_mysql, zip, and bcmath).
 
 ### Phase 2: Laravel 10 → 11
@@ -87,6 +91,18 @@ Work on a dedicated branch and commit after each step, so any step can be revert
 15. Keep the existing `app/Http/Kernel.php` and `app/Exceptions/Handler.php` structure. Moving to the slimmer Laravel 11 skeleton is optional and can be done later.
 16. Review the other Laravel 11 changes that affect this project, especially column modifications, rate limiting, and the password rehashing behaviour.
 17. Run `composer update`, clear caches with `php artisan optimize:clear`, run the migrations against a copy of the database, and run the tests. Fix the failures and commit.
+
+**Phase 2 status:** Laravel 11.57.0 is installed. All 32 tests pass, the migrations run on an empty MySQL 8.4 database, and the config, route, and view caches build, except for the pre-existing view issue below. Changes made:
+- Package versions: Jetstream 5.5, Fortify 1.41, Sanctum 4.3, Telescope 5.26, Media Library 11.23, dompdf 3.1, Carbon 3.15, and PHPUnit 10.5.
+- Telescope 5 no longer loads its migrations automatically, so they were published to `database/migrations`.
+- `config/sanctum.php` now uses the Sanctum 4 key `validate_csrf_token`.
+- Media Library 11 uses spatie/image 3, which removed `Manipulations`. The conversions in `Product`, `Page`, and `Plant` now use `fit(Fit::Crop, w, h)`. Do not use the new `crop()`, because it cuts without scaling. Conversion sizes were checked against a test image.
+- Added the `2026_10_21_000000_add_generated_conversions_to_media_table` migration. The original media migration did not have this column. The new migration does nothing if the column already exists, and otherwise moves the conversion data out of `custom_properties`.
+- `config/lfm.php` sets `use_package_routes` to `false`. The package was registering a second copy of the file manager routes at `/filemanager`, which stopped `route:cache` from working. The editor uses the `/laravel-filemanager` routes in `routes/web.php`.
+
+**Do not deploy Laravel 11.** Every 11.x release has unpatched security advisories. Their IDs are listed under `config.policy.advisories.ignore-id` in `composer.json`. Remove that list once Laravel is at 12.69 or later.
+
+**Pre-existing issue, not caused by the upgrade:** the Fortify auth views (`auth/login`, `forgot-password`, `reset-password`, `register`, `two-factor-challenge`, and `verify-email`) and the Jetstream profile views use `<x-jet-…>` components. Jetstream 3.3.3 did not provide these either, so `/login` and `/forgot-password` already returned 500 errors before the upgrade, and `php artisan view:cache` fails. The backend login's "Forgot Password" link and the `auth` middleware's redirect to `login` both reach these broken pages. Livewire is also not installed, so the Jetstream profile and API token pages cannot work.
 
 ### Phase 3: Laravel 11 → 12
 
