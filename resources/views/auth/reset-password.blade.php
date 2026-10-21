@@ -1,36 +1,45 @@
-<x-guest-layout>
-    <x-jet-authentication-card>
-        <x-slot name="logo">
-            <x-jet-authentication-card-logo />
-        </x-slot>
+@extends('backend.layouts.main')
 
-        <x-jet-validation-errors class="mb-4" />
+@section('content')
 
-        <form method="POST" action="{{ route('password.update') }}">
-            @csrf
+<section class="hero is-fullheight">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <div class="column is-8 is-offset-2">
+                <h3 class="title has-text-black">Reset Password</h3>
+                @include('auth.partials.messages')
+                <hr class="login-hr">
+                <p class="subtitle has-text-black">Choose a new password.</p>
+                <div class="box">
+                    <form action="{{ route('password.update') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-large" name="email" type="email" placeholder="Your Email"
+                                    value="{{ old('email', $request->email) }}" required autofocus autocomplete="username">
+                            </div>
+                        </div>
 
-            <input type="hidden" name="token" value="{{ $request->route('token') }}">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-large" name="password" type="password" placeholder="New Password"
+                                    required autocomplete="new-password">
+                            </div>
+                        </div>
 
-            <div class="block">
-                <x-jet-label value="Email" />
-                <x-jet-input class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus />
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-large" name="password_confirmation" type="password"
+                                    placeholder="Confirm New Password" required autocomplete="new-password">
+                            </div>
+                        </div>
+                        <button class="button is-block is-primary is-large is-fullwidth">Reset Password</button>
+                    </form>
+                </div>
             </div>
+        </div>
+    </div>
+</section>
 
-            <div class="mt-4">
-                <x-jet-label value="Password" />
-                <x-jet-input class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            </div>
-
-            <div class="mt-4">
-                <x-jet-label value="Confirm Password" />
-                <x-jet-input class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <x-jet-button>
-                    {{ __('Reset Password') }}
-                </x-jet-button>
-            </div>
-        </form>
-    </x-jet-authentication-card>
-</x-guest-layout>
+@endsection
