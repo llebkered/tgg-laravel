@@ -14,10 +14,12 @@ use App\Models\Page;
 use App\Models\Plant;
 use App\Models\PlantCategory;
 use App\Models\Product;
+use App\Models\Role;
 use App\Models\Textcolour;
 use App\Models\User;
 use App\Models\Variation;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -60,16 +62,23 @@ class ModelTest extends TestCase
 
     public function test_user_model_persists_and_hides_authentication_secrets(): void
     {
-        if (! class_exists(\TCG\Voyager\Models\User::class)) {
-            $this->markTestSkipped('The TCG Voyager user model dependency is not installed.');
-        }
-
         $user = User::factory()->create();
         $serialized = $user->toArray();
 
         $this->assertDatabaseHas('users', ['id' => $user->id, 'email' => $user->email]);
         $this->assertArrayNotHasKey('password', $serialized);
         $this->assertArrayNotHasKey('remember_token', $serialized);
+    }
+
+    public function test_users_and_roles_use_application_owned_relationships(): void
+    {
+        $userRole = (new User())->role();
+        $roleUsers = (new Role())->users();
+
+        $this->assertInstanceOf(BelongsTo::class, $userRole);
+        $this->assertInstanceOf(Role::class, $userRole->getRelated());
+        $this->assertInstanceOf(HasMany::class, $roleUsers);
+        $this->assertInstanceOf(User::class, $roleUsers->getRelated());
     }
 
     public function test_product_variations_and_their_inverse_relationship(): void

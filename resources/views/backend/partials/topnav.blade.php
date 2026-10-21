@@ -40,7 +40,6 @@
                             {{ Auth::user()->name }}
                         </a>
                         <div class="navbar-dropdown">
-                            <a href="/admin" class="navbar-item">Voyager Admin</a>
                             <hr class="navbar-divider">
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="navbar-item">
                                 {{ csrf_field() }}

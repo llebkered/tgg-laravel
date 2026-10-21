@@ -20,7 +20,6 @@
     <hr class="navbar-divider">
     <ul class="menu-list">
         <li><a href="{{ route('home')}}"><span class="material-icons">home</span> Home Page</a> </li>
-        <li><a href="/admin"><span class="material-icons">directions_boat</span> Voyager Admin</a></li>
     </ul>
     <hr class="navbar-divider">
     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="mt-6">

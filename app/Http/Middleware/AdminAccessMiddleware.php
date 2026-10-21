@@ -19,8 +19,7 @@ class AdminAccessMiddleware
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::check()) {
-
-            if ($request->user()->role->name == 'admin') {
+            if ($request->user()->role?->name === 'admin') {
                 return $next($request);
             }
 
