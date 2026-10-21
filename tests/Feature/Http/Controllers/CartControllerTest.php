@@ -71,9 +71,6 @@ class CartControllerTest extends TestCase
 
     }
 
-    /**
-     *  @test
-     */
     public function test_cart_page_loads()
     {
 
@@ -85,9 +82,6 @@ class CartControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /**
-     * @test
-     */
     public function test_full_cart_should_display_items()
     {
         $this->withoutExceptionHandling();
@@ -106,9 +100,6 @@ class CartControllerTest extends TestCase
         $response->assertStatus(302);
     }
 
-    /**
-     * @test
-     */
     public function test_cart_can_remove_item()
     {
         // $this->withoutExceptionHandling();

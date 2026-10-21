@@ -10,9 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class PaulowniaControllerTest extends TestCase
 {
     use RefreshDatabase;
-    /**
-     *  @test
-     */
+
     public function test_paulownia_page_loads()
     {
 

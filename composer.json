@@ -16,7 +16,7 @@
         "intervention/image": "^2.5",
         "laravel-validation-rules/credit-card": "^1.8",
         "laravel/fortify": "^1.21",
-        "laravel/framework": "^11.0",
+        "laravel/framework": "^12.0",
         "laravel/jetstream": "^5.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
@@ -28,28 +28,14 @@
         "barryvdh/laravel-debugbar": "^3.13",
         "laravel/telescope": "^5.0",
         "mockery/mockery": "^1.3.1",
-        "nunomaduro/collision": "^8.1",
-        "phpunit/phpunit": "^10.5",
+        "nunomaduro/collision": "^8.6",
+        "phpunit/phpunit": "^11.5",
         "spatie/laravel-ignition": "^2.4"
     },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true,
-        "policy": {
-            "advisories": {
-                "ignore-id": [
-                    "PKSA-d5tc-s1qs-h781",
-                    "PKSA-m5cs-t1y6-qpcs",
-                    "PKSA-3r5d-mb8f-1qw9",
-                    "PKSA-mdq4-51ck-6kdq",
-                    "PKSA-8qx3-n5y5-vvnd",
-                    "PKSA-q46n-4fdk-zjr4",
-                    "PKSA-qzrn-rnz3-85w1",
-                    "PKSA-w7xr-vk7n-rstm"
-                ]
-            }
-        }
+        "sort-packages": true
     },
     "extra": {
         "laravel": {

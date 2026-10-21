@@ -11,9 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class HomeControllerTest extends TestCase
 {
     use RefreshDatabase;
-    /**
-     *  @test
-     */
+
     public function test_home_page_loads()
     {
 

@@ -77,9 +77,6 @@ class ProductControllerTest extends TestCase
     }
 
 
-    /**
-     *  @test
-     */
     public function test_products_load()
     {
         $this->withoutExceptionHandling();
@@ -94,9 +91,6 @@ class ProductControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /**
-     *  @test
-     */
     public function test_product_link_directs_to_product_page()
     {
         // $this->withoutExceptionHandling();
@@ -112,9 +106,6 @@ class ProductControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /**
-     *  @test
-     */
 
     public function test_individual_product_page_displays_out_of_stock()
     {
@@ -132,9 +123,6 @@ class ProductControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /**
-     *  @test
-     */
     public function test_individual_product_page_displays_in_stock()
     {
         // $this->withoutExceptionHandling();
@@ -152,9 +140,6 @@ class ProductControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /**
-     *  @test
-     */
     public function test_product_can_be_placed_in_cart()
     {
         $this->withoutExceptionHandling();

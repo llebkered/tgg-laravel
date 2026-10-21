@@ -11,9 +11,6 @@ class ContactControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     *  @test
-     */
     public function test_contact_us_page_loads()
     {
 
@@ -30,7 +27,6 @@ class ContactControllerTest extends TestCase
     }
 
     /**
-     *  @test
      *
      */
     public function test_contact_us_can_send_message()

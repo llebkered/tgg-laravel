@@ -100,7 +100,7 @@ Work on a dedicated branch and commit after each step, so any step can be revert
 - Added the `2026_10_21_000000_add_generated_conversions_to_media_table` migration. The original media migration did not have this column. The new migration does nothing if the column already exists, and otherwise moves the conversion data out of `custom_properties`.
 - `config/lfm.php` sets `use_package_routes` to `false`. The package was registering a second copy of the file manager routes at `/filemanager`, which stopped `route:cache` from working. The editor uses the `/laravel-filemanager` routes in `routes/web.php`.
 
-**Do not deploy Laravel 11.** Every 11.x release has unpatched security advisories. Their IDs are listed under `config.policy.advisories.ignore-id` in `composer.json`. Remove that list once Laravel is at 12.69 or later.
+**Do not deploy Laravel 11.** Every 11.x release has unpatched security advisories. The temporary advisory ignore list was removed in Phase 3.
 
 **Pre-existing issue, not caused by the upgrade:** the Fortify auth views (`auth/login`, `forgot-password`, `reset-password`, `register`, `two-factor-challenge`, and `verify-email`) and the Jetstream profile views use `<x-jet-…>` components. Jetstream 3.3.3 did not provide these either, so `/login` and `/forgot-password` already returned 500 errors before the upgrade, and `php artisan view:cache` fails. The backend login's "Forgot Password" link and the `auth` middleware's redirect to `login` both reach these broken pages. Livewire is also not installed, so the Jetstream profile and API token pages cannot work.
 
@@ -110,6 +110,16 @@ Work on a dedicated branch and commit after each step, so any step can be revert
 19. Update `laravel/framework` to `^12.0`, PHPUnit to `^11`, and the related packages.
 20. Review date and time code for Carbon 3 changes, especially `diffIn*` methods, which now return signed floats.
 21. Run `composer update` and the tests. Fix the failures and commit.
+
+**Phase 3 status:** Laravel 12.70.0 is installed. `composer update` reports no security advisories, all 34 tests pass, and the config and route caches build. Changes made:
+- `laravel/framework` is now `^12.0`, PHPUnit is 11.5, and Collision is 8.9. The other packages already supported Laravel 12 and moved to newer minor versions.
+- The advisory ignore list (`config.policy`) was removed from `composer.json`, because 12.69+ includes the fixes.
+- `@test` docblock annotations were removed from the tests. PHPUnit 12 will drop docblock metadata, and every test method already uses the `test_` prefix.
+- These Laravel 12 changes were checked and do not affect the app:
+  - No models use `HasUuids`, which now generates UUIDv7.
+  - The image validation rules already list their allowed MIME types, and none include SVG.
+  - The `local` disk sets its root explicitly.
+  - Carbon 3 was already installed in Phase 2.
 
 ### Phase 4: Laravel 12 → 13
 

@@ -125,9 +125,6 @@ class CheckoutControllerTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
     public function test_empty_cart_should_return_a_200_status_code()
     {
         $this->createCheckoutPage();
@@ -137,9 +134,6 @@ class CheckoutControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /**
-     * @test
-     */
     public function test_cart_with_stocked_product_should_show_a_form()
     {
         $this->createCheckoutPage(true);
@@ -156,9 +150,6 @@ class CheckoutControllerTest extends TestCase
         $response->assertSee('Phone');
     }
 
-    /**
-     * @test
-     */
     public function test_checkout_form_should_be_validated()
     {
         $this->createCheckoutPage(true);
@@ -177,9 +168,6 @@ class CheckoutControllerTest extends TestCase
         $response->assertSessionHasErrors('phone');
     }
 
-    /**
-     * @test
-     */
     public function test_checkout_form_should_be_validated_with_correct_error_messages()
     {
         $this->createCheckoutPage(true);
@@ -200,9 +188,6 @@ class CheckoutControllerTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
     public function test_checkout_correctly_filled_out_form_directs_to_delivery_form()
     {
         $this->createCheckoutPage(true);
@@ -215,9 +200,6 @@ class CheckoutControllerTest extends TestCase
         $response->assertRedirect('/checkout/delivery');
     }
 
-    /**
-     * @test
-     */
     public function test_delivery_form_should_show_after_contact_info()
     {
         $this->createCheckoutPage(true);
@@ -237,9 +219,6 @@ class CheckoutControllerTest extends TestCase
         $response->assertSee('State');
     }
 
-    /**
-     * @test
-     */
     public function test_delivery_form_should_be_validated()
     {
         $this->createCheckoutPage(true);
@@ -261,9 +240,6 @@ class CheckoutControllerTest extends TestCase
         $response->assertSessionHasErrors('postcode');
     }
 
-    /**
-     * @test
-     */
     public function test_correct_delivery_form_should_redirect_to_payment()
     {
         // turn off exception handling
@@ -281,9 +257,6 @@ class CheckoutControllerTest extends TestCase
         $response->assertRedirect('/checkout/card');
     }
 
-    /**
-     * @test
-     */
     public function test_payment_form_should_show_after_delivery_form()
     {
         $this->createCheckoutPage(true);
@@ -308,9 +281,6 @@ class CheckoutControllerTest extends TestCase
         $response->assertSee('Direct Deposit');
     }
 
-    /**
-     * @test
-     */
     public function test_direct_deposit_link_should_show_correct_info()
     {
         $this->createCheckoutPage(true);
@@ -328,9 +298,6 @@ class CheckoutControllerTest extends TestCase
         $response->assertSee('John Doe');
     }
 
-    /**
-     * @test
-     */
     public function test_payment_form_should_be_validated()
     {
         $this->createCheckoutPage(true);
@@ -353,9 +320,6 @@ class CheckoutControllerTest extends TestCase
         $response->assertSessionHasErrors('cvc');
     }
 
-    /**
-     * @test
-     */
     // public function test_correct_payment_form_should_redirect_to_confirmation()
     // {
     //     $this->createCheckoutPage(true);
