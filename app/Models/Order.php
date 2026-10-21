@@ -20,7 +20,7 @@ class Order extends Model
     // address
     public function address()
     {
-        return $this->hasOne(Address::class);
+        return $this->belongsTo(Address::class);
     }
 
     public function customer()

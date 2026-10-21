@@ -16,11 +16,11 @@ class Address extends Model
     // address
     public function order()
     {
-        $this->belongsTo(Order::class);
+        return $this->hasOne(Order::class);
     }
 
     public function customer()
     {
-        $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class);
     }
 }
