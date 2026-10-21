@@ -67,6 +67,16 @@ class CardPaymentTest extends TestCase
         $this->assertSame('ch_test123', $order->charge_token);
     }
 
+    public function test_charge_amount_is_the_order_total_in_cents()
+    {
+        $this->createOrder(['total' => 19.99]);
+        $this->pin->respondWith(new Response(201, [], json_encode(['response' => ['token' => 'ch_test123']])));
+
+        $this->payByCard();
+
+        $this->assertSame(1999, $this->pin->lastCharge['amount']);
+    }
+
     public function test_paid_order_is_not_charged_again()
     {
         $this->createOrder();
@@ -164,6 +174,8 @@ class FakePinPayments extends PinPayments
 {
     public int $charges = 0;
 
+    public ?array $lastCharge = null;
+
     private array $responses = [];
 
     public function respondWith(...$responses): void
@@ -174,6 +186,7 @@ class FakePinPayments extends PinPayments
     public function charge($card)
     {
         $this->charges++;
+        $this->lastCharge = $card;
         $response = array_shift($this->responses);
 
         if ($response instanceof \Throwable) {

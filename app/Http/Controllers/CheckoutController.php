@@ -188,7 +188,7 @@ class CheckoutController extends Controller
     //             "address_country"  => "Australia"
     //         ],
     //         "description"  => $this->getDescription(),
-    //         "amount" => (int)($order->total * 100),
+    //         "amount" => (int) round($order->total * 100),
     //         "email" => $order->email
     //     ];
 
@@ -493,7 +493,7 @@ class CheckoutController extends Controller
                 "address_country"  => "Australia"
             ],
             "description"  => $this->getDescription(),
-            "amount" => (int)($order->total * 100),
+            "amount" => (int) round($order->total * 100),
             "email" => $order->email
         ];
     }
