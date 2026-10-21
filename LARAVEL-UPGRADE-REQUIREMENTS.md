@@ -71,8 +71,8 @@ Work on a dedicated branch and commit after each step, so any step can be revert
 7. ~~Check package support for Laravel 11 to 13.~~ Done:
    - `intervention/imagecache` was unused and abandoned, so it was removed.
    - `appstract/laravel-options` stopped at Laravel 10. It was replaced with `App\Models\Option`, bound as `option`, so the `option()` helper still works.
-   - `unisharp/laravel-filemanager` is pinned to `^2.10` (v2.10.1), the last version that supports Intervention Image 2. Laravel 13 needs v2.13+, which requires Intervention Image 3, so the `Image::make()` calls in `BackendPageController` and `BackendBlockController` must be migrated before Phase 4.
-   - `hardevine/shoppingcart` 3.4 supports Laravel 11.
+   - `unisharp/laravel-filemanager` was pinned to `^2.10` for Laravel 11 and 12. It moved to `^2.15` with Intervention Image 3 in Phase 4.
+   - `hardevine/shoppingcart` 3.4 supports Laravel 11 and 12, but not Laravel 13. See Phase 4.
 8. ~~Remove Doctrine DBAL.~~ Done as part of the Laravel 11 update. The migration's `->change()` calls only needed `nullable`, so no other attributes had to be restated:
    - Rewrite `database/migrations/2017_04_11_000000_alter_post_nullable_fields_table.php` so that it no longer calls `getDoctrineSchemaManager()`, and make its `->change()` calls restate every column attribute to keep. Alternatively, run `php artisan schema:dump --prune` to squash the old migrations.
    - Remove `doctrine/dbal` from `composer.json`, run `composer update`, and run the tests.
@@ -126,6 +126,21 @@ Work on a dedicated branch and commit after each step, so any step can be revert
 22. Work through the [Laravel 13 upgrade guide](https://laravel.com/docs/13.x/upgrade).
 23. Update `laravel/framework` to `^13.0`, PHPUnit to `^12`, Laravel Tinker, and the related packages.
 24. Run `composer update` and the tests. Fix the failures and commit.
+
+**Phase 4 status:** Laravel 13.38.0 is installed. `composer update` reports no security advisories, all 34 tests pass, and the config and route caches build. Changes made:
+- `laravel/framework` is now `^13.0`, along with Tinker `^3.0` (3.0.2) and PHPUnit `^12.0` (12.5). Debugbar moved to `^4.4`, because 3.x stops at Laravel 12.
+- **Intervention Image 3:** `intervention/image` is now `^3.11`, and `unisharp/laravel-filemanager` is now `^2.15`.
+  - The v2 `Image::make()` calls in `BackendPageController` and `BackendBlockController` now use `App\Support\ImageResizer`.
+  - The v2 service provider, the `Image` alias, and `config/image.php` were removed.
+  - The new code was compared with v2 on landscape, portrait, small, and panorama test images. Sizes, crops, upscaling, and the white canvas padding all matched exactly.
+- **Shopping cart:** `hardevine/shoppingcart` has no Laravel 13 release; its last release, 3.4, came out in March 2025. A copy of 3.4 (MIT licence) is bundled in `packages/shoppingcart` and loaded as a Composer path repository. The only change is that `^13` was added to its `illuminate/*` requirements. `packages/shoppingcart/LOCAL-COPY.md` explains how to switch back once upstream releases a Laravel 13 version.
+- **CSRF:** `App\Http\Middleware\VerifyCsrfToken` now extends `PreventRequestForgery`. The new `Sec-Fetch-Site` check only lets more same-origin requests through, and the token check is unchanged.
+- **Session serialization:** `config/session.php` now sets `'serialization' => 'php'` explicitly. The cart stores objects in the session, so do not switch to the skeleton's `json` default.
+- **File manager config:** the new keys in 2.15, including `disallowed_extensions => ['php', 'html']`, are merged automatically from the package defaults. The app still sets `should_validate_mime` to `false`, although the package default is `true`. This was already the case before the upgrade, and it should be reviewed.
+- The other Laravel 13 changes do not affect the app:
+  - Cache, Redis, and session prefixes are set explicitly.
+  - Nothing is stored in the cache as an object, and `serializable_classes` stays unset.
+  - The app does not use `upsert`, `array_first` or `array_last`, the pagination view names, queue events, or custom managers.
 
 ### Phase 5: Database
 

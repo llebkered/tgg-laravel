@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Intervention\Image\Facades\Image;
+use App\Support\ImageResizer;
 use Illuminate\Support\Facades\Storage;
 
 class BackendPageController extends Controller
@@ -164,11 +164,7 @@ class BackendPageController extends Controller
             $path      = $file->storeAs('testing', $filename);
 
             // Resize image
-            $photo = Image::make($file)
-                ->resize(400, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                })
-                ->encode('jpg', 80);
+            $photo = ImageResizer::pageImage($file);
             // stor filename and image object
             Storage::disk('public')->put('testing/' . $basename . '-400.jpg', $photo);
             // add new image path to page

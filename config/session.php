@@ -117,6 +117,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Session Serialization
+    |--------------------------------------------------------------------------
+    |
+    | Keep "php". The shopping cart stores CartItem objects in the session,
+    | which the "json" option (the Laravel 13 skeleton default) can't hold.
+    | Changing this also logs out every active session.
+    |
+    */
+
+    'serialization' => 'php',
+
+    /*
+    |--------------------------------------------------------------------------
     | Session Cookie Name
     |--------------------------------------------------------------------------
     |

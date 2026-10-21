@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Backgroundcolour;
 use App\Http\Controllers\Controller;
-use Intervention\Image\Facades\Image;
+use App\Support\ImageResizer;
 use Illuminate\Support\Facades\Storage;
 
 class BackendBlockController extends Controller
@@ -161,12 +161,7 @@ class BackendBlockController extends Controller
 
 
             // Resize & crop image
-            $photo = Image::make($file)
-                ->resize(1366, null, function ($constraint) {  // 1366 x 768
-                    $constraint->aspectRatio();
-                })
-                ->resizeCanvas(1366, 768)
-                ->encode('jpg', 80);
+            $photo = ImageResizer::blockBackground($file); // 1366 x 768
                 
             // store filename and image object
             Storage::disk('public')->put('images/blocks/' . $basename . '.jpg', $photo);

@@ -1,0 +1,36 @@
+{
+    "name": "hardevine/shoppingcart",
+    "description": "Laravel Shoppingcart",
+    "version": "3.4.0",
+    "keywords": [
+        "laravel",
+        "shoppingcart"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rob Gloudemans",
+            "email": "info@robgloudemans.nl"
+        }
+    ],
+    "require": {
+        "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6|^7|^8|^9|^10|^11|^12|^13",
+        "illuminate/session": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6|^7|^8|^9|^10|^11|^12|^13",
+        "illuminate/events": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6|^7|^8|^9|^10|^11|^12|^13"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gloudemans\\Shoppingcart\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Gloudemans\\Shoppingcart\\ShoppingcartServiceProvider"
+            ],
+            "aliases": {
+                "Cart": "Gloudemans\\Shoppingcart\\Facades\\Cart"
+            }
+        }
+    }
+}
