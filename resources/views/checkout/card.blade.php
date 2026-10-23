@@ -31,7 +31,7 @@
                                 <label for="name" class="label">Name On Card</label>
                                 <div class="control">
                                     <input name="name" class="input is-medium" type="text" placeholder="Name On Card"
-                                        value="{{ $customer->name }}">
+                                        value="{{ old('name', $customer?->name) }}">
                                 </div>
                             </div>
                             <div class="field">

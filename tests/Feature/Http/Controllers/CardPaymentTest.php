@@ -56,14 +56,15 @@ class CardPaymentTest extends TestCase
         return $order;
     }
 
-    private function payByCard()
+    private function payByCard(array $fields = [])
     {
-        return $this->post('/checkout/card', [
+        return $this->post('/checkout/card', array_merge([
+            'name' => 'Johnny Doe',
             'number' => '4200000000000000',
             'month' => '12',
             'year' => (string) (date('Y') + 1),
             'cvc' => '123',
-        ]);
+        ], $fields));
     }
 
     public function test_successful_payment_marks_the_order_paid()
@@ -109,7 +110,7 @@ class CardPaymentTest extends TestCase
                 && $request['card']['number'] === '4200000000000000'
                 && $request['card']['expiry_month'] === '12'
                 && $request['card']['cvc'] === '123'
-                && $request['card']['name'] === 'John Doe'
+                && $request['card']['name'] === 'Johnny Doe'
                 && $request['card']['address_line1'] === '1 Main St'
                 && $request['card']['address_postcode'] === '3000'
                 && $request['description'] === 'Farm Pack <br> Estate Pack <br> '
@@ -169,6 +170,38 @@ class CardPaymentTest extends TestCase
 
         $this->assertNull(session()->getOldInput('number'));
         $this->assertNull(session()->getOldInput('cvc'));
+        $this->assertSame('Johnny Doe', session()->getOldInput('name'));
+    }
+
+    public function test_name_on_card_is_required()
+    {
+        $this->createOrder();
+
+        $this->payByCard(['name' => ''])->assertSessionHasErrors('name');
+
+        Http::assertSentCount(0);
+    }
+
+    public function test_name_on_card_needs_a_first_name_and_surname()
+    {
+        $this->createOrder();
+
+        $this->payByCard(['name' => 'Johnny'])->assertSessionHasErrors([
+            'name' => 'Please enter the name as it appears on the card, including the surname.',
+        ]);
+
+        Http::assertSentCount(0);
+    }
+
+    public function test_card_form_keeps_the_name_typed_after_a_declined_card()
+    {
+        Cart::instance('cart')->add('1', 'Farm Pack', 1, 25.00);
+        $this->createOrder();
+        $this->fakePin([400, ['error_description' => 'The card was declined']]);
+
+        $this->payByCard(['name' => 'J R Doe']);
+
+        $this->get('/checkout/card')->assertSee('value="J R Doe"', false);
     }
 
     public function test_gateway_error_blocks_retries()

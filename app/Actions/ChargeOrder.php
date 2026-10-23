@@ -20,7 +20,7 @@ class ChargeOrder
     }
 
     /**
-     * @param  array  $card  number, expiry_month, expiry_year and cvc
+     * @param  array  $card  name, number, expiry_month, expiry_year and cvc
      */
     public function __invoke(Order $order, array $card): ChargeResult
     {
@@ -96,7 +96,6 @@ class ChargeOrder
     {
         return [
             'card' => $card + [
-                'name' => $order->name,
                 'address_line1' => $order->line1,
                 'address_line2' => $order->line2,
                 'address_city' => $order->city,

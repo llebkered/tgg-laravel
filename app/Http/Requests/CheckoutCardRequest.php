@@ -18,6 +18,8 @@ class CheckoutCardRequest extends FormRequest
     public function rules()
     {
         return [
+            // Pin needs at least two words, e.g. 'John Smith'
+            'name' => ['required', 'regex:/\S+\s+\S+/'],
             'number' => ['required', new CardNumber],
             'year' => ['required', new CardExpirationYear($this->input('month'))],
             'month' => ['required', new CardExpirationMonth($this->input('year'))],
@@ -29,6 +31,14 @@ class CheckoutCardRequest extends FormRequest
     {
         return [
             'required' => 'The :attribute field can not be blank.',
+            'name.regex' => 'Please enter the name as it appears on the card, including the surname.',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'name on card',
         ];
     }
 
@@ -38,6 +48,7 @@ class CheckoutCardRequest extends FormRequest
     public function card(): array
     {
         return [
+            'name' => $this->input('name'),
             'number' => $this->input('number'),
             'expiry_month' => $this->input('month'),
             'expiry_year' => $this->input('year'),
