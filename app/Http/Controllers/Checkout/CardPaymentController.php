@@ -79,7 +79,8 @@ class CardPaymentController extends Controller
         $request->session()->put('paid_order', $order->id);
 
         // The card has been charged, so a failed email must not stop the
-        // checkout finishing. rescue() reports the error instead.
+        // checkout finishing. The listener alerts sales if the email fails,
+        // and rescue() reports anything else.
         rescue(fn () => OrderPaid::dispatch($order));
     }
 }

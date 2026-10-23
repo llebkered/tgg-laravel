@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Mail;
 
+use App\Mail\OrderEmailFailedMail;
 use App\Mail\OrderInvoiceMail;
 use App\Mail\OrderPaidMail;
 use App\Mail\PaymentUnconfirmedMail;
@@ -77,6 +78,18 @@ class OrderMailTest extends TestCase
         $mail->assertSeeInHtml('Please include your order number (' . $order->id . ')');
         $mail->assertSeeInHtml('Farm Pack');
         $this->assertPdfAttached($mail);
+    }
+
+    public function test_email_failed_alert_tells_staff_who_to_contact()
+    {
+        $order = $this->order();
+        $order->update(['phone' => '0491 570 006']);
+        $mail = new OrderEmailFailedMail($order->fresh(), 'receipt', '550 mailbox unavailable');
+
+        $mail->assertHasSubject('Order ' . $order->id . ' receipt email was not sent');
+        $mail->assertSeeInText('could not be sent to John Doe (john@test.com)');
+        $mail->assertSeeInText('Phone: 0491 570 006');
+        $mail->assertSeeInText('Error: 550 mailbox unavailable');
     }
 
     public function test_payment_unconfirmed_email_tells_staff_which_order_to_check()

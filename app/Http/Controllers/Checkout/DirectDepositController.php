@@ -41,7 +41,8 @@ class DirectDepositController extends Controller
         $request->session()->forget(['customer', 'order']);
 
         // The order is placed and this page shows how to pay, so a failed
-        // email must not stop it showing. rescue() reports the error instead.
+        // email must not stop it showing. The listener alerts sales if the
+        // email fails, and rescue() reports anything else.
         rescue(fn () => OrderInvoiced::dispatch($order));
 
         $page = Page::where('slug', '=', 'checkout')->first();

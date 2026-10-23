@@ -4,14 +4,13 @@ namespace App\Listeners;
 
 use App\Events\OrderInvoiced;
 use App\Mail\OrderInvoiceMail;
-use Illuminate\Support\Facades\Mail;
 
 class SendOrderInvoiceEmail
 {
+    use SendsOrderEmails;
+
     public function handle(OrderInvoiced $event): void
     {
-        Mail::to($event->order)
-            ->bcc(config('tgg.sales_email'))
-            ->send(new OrderInvoiceMail($event->order));
+        $this->sendToCustomer($event->order, new OrderInvoiceMail($event->order), 'invoice');
     }
 }
