@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Checkout;
 
+use App\Actions\RefreshCart;
 use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CheckoutContactRequest;
@@ -15,15 +16,29 @@ use Gloudemans\Shoppingcart\Facades\Cart;
  */
 class ContactController extends Controller
 {
-    public function show()
+    public function show(RefreshCart $refreshCart)
     {
         $page = Page::where('slug', '=', 'checkout')->firstOrFail();
+
+        if ($changes = $refreshCart()) {
+            session()->now('warning_message', $changes);
+        }
 
         return view('checkout.index', ['page' => $page]);
     }
 
-    public function store(CheckoutContactRequest $request)
+    public function store(CheckoutContactRequest $request, RefreshCart $refreshCart)
     {
+        // The order is charged at the cart's prices, so the customer sees any
+        // change in the cart before an order is made.
+        if ($changes = $refreshCart()) {
+            return redirect()->route('cart.index')->with('warning_message', $changes);
+        }
+
+        if (Cart::instance('cart')->count() === 0) {
+            return redirect()->route('cart.index');
+        }
+
         $data = $request->validated();
 
         $customer = Customer::create($data);

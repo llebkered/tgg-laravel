@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\RefreshCart;
 use App\Models\Order;
 use App\Models\Page;
 use App\Models\Variation;
@@ -15,9 +16,13 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(RefreshCart $refreshCart)
     {
         $page = Page::where('slug', '=', 'cart')->firstOrFail();
+
+        if ($changes = $refreshCart()) {
+            session()->now('warning_message', $changes);
+        }
 
         $cart = Cart::instance('cart')->content();
 
@@ -31,16 +36,6 @@ class CartController extends Controller
             ->keyBy('id');
 
         return view('cart', compact('page'))->with(['variations' => $variations, 'gst' => $gst]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -67,48 +62,20 @@ class CartController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $id  the cart row id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        Cart::instance('cart')->remove($id);
+        $cart = Cart::instance('cart');
+
+        // Already gone, from a double click, another tab or an expired session
+        if ($cart->content()->has($id)) {
+            $cart->remove($id);
+        }
+
         return back()->with('success_message', "Item has been removed.");
     }
 }

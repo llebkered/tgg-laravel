@@ -139,15 +139,70 @@ class CartControllerTest extends TestCase
         ]);
     }
 
-    public function test_cart_still_shows_an_item_whose_variation_was_deleted()
+    public function test_cart_removes_an_item_whose_variation_was_deleted()
     {
         $this->createCartPage();
         $small = Variation::where('slug', 'small')->first();
-        $this->post('/cart', ['id' => $small->id, 'name' => 'Product 1 - Small Pack', 'qty' => 1, 'price' => 100]);
+        $this->post('/cart', ['id' => $small->id]);
 
         $small->delete();
 
-        $this->get('/cart')->assertOk()->assertSee('Product 1 - Small Pack');
+        $this->get('/cart')->assertOk()
+            ->assertSee('Product 1 - Small Pack is no longer available and has been removed.');
+        $this->assertSame(0, Cart::instance('cart')->count());
+    }
+
+    public function test_cart_removes_items_that_are_no_longer_available()
+    {
+        $this->createCartPage();
+        $small = Variation::where('slug', 'small')->first();
+        $medium = Variation::where('slug', 'medium')->first();
+        $large = Variation::where('slug', 'large')->first();
+        $this->post('/cart', ['id' => $small->id]);
+        $this->post('/cart', ['id' => $medium->id]);
+        $this->post('/cart', ['id' => $large->id]);
+
+        $medium->update(['is_published' => false]);
+
+        $this->get('/cart')->assertOk()
+            ->assertSee('Product 1 - Medium Pack is no longer available');
+        $this->assertSame(2, Cart::instance('cart')->count());
+        $this->assertSame('400.00', Cart::instance('cart')->total(2, '.', ''));
+
+        $small->product->update(['stocked' => false]);
+
+        $this->get('/cart')->assertOk();
+        $this->assertSame(0, Cart::instance('cart')->count());
+    }
+
+    public function test_cart_updates_a_changed_price_and_tells_the_customer()
+    {
+        $this->createCartPage();
+        $small = Variation::where('slug', 'small')->first();
+        $this->post('/cart', ['id' => $small->id]);
+
+        $small->update(['price' => 120]);
+
+        $this->get('/cart')->assertOk()
+            ->assertSee('Product 1 - Small Pack has changed price from $100.00 to $120.00.');
+        $this->assertSame('120.00', Cart::instance('cart')->total(2, '.', ''));
+
+        // Told once, not on every visit
+        $this->get('/cart')->assertOk()->assertDontSee('has changed price');
+    }
+
+    public function test_cart_updates_a_changed_name_without_a_message()
+    {
+        $this->createCartPage();
+        $small = Variation::where('slug', 'small')->first();
+        $this->post('/cart', ['id' => $small->id]);
+
+        $small->update(['title' => 'Mini Pack']);
+
+        $this->get('/cart')->assertOk()
+            ->assertSee('Product 1 - Mini Pack')
+            ->assertDontSee('has changed price');
+        $this->assertSame('Product 1 - Mini Pack', Cart::instance('cart')->content()->first()->name);
     }
 
     public function test_price_and_name_come_from_the_product_not_the_form()
@@ -207,6 +262,20 @@ class CartControllerTest extends TestCase
 
         // check if the cart page loads
         $response->assertStatus(302);
+    }
+
+    public function test_removing_an_item_that_is_already_gone_goes_back_to_the_cart()
+    {
+        $this->createCartPage();
+        $this->post('/cart', ['id' => Variation::where('slug', 'small')->value('id')]);
+        $rowId = Cart::instance('cart')->content()->first()->rowId;
+
+        // A double click sends the same removal twice
+        $this->from('/cart')->delete('/cart/' . $rowId)->assertRedirect('/cart');
+        $this->from('/cart')->delete('/cart/' . $rowId)->assertRedirect('/cart');
+        $this->from('/cart')->delete('/cart/not-a-row-id')->assertRedirect('/cart');
+
+        $this->assertSame(0, Cart::instance('cart')->count());
     }
 
 }

@@ -238,6 +238,51 @@ class CheckoutControllerTest extends TestCase
         $this->assertEquals(112.23, $order->gst);
     }
 
+    public function test_order_is_not_made_at_an_old_price()
+    {
+        $this->createCheckoutPage(true);
+        $this->correctlyFillCart();
+
+        Variation::where('slug', 'small')->update(['price' => 150]);
+
+        $this->correctlyFillCheckoutForm()
+            ->assertRedirect('/cart')
+            ->assertSessionHas('warning_message', 'Product 1 - Small Pack has changed price from $100.00 to $150.00.');
+        $this->assertSame(0, Order::count());
+
+        // Once seen, checking out again uses the new price
+        $this->correctlyFillCheckoutForm()->assertRedirect('/checkout/delivery');
+        $this->assertEquals(150.00, Order::first()->total);
+    }
+
+    public function test_order_is_not_made_for_an_item_no_longer_available()
+    {
+        $this->createCheckoutPage(true);
+        $this->correctlyFillCart();
+
+        Product::first()->update(['stocked' => false]);
+
+        $this->correctlyFillCheckoutForm()
+            ->assertRedirect('/cart')
+            ->assertSessionHas('warning_message');
+        $this->assertSame(0, Order::count());
+
+        // The cart is now empty, so no order can be made
+        $this->correctlyFillCheckoutForm()->assertRedirect('/cart');
+        $this->assertSame(0, Order::count());
+    }
+
+    public function test_checkout_page_shows_a_price_change()
+    {
+        $this->createCheckoutPage(true);
+        $this->correctlyFillCart();
+
+        Variation::where('slug', 'small')->update(['price' => 150]);
+
+        $this->get('/checkout')->assertOk()
+            ->assertSee('Product 1 - Small Pack has changed price from $100.00 to $150.00.');
+    }
+
     public function test_cart_order_and_invoice_show_the_same_gst()
     {
         $this->createCheckoutPage(true);
