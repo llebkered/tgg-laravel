@@ -9,14 +9,14 @@ use App\Models\Address;
 use App\Models\Customer;
 use App\Mail\OrderInvoice;
 use Illuminate\Http\Request;
-use App\Libraries\Pin\PinPayments;
+use App\Actions\ChargeOrder;
+use App\Enums\ChargeStatus;
 use App\Enums\OrderStatus;
 use App\Http\Requests\CheckoutCardRequest;
 use App\Http\Requests\CheckoutContactRequest;
 use App\Http\Requests\CheckoutDeliveryRequest;
 // use Barryvdh\DomPDF\Facade\Pdf;
 use PDF;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use App\Models\Variation;
@@ -26,6 +26,8 @@ use Illuminate\Support\Facades\Validator;
 class CheckoutController extends Controller
 {
     private const PAYMENT_IN_PROGRESS = 'A payment for this order is already being processed. Please do not pay again. Contact us if you have not received a confirmation email.';
+
+    private const PAYMENT_UNCONFIRMED = 'We could not confirm your payment. Your card may have been charged, so please do not try again. We will check your payment and contact you by email.';
 
     public function index()
     {
@@ -202,7 +204,7 @@ class CheckoutController extends Controller
     //     }
     // }
 
-    public function processcard(CheckoutCardRequest $request)
+    public function processcard(CheckoutCardRequest $request, ChargeOrder $chargeOrder)
     {
         $order = Order::where('id', '=', $request->session()->get('order'))->first();
 
@@ -216,53 +218,21 @@ class CheckoutController extends Controller
             return redirect('/cart');
         }
 
-        // Claim the order so only one request can charge it. The update is
-        // atomic, so a double click or resubmit finds the order already claimed.
-        $claimed = Order::where('id', '=', $order->id)
-            ->where('order_status_id', '!=', OrderStatus::Paid->value)
-            ->whereNull('payment_started_at')
-            ->update(['payment_started_at' => now()]);
+        $result = $chargeOrder($order, $request->card());
 
-        if (! $claimed) {
-            return redirect()->route('checkout.card')->with('danger_message', self::PAYMENT_IN_PROGRESS);
-        }
-
-        try {
-            $result = app(PinPayments::class)->charge($this->createChargeVar($request, $order));
-        } catch (\Throwable $e) {
-            // No response (e.g. timeout): the card may have been charged.
-            report($e);
-
-            return $this->paymentUnconfirmed($order);
-        }
-
-        $status = $result->getStatusCode();
-        $body = json_decode($result->getBody());
-
-        if ($status == 201) {
-            // payment success, update order status to paid
-            $order->order_status_id = OrderStatus::Paid->value;
-            $order->charge_token = $body->response->token ?? null;
-            $order->save();
-
+        if ($result->status === ChargeStatus::Paid) {
             $this->completePaidOrder($request, $order);
 
             return redirect()->route('checkout.thankyou')->with('success_message', 'Your payment has been successful.');
         }
 
-        if ($status >= 400 && $status < 500) {
-            // Pin rejected the charge (e.g. card declined), so nothing was
-            // charged. Release the claim so the customer can try again.
-            Order::where('id', '=', $order->id)->update(['payment_started_at' => null]);
+        $message = match ($result->status) {
+            ChargeStatus::Declined => $result->message,
+            ChargeStatus::AlreadyClaimed => self::PAYMENT_IN_PROGRESS,
+            ChargeStatus::Unconfirmed => self::PAYMENT_UNCONFIRMED,
+        };
 
-            $error = $body->error_description ?? 'Your card could not be charged. Please check your card details.';
-
-            return redirect()->route('checkout.card')->with('danger_message', $error)->withInput($request->except(['number', 'cvc']));
-        }
-
-        // 5xx or any other response: the outcome is unknown, so keep the order
-        // claimed rather than risk charging the card twice.
-        return $this->paymentUnconfirmed($order, $status . ' ' . $result->getBody());
+        return redirect()->route('checkout.card')->with('danger_message', $message)->withInput($request->except(['number', 'cvc']));
     }
 
     /**
@@ -310,30 +280,6 @@ class CheckoutController extends Controller
         }
 
         return $request->session()->has('paid_order');
-    }
-
-    /**
-     * The card may or may not have been charged. Block further attempts on the
-     * order and ask staff to check the payment in Pin.
-     */
-    private function paymentUnconfirmed(Order $order, $detail = 'no response')
-    {
-        Log::error('Card payment outcome unknown for order ' . $order->id . ': ' . $detail);
-
-        try {
-            Mail::raw(
-                'The card payment for order ' . $order->id . ' (' . $order->name . ', ' . $order->email . ', $' . $order->total . ") could not be confirmed.\n\n"
-                . "Check the Pin Payments dashboard to see whether the card was charged, then update the order.\n\n"
-                . 'Pin response: ' . $detail,
-                function ($message) use ($order) {
-                    $message->to('sales@toadgully.com.au')->subject('Check card payment for order ' . $order->id);
-                }
-            );
-        } catch (\Throwable $e) {
-            report($e);
-        }
-
-        return redirect()->route('checkout.card')->with('danger_message', 'We could not confirm your payment. Your card may have been charged, so please do not try again. We will check your payment and contact you by email.');
     }
 
     public function directdeposit(Request $request)
@@ -435,39 +381,5 @@ class CheckoutController extends Controller
 
 
         return $order;
-    }
-
-    private function getDescription()
-    {
-        $description = '';
-        foreach (Cart::instance('cart')->content() as $row) {
-            $description = $description . $row->name . ' <br> ';
-        }
-
-        return $description;
-    }
-
-    // returns a charge array
-    private function createChargeVar(Request $request, Order $order)
-    {
-        return [
-            "card" =>
-            [
-                "number" => $request->post('number'),
-                "expiry_month"  => $request->post('month'),
-                "expiry_year"  => $request->post('year'),
-                "cvc"  => $request->post('cvc'),
-                "name"  => $order->name,
-                "address_line1"  => $order->line1,
-                "address_line2" => $order->line2,
-                "address_city"  => $order->city,
-                "address_postcode"  => $order->postcode,
-                "address_state"  => $order->state,
-                "address_country"  => "Australia"
-            ],
-            "description"  => $this->getDescription(),
-            "amount" => (int) round($order->total * 100),
-            "email" => $order->email
-        ];
     }
 }

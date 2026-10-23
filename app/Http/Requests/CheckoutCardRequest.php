@@ -31,4 +31,17 @@ class CheckoutCardRequest extends FormRequest
             'required' => 'The :attribute field can not be blank.',
         ];
     }
+
+    /**
+     * The card details, named as Pin Payments expects them.
+     */
+    public function card(): array
+    {
+        return [
+            'number' => $this->input('number'),
+            'expiry_month' => $this->input('month'),
+            'expiry_year' => $this->input('year'),
+            'cvc' => $this->input('cvc'),
+        ];
+    }
 }

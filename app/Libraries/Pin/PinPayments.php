@@ -2,39 +2,23 @@
 
 namespace App\Libraries\Pin;
 
-use GuzzleHttp;
-use Dotenv\Dotenv;
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
 
 class PinPayments
 {
-    public function charge($card)
+    /**
+     * Create a charge.
+     * https://pinpayments.com/developers/api-reference/charges
+     *
+     * Error responses from Pin (4xx and 5xx) are returned, not thrown. Throws
+     * a ConnectionException when Pin can't be reached or doesn't reply in time.
+     */
+    public function charge(array $charge): Response
     {
-        // https://pinpayments.com/developers/api-reference/charges
-
-        $client = new \GuzzleHttp\Client(
-            [
-                'headers' => [ 'Content-Type' => 'application/json' ]
-            ]
-        );
-
-        try {
-            $res = $client->request('POST', 'https://' . config('pin.host') . '/1/charges', [
-                'auth' => [config('pin.secret'), ''],
-                'json' => $card
-            ]);
-            return $res;
-
-        // Return processing error
-        } catch (ClientException $e) {
-            return $e->getResponse();
-        }
-
-        // Return server error
-        catch (ServerException $e) {
-            return $e->getResponse();
-        }
+        return Http::withBasicAuth(config('pin.secret'), '')
+            ->acceptJson()
+            ->timeout(60)
+            ->post('https://' . config('pin.host') . '/1/charges', $charge);
     }
 }
