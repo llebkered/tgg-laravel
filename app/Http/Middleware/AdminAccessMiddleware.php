@@ -26,6 +26,7 @@ class AdminAccessMiddleware
             return redirect('/');
         }
 
-        return redirect('/backend/login');
+        // Fortify's login page sends them back here once signed in
+        return redirect()->guest(route('login'));
     }
 }

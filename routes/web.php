@@ -12,7 +12,6 @@ use App\Http\Controllers\Checkout;
 use App\Http\Controllers\PaulowniaController;
 use App\Http\Controllers\Backend\BackendController;
 use App\Http\Controllers\Backend\OrderPaymentController;
-use App\Http\Controllers\Backend\BackendAuthController;
 use App\Http\Controllers\Backend\BackendPageController;
 use App\Http\Controllers\Backend\BackendUserController;
 use App\Http\Controllers\Backend\PageGalleryController;
@@ -82,9 +81,9 @@ Route::prefix('checkout')->name('checkout.')->group(function () {
 
 
 // Backend dashboard
-Route::get('/backend/login', [BackendAuthController::class, 'index'])->name('backend.login');
-Route::post('/backend/login', [BackendAuthController::class, 'login']);
-// middleware('App\Http\Middleware\AdminAccessMiddleware') ['auth:sanctum', 'verified']
+// Fortify handles login (/login), logout and password reset. Keep the old
+// admin login address working for bookmarks.
+Route::redirect('/backend/login', '/login')->name('backend.login');
 
 Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware')->group(function () {
     Route::get('/', [BackendController::class, 'index'])->name('backend.index');

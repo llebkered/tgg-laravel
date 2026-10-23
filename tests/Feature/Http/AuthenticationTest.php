@@ -51,6 +51,43 @@ class AuthenticationTest extends TestCase
         $this->get('/login')->assertSee('These credentials do not match our records.');
     }
 
+    public function test_signed_out_admin_page_goes_to_login_and_back_after_signing_in()
+    {
+        $user = User::factory()->create();
+
+        $this->get('/backend/orders')->assertRedirect('/login');
+
+        $this->post('/login', ['email' => $user->email, 'password' => 'password'])
+            ->assertRedirect('/backend/orders');
+    }
+
+    public function test_old_admin_login_address_redirects_to_login()
+    {
+        $this->get('/backend/login')->assertRedirect('/login');
+    }
+
+    public function test_user_can_log_out()
+    {
+        $this->actingAs(User::factory()->create());
+
+        $this->post('/logout')->assertRedirect('/');
+
+        $this->assertGuest();
+    }
+
+    public function test_repeated_wrong_passwords_are_slowed_down()
+    {
+        $user = User::factory()->create();
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->post('/login', ['email' => $user->email, 'password' => 'wrong-password']);
+        }
+
+        $this->post('/login', ['email' => $user->email, 'password' => 'password'])
+            ->assertStatus(429);
+        $this->assertGuest();
+    }
+
     public function test_logged_in_user_visiting_login_is_sent_to_the_backend()
     {
         $this->actingAs(User::factory()->create());

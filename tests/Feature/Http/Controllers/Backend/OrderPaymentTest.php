@@ -146,8 +146,8 @@ class OrderPaymentTest extends TestCase
     {
         $order = $this->unconfirmedOrder();
 
-        $this->post(route('backend.orders.payment.paid', $order->id))->assertRedirect('/backend/login');
-        $this->post(route('backend.orders.payment.release', $order->id))->assertRedirect('/backend/login');
+        $this->post(route('backend.orders.payment.paid', $order->id))->assertRedirect('/login');
+        $this->post(route('backend.orders.payment.release', $order->id))->assertRedirect('/login');
 
         $this->assertFalse($order->fresh()->isPaid());
         $this->assertNotNull($order->fresh()->payment_started_at);
