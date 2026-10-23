@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Page;
-use NumberFormatter;
 use App\Models\Variation;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -20,25 +19,16 @@ class CartController extends Controller
     {
         $page = Page::where('slug', '=', 'cart')->firstOrFail();
 
-        // $fmt = new NumberFormatter( 'en_AU', NumberFormatter::CURRENCY );
-
-        // $gst = $fmt->parseCurrency(Cart::total());
-
-        // dd( $gst );
-
-        // Get products fore each cart item
-        $variations = [];
         $cart = Cart::instance('cart')->content();
 
         $gst = number_format(Order::gstIncluded(Cart::instance('cart')->total(2, '.', '')), 2);
 
-        if (count($cart) > 0) {
-            foreach ($cart as $item) {
-                $cartItems[] = $item->id;
-            }
-
-            $variations = Variation::find($cartItems);
-        }
+        // The variation for each cart item, looked up by id. find() returns
+        // them sorted by id, not in cart order, so they can't be matched by
+        // position.
+        $variations = Variation::with('product')
+            ->findMany($cart->pluck('id'))
+            ->keyBy('id');
 
         return view('cart', compact('page'))->with(['variations' => $variations, 'gst' => $gst]);
     }

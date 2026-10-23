@@ -110,6 +110,49 @@ class CartControllerTest extends TestCase
         $this->get('/cart')->assertOk()->assertSeeInOrder(['Includes GST', '$9.09']);
     }
 
+    public function test_cart_shows_each_items_own_product_code()
+    {
+        $this->createCartPage();
+        $other = Product::factory()->create([
+            'title' => 'Product 2',
+            'slug' => 'product-2',
+            'code' => 'PROD2',
+            'image' => 'https://via.placeholder.com/150',
+            'description' => 'Another product',
+            'published' => true,
+            'stocked' => true,
+        ]);
+        $big = $other->variations()->create([
+            'title' => 'Big Pack',
+            'slug' => 'big',
+            'image' => 'https://via.placeholder.com/150',
+            'description' => 'A big pack',
+            'price' => 500,
+            'is_published' => true,
+        ]);
+        $small = Variation::where('slug', 'small')->first();
+
+        // Add the newer variation first, so cart order differs from id order
+        $this->post('/cart', ['id' => $big->id, 'name' => 'Product 2 - Big Pack', 'qty' => 1, 'price' => 500]);
+        $this->post('/cart', ['id' => $small->id, 'name' => 'Product 1 - Small Pack', 'qty' => 1, 'price' => 100]);
+
+        $this->get('/cart')->assertOk()->assertSeeInOrder([
+            'PROD2', 'Product 2 - Big Pack',
+            'PROD1', 'Product 1 - Small Pack',
+        ]);
+    }
+
+    public function test_cart_still_shows_an_item_whose_variation_was_deleted()
+    {
+        $this->createCartPage();
+        $small = Variation::where('slug', 'small')->first();
+        $this->post('/cart', ['id' => $small->id, 'name' => 'Product 1 - Small Pack', 'qty' => 1, 'price' => 100]);
+
+        $small->delete();
+
+        $this->get('/cart')->assertOk()->assertSee('Product 1 - Small Pack');
+    }
+
     public function test_cart_can_remove_item()
     {
         // $this->withoutExceptionHandling();

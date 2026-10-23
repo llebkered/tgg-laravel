@@ -28,14 +28,14 @@
             </thead>
 
             <tbody>
-                @php $i = 0 @endphp
                 @foreach(Cart::instance('cart')->content() as $row)
+                @php $product = $variations->get($row->id)?->product @endphp
                 <tr>
                     <td>
-                        <img src="{{ $variations[$i]->product->getFirstMediaUrl('featured_image', 'thumb') }}"
+                        <img src="{{ $product?->getFirstMediaUrl('featured_image', 'thumb') }}"
                             alt="{{ $row->name }}">
                     </td>
-                    <td>{{ $variations[$i]->product->code }}
+                    <td>{{ $product?->code }}
                         <p><strong>{{ $row->name }}</strong></p>
                         <p>{{ ($row->options->has('size') ? $row->options->size : '') }}</p>
                     </td>
@@ -57,7 +57,6 @@
 
                     </td>
                 </tr>
-                @php $i++ @endphp
                 @endforeach
             </tbody>
 
