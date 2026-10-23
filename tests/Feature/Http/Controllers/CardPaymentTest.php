@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Enums\OrderStatus;
 use App\Libraries\Pin\PinPayments;
 use App\Models\Order;
 use App\Models\Page;
@@ -33,7 +34,7 @@ class CardPaymentTest extends TestCase
     private function createOrder(array $attributes = []): Order
     {
         $order = Order::create(array_merge([
-            'order_status_id' => 1,
+            'order_status_id' => OrderStatus::InCart->value,
             'name' => 'John Doe',
             'email' => 'john@test.com',
             'total' => 25.00,
@@ -64,7 +65,7 @@ class CardPaymentTest extends TestCase
         $response->assertRedirect(route('checkout.thankyou'));
         $this->assertSame(1, $this->pin->charges);
         $order->refresh();
-        $this->assertEquals(3, $order->order_status_id);
+        $this->assertEquals(OrderStatus::Paid->value, $order->order_status_id);
         $this->assertSame('ch_test123', $order->charge_token);
     }
 
@@ -118,7 +119,7 @@ class CardPaymentTest extends TestCase
 
         $this->payByCard()->assertRedirect(route('checkout.thankyou'));
         $this->assertSame(2, $this->pin->charges);
-        $this->assertEquals(3, $order->fresh()->order_status_id);
+        $this->assertEquals(OrderStatus::Paid->value, $order->fresh()->order_status_id);
     }
 
     public function test_declined_card_details_are_not_kept_in_the_session()
@@ -142,7 +143,7 @@ class CardPaymentTest extends TestCase
         $response->assertRedirect(route('checkout.card'));
         $response->assertSessionHas('danger_message');
         $this->assertNotNull($order->fresh()->payment_started_at);
-        $this->assertEquals(1, $order->fresh()->order_status_id);
+        $this->assertEquals(OrderStatus::InCart->value, $order->fresh()->order_status_id);
 
         // A retry must not reach Pin, because the first charge may have gone through.
         $this->payByCard();
@@ -165,7 +166,7 @@ class CardPaymentTest extends TestCase
 
     public function test_card_page_redirects_once_the_order_is_paid()
     {
-        $this->createOrder(['order_status_id' => 3]);
+        $this->createOrder(['order_status_id' => OrderStatus::Paid->value]);
 
         $this->get('/checkout/card')->assertRedirect(route('checkout.thankyou'));
     }
@@ -193,7 +194,7 @@ class CardPaymentTest extends TestCase
 
         $this->payByCard()->assertRedirect(route('checkout.thankyou'));
 
-        $this->assertEquals(3, $order->fresh()->order_status_id);
+        $this->assertEquals(OrderStatus::Paid->value, $order->fresh()->order_status_id);
         $this->assertSame($order->id, session('paid_order'));
     }
 
@@ -227,11 +228,11 @@ class CardPaymentTest extends TestCase
     public function test_direct_deposit_does_not_change_a_paid_order()
     {
         Mail::spy();
-        $order = $this->createOrder(['order_status_id' => 3]);
+        $order = $this->createOrder(['order_status_id' => OrderStatus::Paid->value]);
 
         $this->get('/checkout/directdeposit')->assertRedirect(route('checkout.thankyou'));
 
-        $this->assertEquals(3, $order->fresh()->order_status_id);
+        $this->assertEquals(OrderStatus::Paid->value, $order->fresh()->order_status_id);
         Mail::shouldNotHaveReceived('send');
     }
 
@@ -243,7 +244,7 @@ class CardPaymentTest extends TestCase
 
         $this->get('/checkout/directdeposit')->assertRedirect(route('checkout.thankyou'));
 
-        $this->assertEquals(3, $order->fresh()->order_status_id);
+        $this->assertEquals(OrderStatus::Paid->value, $order->fresh()->order_status_id);
     }
 
     public function test_direct_deposit_is_blocked_while_a_card_payment_is_in_progress()
@@ -255,7 +256,7 @@ class CardPaymentTest extends TestCase
 
         $response->assertRedirect(route('checkout.card'));
         $response->assertSessionHas('danger_message');
-        $this->assertEquals(1, $order->fresh()->order_status_id);
+        $this->assertEquals(OrderStatus::InCart->value, $order->fresh()->order_status_id);
         Mail::shouldNotHaveReceived('send');
     }
 

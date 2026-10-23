@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Models\Order;
 use App\Models\OrderStatus;
+use App\Enums\OrderStatus as OrderStatusId;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
@@ -19,7 +20,7 @@ class BackendOrderController extends Controller
     public function index()
     {
         $orders = Order::orderBy('id', 'DESC')->get();
-        $openOrders = Order::whereIn('order_status_id', [1, 2, 3])->orderBy('id', 'DESC')->get();
+        $openOrders = Order::whereIn('order_status_id', OrderStatusId::open())->orderBy('id', 'DESC')->get();
 
         $order_statuses = OrderStatus::all();
 

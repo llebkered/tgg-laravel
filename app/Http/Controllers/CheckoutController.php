@@ -10,10 +10,10 @@ use App\Models\Customer;
 use App\Mail\OrderInvoice;
 use Illuminate\Http\Request;
 use App\Libraries\Pin\PinPayments;
-use LVR\CreditCard\CardCvc;
-use LVR\CreditCard\CardNumber;
-use LVR\CreditCard\CardExpirationYear;
-use LVR\CreditCard\CardExpirationMonth;
+use App\Enums\OrderStatus;
+use App\Http\Requests\CheckoutCardRequest;
+use App\Http\Requests\CheckoutContactRequest;
+use App\Http\Requests\CheckoutDeliveryRequest;
 // use Barryvdh\DomPDF\Facade\Pdf;
 use PDF;
 use Illuminate\Support\Facades\Log;
@@ -34,23 +34,11 @@ class CheckoutController extends Controller
         return view('checkout.index')->with(['page' => $page]);
     }
 
-    public function contact(Request $request)
+    public function contact(CheckoutContactRequest $request)
     {
         $page = Page::where('slug', '=', 'checkout')->first();
 
-        // validate
-        $rules = [
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone' => ['required', 'regex:/^(?:\+?(61))? ?(?:\((?=.*\)))?(0?[2-57-8])\)? ?(\d\d(?:[- ](?=\d{3})|(?!\d\d[- ]?\d[- ]))\d\d[- ]?\d[- ]?\d{3})$/']
-        ];
-
-        $customMessages = [
-            'required' => 'The :attribute field can not be blank.',
-            'phone.regex' => 'The phone number must be a valid Australian number. eg 03 7010 1234 or 0491 570 006'
-        ];
-
-        $data = $this->validate($request, $rules, $customMessages);
+        $data = $request->validated();
 
         // create customer
         $customer = Customer::create($data);
@@ -60,7 +48,7 @@ class CheckoutController extends Controller
 
         // Create Order
         // $orderDetails['customer_id']  = $request->session()->get('customer');
-        $orderDetails['order_status_id'] = 1;
+        $orderDetails['order_status_id'] = OrderStatus::InCart->value;
         $orderDetails['cart'] = json_encode(Cart::instance('cart')->content());
         // Unformatted amounts, so totals of $1,000 or more save correctly
         $total = Cart::instance('cart')->total(2, '.', '');
@@ -90,24 +78,9 @@ class CheckoutController extends Controller
         return view('checkout.delivery')->with(['page' => $page]);
     }
 
-    public function deliverypost(Request $request)
+    public function deliverypost(CheckoutDeliveryRequest $request)
     {
         $page = Page::where('slug', '=', 'checkout')->first();
-
-        $rules = [
-            'line1' => 'required',
-            'line2' => '',
-            'postcode' => ['required', 'size:4', 'regex:/[2-5]\d\d\d|[0][2,7,8,9]\d\d/'], // 2-5NNN. 0[2,8,09]NN ie not WA or Tas
-            'city' => 'required'
-        ];
-
-        $customMessages = [
-            'required' => 'The :attribute field can not be blank.',
-            'postcode.size' => 'The post code must be a 4 digit number (WA and Tas not accepted.)',
-            'postcode.regex' => 'Please check your postcode is correct. (WA and Tas not accepted.)'
-        ];
-
-        $this->validate($request, $rules, $customMessages);
 
         $data = $request->only('line1', 'line2', 'postcode', 'city', 'state', 'country');
 
@@ -229,22 +202,8 @@ class CheckoutController extends Controller
     //     }
     // }
 
-    public function processcard(Request $request)
+    public function processcard(CheckoutCardRequest $request)
     {
-        // validate
-        $rules = [
-            'number' => ['required', new CardNumber],
-            'year' => ['required', new CardExpirationYear($request->get('month'))],
-            'month' => ['required', new CardExpirationMonth($request->get('year'))],
-            'cvc' => ['required', new CardCvc($request->get('number'))]
-        ];
-
-        $customMessages = [
-            'required' => 'The :attribute field can not be blank.'
-        ];
-
-        $this->validate($request, $rules, $customMessages);
-
         $order = Order::where('id', '=', $request->session()->get('order'))->first();
 
         // Already paid (e.g. back button or a resubmitted form)
@@ -260,7 +219,7 @@ class CheckoutController extends Controller
         // Claim the order so only one request can charge it. The update is
         // atomic, so a double click or resubmit finds the order already claimed.
         $claimed = Order::where('id', '=', $order->id)
-            ->where('order_status_id', '!=', 3)
+            ->where('order_status_id', '!=', OrderStatus::Paid->value)
             ->whereNull('payment_started_at')
             ->update(['payment_started_at' => now()]);
 
@@ -282,7 +241,7 @@ class CheckoutController extends Controller
 
         if ($status == 201) {
             // payment success, update order status to paid
-            $order->order_status_id = 3;
+            $order->order_status_id = OrderStatus::Paid->value;
             $order->charge_token = $body->response->token ?? null;
             $order->save();
 
@@ -347,7 +306,7 @@ class CheckoutController extends Controller
     private function alreadyPaid(Request $request, ?Order $order)
     {
         if ($order) {
-            return $order->order_status_id == 3;
+            return $order->isPaid();
         }
 
         return $request->session()->has('paid_order');
@@ -397,8 +356,7 @@ class CheckoutController extends Controller
             return redirect()->route('checkout.card')->with('danger_message', self::PAYMENT_IN_PROGRESS);
         }
 
-        // update order status to invoiced
-        $order['order_status_id'] = 2; // invoiced
+        $order->order_status_id = OrderStatus::Invoiced->value;
         $order->save();
 
         // send order email
@@ -434,7 +392,7 @@ class CheckoutController extends Controller
         // made, so refreshing this page is safe.
         $order = Order::find($request->session()->get('paid_order') ?? $request->session()->get('order'));
 
-        if (is_null($order) || $order->order_status_id != 3) {
+        if (is_null($order) || ! $order->isPaid()) {
             return redirect('/cart');
         }
 

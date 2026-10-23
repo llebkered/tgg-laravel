@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,6 +18,11 @@ class Order extends Model
     public static function gstIncluded($total)
     {
         return round($total / 11, 2);
+    }
+
+    public function isPaid()
+    {
+        return $this->order_status_id == OrderStatus::Paid->value;
     }
 
     public function order_status()
