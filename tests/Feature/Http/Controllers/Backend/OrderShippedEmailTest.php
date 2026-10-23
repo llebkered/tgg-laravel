@@ -3,7 +3,6 @@
 namespace Tests\Feature\Http\Controllers\Backend;
 
 use App\Enums\OrderStatus;
-use App\Http\Middleware\AdminAccessMiddleware;
 use App\Mail\OrderShippedMail;
 use App\Models\Order;
 use App\Models\User;
@@ -20,10 +19,7 @@ class OrderShippedEmailTest extends TestCase
     {
         parent::setUp();
 
-        // The admin check needs users.role_id and a roles table, which the
-        // migrations don't create, so sign in and skip it.
-        $this->withoutMiddleware(AdminAccessMiddleware::class);
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->admin()->create());
     }
 
     private function order(): Order

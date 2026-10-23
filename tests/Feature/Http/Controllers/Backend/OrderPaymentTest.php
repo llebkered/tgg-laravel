@@ -3,7 +3,6 @@
 namespace Tests\Feature\Http\Controllers\Backend;
 
 use App\Enums\OrderStatus;
-use App\Http\Middleware\AdminAccessMiddleware;
 use App\Mail\OrderPaidMail;
 use App\Models\Order;
 use App\Models\User;
@@ -22,14 +21,9 @@ class OrderPaymentTest extends TestCase
         Mail::fake();
     }
 
-    /**
-     * The admin check needs users.role_id and a roles table, which the
-     * migrations don't create, so sign in and skip it.
-     */
     private function signInAsAdmin(): void
     {
-        $this->withoutMiddleware(AdminAccessMiddleware::class);
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->admin()->create());
     }
 
     private function order(array $attributes = []): Order
