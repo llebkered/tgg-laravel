@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Models\Order;
 use App\Enums\OrderStatus;
+use App\Mail\OrderShippedMail;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
@@ -138,31 +139,29 @@ class BackendOrderController extends Controller
         return redirect()->route('backend.orders.index')->with('success_message', 'Order has been deleted.');
     }
 
-    public function showOrderShippedEmail($id)
+    public function showOrderShippedEmail(Order $order)
     {
-        // send order email
-        $orderDetails = Order::find($id);
-
-        return view('backend.order.orderShipped')->with('order', $orderDetails);
+        return view('backend.order.orderShipped')->with('order', $order);
     }
 
-    public function sendOrderShippedEmail($id, Request $request)
+    public function sendOrderShippedEmail(Order $order, Request $request)
     {
-        $orderDetails = Order::find($id);
-        $orderDetails->update($request->only(
-            [
-                'message',
-                'tracking'
-            ]
-        ));
-        $orderDetails['subject'] = "Order from Toad Gully Growers has been shipped";
+        $order->update($request->validate([
+            'tracking' => ['nullable', 'string', 'max:255'],
+            'message' => ['nullable', 'string'],
+        ]));
 
-        Mail::send('emails.orders.shipped', compact('orderDetails'), function ($message) use ($orderDetails) {
-            $message->to($orderDetails["email"], $orderDetails["name"])
-                ->bcc('sales@toadgully.com.au')
-                ->subject($orderDetails["subject"])
-                ->from('sales@toadgully.com.au', 'Toad Gully Growers');
-        });
-        return redirect()->route('backend.orders.edit', $orderDetails->id)->with('success_message', 'Order Shipped Email has been sent.');
+        try {
+            Mail::to($order)
+                ->bcc(config('tgg.sales_email'))
+                ->send(new OrderShippedMail($order));
+        } catch (\Throwable $e) {
+            report($e);
+
+            return redirect()->route('backend.orders.sendshippedemail', $order->id)
+                ->with('danger_message', 'The shipped email could not be sent: ' . $e->getMessage());
+        }
+
+        return redirect()->route('backend.orders.edit', $order->id)->with('success_message', 'Order Shipped Email has been sent.');
     }
 }
