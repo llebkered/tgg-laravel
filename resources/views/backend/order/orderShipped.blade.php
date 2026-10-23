@@ -75,7 +75,7 @@
                         <tr>
                             <td colspan="3"></td>
                         <td class="has-text-right">
-                            <p>GST: ${{ $order->gst }}</p>
+                            <p>GST: ${{ number_format($order->gstAmount(), 2) }}</p>
                             <p>Total: ${{ $order->total }}</p>   
                         </td>
                         </tr>

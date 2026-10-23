@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers;
 
 use Tests\TestCase;
+use App\Mail\OrderInvoiceMail;
 use App\Models\Order;
 use App\Models\Page;
 use App\Models\Product;
@@ -235,6 +236,21 @@ class CheckoutControllerTest extends TestCase
         $order = Order::first();
         $this->assertEquals(1234.50, $order->total);
         $this->assertEquals(112.23, $order->gst);
+    }
+
+    public function test_cart_order_and_invoice_show_the_same_gst()
+    {
+        $this->createCheckoutPage(true);
+        $this->addVariationToCart(229);
+
+        $this->get('/cart')->assertSeeInOrder(['Includes GST', '$20.82']);
+
+        $this->correctlyFillCheckoutForm();
+        $order = Order::first();
+        $this->assertEquals(20.82, $order->gst);
+        $this->assertSame(20.82, $order->gstAmount());
+
+        (new OrderInvoiceMail($order))->assertSeeInHtml('$20.82');
     }
 
     public function test_delivery_form_without_an_order_goes_back_to_the_cart()

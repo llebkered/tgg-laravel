@@ -56,6 +56,19 @@ class OrderMailTest extends TestCase
         $this->assertPdfAttached($mail);
     }
 
+    public function test_email_shows_the_correct_gst_for_an_old_order_without_changing_it()
+    {
+        // Orders placed before October 2026 stored 1/10 of the total as GST
+        $order = $this->order();
+        $order->update(['total' => 100.00, 'gst' => 10.00]);
+
+        (new OrderPaidMail($order))
+            ->assertSeeInHtml('$9.09')
+            ->assertDontSeeInHtml('$10.00');
+
+        $this->assertEquals(10.00, $order->fresh()->gst);
+    }
+
     public function test_invoice_email_lists_the_order_and_attaches_a_pdf()
     {
         $order = $this->order();

@@ -22,6 +22,16 @@ class Order extends Model
     }
 
     /**
+     * The GST included in this order's total. Use this to show GST rather than
+     * the stored gst column, which holds 1/10 of the total on orders placed
+     * before October 2026.
+     */
+    public function gstAmount()
+    {
+        return static::gstIncluded($this->total);
+    }
+
+    /**
      * The items ordered, as they were in the cart when the order was placed.
      */
     protected function products(): Attribute

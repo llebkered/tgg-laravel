@@ -16,7 +16,7 @@
 
     <tr>
         <td colspan="4" class="has-text-right" align="right">
-            <strong>GST: &nbsp;</strong> ${{ $orderDetails->gst }}
+            <strong>GST: &nbsp;</strong> ${{ number_format($orderDetails->gstAmount(), 2) }}
         </td>
     </tr>
     <tr>

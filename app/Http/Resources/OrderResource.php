@@ -33,7 +33,7 @@ class OrderResource extends JsonResource
             'description' => $this->description,
             'comments' => $this->comments,
             'tax' => $this->tax,
-            'gst' => $this->gst,
+            'gst' => $this->gstAmount(),
             'id' => $this->id,
             'order_status' => $this->order_status,
             'created_at' => $this->created_at,
