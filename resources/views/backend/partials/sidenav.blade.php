@@ -1,6 +1,6 @@
 <aside class="menu side-menu">
     <div class="side-menu__header mb-4">
-        <h1 class="is-size-5">TGG Dashboard</h1>
+        <h1 class="is-size-5"><a href="{{ route('backend.index') }}" style="color: inherit">TGG Dashboard</a></h1>
         <p class="menu-user">
             <span class="material-icons">
                 account_circle
