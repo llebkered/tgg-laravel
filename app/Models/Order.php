@@ -35,8 +35,9 @@ class Order extends Model
 
     /**
      * The GST included in this order's total. Use this to show GST rather than
-     * the stored gst column, which holds 1/10 of the total on orders placed
-     * before October 2026.
+     * the stored gst column. Orders placed before October 2026 stored 1/10 of
+     * the total until a migration corrected them, keeping the figure their
+     * invoices showed in gst_as_invoiced.
      */
     public function gstAmount()
     {
