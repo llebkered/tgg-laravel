@@ -17,7 +17,6 @@
         "laravel-validation-rules/credit-card": "^1.8",
         "laravel/fortify": "^1.21",
         "laravel/framework": "^13.0",
-        "laravel/jetstream": "^5.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0",
         "spatie/laravel-honeypot": "^4.5",

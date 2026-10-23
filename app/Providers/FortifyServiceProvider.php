@@ -29,6 +29,9 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Fortify::loginView('auth.login');
+        Fortify::requestPasswordResetLinkView('auth.forgot-password');
+        Fortify::resetPasswordView('auth.reset-password');
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         // 5 login attempts a minute for each email address and IP
