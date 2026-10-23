@@ -14,10 +14,10 @@ class BackendController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $page = [];
-        $orders = Order::orderBy('id', 'DESC')->get();
+        $orders = Order::sortedBy($request->query('sort'), $request->query('direction'))->get();
         $openOrders = Order::whereIn('order_status_id', OrderStatus::open())->orderBy('id', 'DESC')->get();
 
         return view('backend.index', compact(['orders', 'openOrders', 'page']));

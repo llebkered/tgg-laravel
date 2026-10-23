@@ -1,10 +1,10 @@
 <table class="table">
     <thead>
-        <th>Id</th>
-        <th>Date</th>
-        <th>Customer</th>
+        @include('backend.order.sort-header', ['column' => 'id', 'label' => 'Id'])
+        @include('backend.order.sort-header', ['column' => 'date', 'label' => 'Date'])
+        @include('backend.order.sort-header', ['column' => 'name', 'label' => 'Customer'])
         <th>Address</th>
-        <th>Status</th>
+        @include('backend.order.sort-header', ['column' => 'status', 'label' => 'Status'])
         <th></th>
     </thead>
     @foreach ($orders as $order)

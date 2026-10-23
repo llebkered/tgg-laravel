@@ -77,6 +77,36 @@ class Order extends Model
             ->where('payment_started_at', '<=', now()->subMinutes(self::PAYMENT_TIMEOUT_MINUTES));
     }
 
+    /**
+     * The columns the backend order list can be sorted by, keyed by the name
+     * used in the address bar.
+     */
+    public const SORTABLE = [
+        'id' => 'id',
+        'date' => 'created_at',
+        'name' => 'name',
+        'status' => 'order_status_id',
+    ];
+
+    /**
+     * Sort by one of SORTABLE, newest first by default. Anything else in the
+     * address bar is ignored. Status sorts in workflow order (In Cart first).
+     */
+    public function scopeSortedBy($query, $sort = null, $direction = null)
+    {
+        $column = is_string($sort) ? (self::SORTABLE[$sort] ?? 'id') : 'id';
+        $direction = $direction === 'asc' ? 'asc' : 'desc';
+
+        $query->orderBy($column, $direction);
+
+        // Newest first among orders with the same name, date or status
+        if ($column !== 'id') {
+            $query->orderBy('id', 'desc');
+        }
+
+        return $query;
+    }
+
     public function order_status()
     {
         // return ['orderStatus'];
