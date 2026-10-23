@@ -25,6 +25,10 @@ class ChargeOrder
      */
     public function __invoke(Order $order, array $card): ChargeResult
     {
+        // Check before claiming the order, so a missing key is an error rather
+        // than a blocked order the customer is told may have been charged.
+        $this->pin->ensureConfigured();
+
         // Claim the order so only one request can charge it. The update is
         // atomic, so a double click or resubmit finds the order already claimed.
         $claimed = Order::where('id', '=', $order->id)

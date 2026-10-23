@@ -4,6 +4,7 @@ namespace App\Libraries\Pin;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
+use RuntimeException;
 
 class PinPayments
 {
@@ -16,9 +17,21 @@ class PinPayments
      */
     public function charge(array $charge): Response
     {
+        $this->ensureConfigured();
+
         return Http::withBasicAuth(config('pin.secret'), '')
             ->acceptJson()
             ->timeout(60)
             ->post('https://' . config('pin.host') . '/1/charges', $charge);
+    }
+
+    /**
+     * Throws when the secret key isn't set.
+     */
+    public function ensureConfigured(): void
+    {
+        if (blank(config('pin.secret'))) {
+            throw new RuntimeException('Pin Payments is not configured. Set PIN_SECRET in .env.');
+        }
     }
 }

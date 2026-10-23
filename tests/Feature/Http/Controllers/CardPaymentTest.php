@@ -121,6 +121,18 @@ class CardPaymentTest extends TestCase
         });
     }
 
+    public function test_missing_pin_key_fails_without_blocking_the_order()
+    {
+        config(['pin.secret' => null]);
+        $order = $this->createOrder();
+
+        $this->payByCard()->assertServerError();
+
+        Http::assertNothingSent();
+        $this->assertNull($order->fresh()->payment_started_at);
+        Mail::assertNothingSent();
+    }
+
     public function test_paid_order_is_not_charged_again()
     {
         $this->createOrder();
