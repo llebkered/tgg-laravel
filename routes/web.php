@@ -8,7 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FernsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\Checkout;
 use App\Http\Controllers\PaulowniaController;
 use App\Http\Controllers\Backend\BackendController;
 use App\Http\Controllers\Backend\BackendAuthController;
@@ -68,15 +68,15 @@ Route::prefix('cart')->group(function () {
 });
 
 
-Route::prefix('checkout')->group(function () {
-    Route::get('/', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/', [CheckoutController::class, 'contact'])->name('checkout.contact');
-    Route::get('/delivery', [CheckoutController::class, 'delivery'])->name('checkout.delivery');
-    Route::post('/delivery', [CheckoutController::class, 'deliverypost'])->name('checkout.deliverypost');
-    Route::get('/card', [CheckoutController::class, 'card'])->name('checkout.card');
-    Route::post('/card', [CheckoutController::class, 'processcard'])->name('checkout.processcard');
-    Route::get('/directdeposit', [CheckoutController::class, 'directdeposit'])->name('checkout.directdeposit');
-    Route::get('/thankyou', [CheckoutController::class, 'thankyou'])->name('checkout.thankyou');
+Route::prefix('checkout')->name('checkout.')->group(function () {
+    Route::get('/', [Checkout\ContactController::class, 'show'])->name('index');
+    Route::post('/', [Checkout\ContactController::class, 'store'])->name('contact');
+    Route::get('/delivery', [Checkout\DeliveryController::class, 'show'])->name('delivery');
+    Route::post('/delivery', [Checkout\DeliveryController::class, 'store'])->name('deliverypost');
+    Route::get('/card', [Checkout\CardPaymentController::class, 'show'])->name('card');
+    Route::post('/card', [Checkout\CardPaymentController::class, 'store'])->name('processcard');
+    Route::get('/directdeposit', Checkout\DirectDepositController::class)->name('directdeposit');
+    Route::get('/thankyou', Checkout\ThankYouController::class)->name('thankyou');
 });
 
 

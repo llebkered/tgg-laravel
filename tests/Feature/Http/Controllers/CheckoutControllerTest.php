@@ -225,6 +225,13 @@ class CheckoutControllerTest extends TestCase
         $this->assertEquals(112.23, $order->gst);
     }
 
+    public function test_delivery_form_without_an_order_goes_back_to_the_cart()
+    {
+        $this->createCheckoutPage(true);
+
+        $this->correctlyFillDeliveryForm()->assertRedirect('/cart');
+    }
+
     public function test_delivery_form_should_show_after_contact_info()
     {
         $this->createCheckoutPage(true);
