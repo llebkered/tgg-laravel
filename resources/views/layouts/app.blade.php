@@ -29,6 +29,14 @@
 
     @include('partials.navbar')
 
+    @if (option('maintenance'))
+    {{-- Only admins get past ShowMaintenancePage while it's on --}}
+    <div class="notification is-warning is-light mb-0 has-text-centered">
+        Maintenance is on: visitors see the maintenance page.
+        <a href="{{ route('backend.index') }}">Turn it off in the dashboard</a>
+    </div>
+    @endif
+
     @include('partials.flash-message')
 
     @if (isset($slot))

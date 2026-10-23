@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Checkout;
 use App\Http\Controllers\PaulowniaController;
 use App\Http\Controllers\Backend\BackendController;
+use App\Http\Controllers\Backend\MaintenanceController;
 use App\Http\Controllers\Backend\OrderPaymentController;
 use App\Http\Controllers\Backend\BackendPageController;
 use App\Http\Controllers\Backend\BackendUserController;
@@ -108,6 +109,8 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
     Route::get('/products/{id}/gallery',[ ProductGalleryController::class, 'create'])->name('backend.productgallery.create');
     Route::post('/products/{id}/gallery',[ ProductGalleryController::class, 'store']);
     Route::get('/products/{product}/gallery/{id}',[ ProductGalleryController::class, 'destroy']);
+
+    Route::post('/maintenance', [MaintenanceController::class, 'update'])->name('backend.maintenance');
 
     Route::get('/shop/toggle', function () {
         $option = (option('shop')) ? 0 : 1 ;
