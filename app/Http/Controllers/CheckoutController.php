@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\Validator;
 
 class CheckoutController extends Controller
 {
+    private const PAYMENT_IN_PROGRESS = 'A payment for this order is already being processed. Please do not pay again. Contact us if you have not received a confirmation email.';
+
     public function index()
     {
         $page = Page::where('slug', '=', 'checkout')->firstOrFail();
@@ -263,7 +265,7 @@ class CheckoutController extends Controller
             ->update(['payment_started_at' => now()]);
 
         if (! $claimed) {
-            return redirect()->route('checkout.card')->with('danger_message', 'A payment for this order is already being processed. Please do not pay again. Contact us if you have not received a confirmation email.');
+            return redirect()->route('checkout.card')->with('danger_message', self::PAYMENT_IN_PROGRESS);
         }
 
         try {
@@ -378,14 +380,24 @@ class CheckoutController extends Controller
     public function directdeposit(Request $request)
     {
         $page = Page::where('slug', '=', 'checkout')->first();
-        // update order status to invoiced
         $order = Order::where('id', '=', $request->session()->get('order'))->first();
+
+        // Already paid by card (e.g. back button after paying)
+        if ($this->alreadyPaid($request, $order)) {
+            return redirect()->route('checkout.thankyou');
+        }
 
         // Don't proceed if order is null
         if (is_null($order)) {
             return redirect('/cart');
         }
 
+        // A card payment has been started, so the card may have been charged
+        if ($order->payment_started_at) {
+            return redirect()->route('checkout.card')->with('danger_message', self::PAYMENT_IN_PROGRESS);
+        }
+
+        // update order status to invoiced
         $order['order_status_id'] = 2; // invoiced
         $order->save();
 

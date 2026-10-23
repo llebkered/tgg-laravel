@@ -224,6 +224,41 @@ class CardPaymentTest extends TestCase
         $this->assertSame(1, $this->pin->charges);
     }
 
+    public function test_direct_deposit_does_not_change_a_paid_order()
+    {
+        Mail::spy();
+        $order = $this->createOrder(['order_status_id' => 3]);
+
+        $this->get('/checkout/directdeposit')->assertRedirect(route('checkout.thankyou'));
+
+        $this->assertEquals(3, $order->fresh()->order_status_id);
+        Mail::shouldNotHaveReceived('send');
+    }
+
+    public function test_direct_deposit_after_paying_by_card_shows_the_thank_you_page()
+    {
+        $order = $this->createOrder();
+        $this->pin->respondWith(new Response(201, [], json_encode(['response' => ['token' => 'ch_test123']])));
+        $this->payByCard();
+
+        $this->get('/checkout/directdeposit')->assertRedirect(route('checkout.thankyou'));
+
+        $this->assertEquals(3, $order->fresh()->order_status_id);
+    }
+
+    public function test_direct_deposit_is_blocked_while_a_card_payment_is_in_progress()
+    {
+        Mail::spy();
+        $order = $this->createOrder(['payment_started_at' => now()]);
+
+        $response = $this->get('/checkout/directdeposit');
+
+        $response->assertRedirect(route('checkout.card'));
+        $response->assertSessionHas('danger_message');
+        $this->assertEquals(1, $order->fresh()->order_status_id);
+        Mail::shouldNotHaveReceived('send');
+    }
+
     public function test_thank_you_page_needs_a_paid_order()
     {
         $this->get('/checkout/thankyou')->assertRedirect('/cart');
