@@ -433,37 +433,6 @@ class CheckoutController extends Controller
         return $order;
     }
 
-    public function test()
-    {
-        $page = Page::where('slug', '=', 'thankyou')->first();
-
-        $order = Order::where('id', '=', 14)->first();
-        $cart = json_decode($order['cart']);
-
-        $order['products'] = $cart;
-
-        $data['order'] = $order;
-
-        // dd( $cart);
-
-        $pdf = PDF::loadView('emails.orders.invoice', $data);
-        return $pdf->download('invoice.pdf');
-
-        // Fetch all customers from database
-
-        // // Send data to the view using loadView function of PDF facade
-        // $pdf = PDF::loadView('emails.orders.invoice', $data);
-        // // If you want to store the generated pdf to the server then you can use the store function
-        // $pdf->save(storage_path().'_filename.pdf');
-        // // Finally, you can download the file using download function
-        // return $pdf->download('customers.pdf');
-
-
-
-        // return view('emails.orders.invoice', ['page' => $page, 'order' => $order]);
-    }
-
-
     private function getDescription()
     {
         $description = '';

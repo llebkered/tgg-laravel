@@ -77,7 +77,6 @@ Route::prefix('checkout')->group(function () {
     Route::post('/card', [CheckoutController::class, 'processcard'])->name('checkout.processcard');
     Route::get('/directdeposit', [CheckoutController::class, 'directdeposit'])->name('checkout.directdeposit');
     Route::get('/thankyou', [CheckoutController::class, 'thankyou'])->name('checkout.thankyou');
-    Route::get('/test', [CheckoutController::class, 'test'])->name('checkout.test');
 });
 
 
