@@ -84,12 +84,9 @@ return [
     */
 
     'features' => [
-       // Features::registration(),
+        // Login and logout are always on. Staff accounts are created by hand,
+        // and there are no profile or two-factor pages.
         Features::resetPasswords(),
-        // Features::emailVerification(),
-        Features::updateProfileInformation(),
-        Features::updatePasswords(),
-        Features::twoFactorAuthentication(),
     ],
 
 ];
