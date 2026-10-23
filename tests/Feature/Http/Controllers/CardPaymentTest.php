@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers;
 use App\Libraries\Pin\PinPayments;
 use App\Models\Order;
 use App\Models\Page;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\Request as PsrRequest;
 use GuzzleHttp\Psr7\Response;
@@ -167,6 +168,68 @@ class CardPaymentTest extends TestCase
         $this->createOrder(['order_status_id' => 3]);
 
         $this->get('/checkout/card')->assertRedirect(route('checkout.thankyou'));
+    }
+
+    public function test_successful_payment_emails_the_receipt_and_ends_the_checkout()
+    {
+        Mail::spy();
+        Cart::instance('cart')->add('1', 'Farm Pack', 1, 25.00);
+        $order = $this->createOrder();
+        $this->pin->respondWith(new Response(201, [], json_encode(['response' => ['token' => 'ch_test123']])));
+
+        $this->payByCard();
+
+        Mail::shouldHaveReceived('send')->once();
+        $this->assertSame(0, Cart::instance('cart')->count());
+        $this->assertNull(session('order'));
+        $this->assertSame($order->id, session('paid_order'));
+    }
+
+    public function test_failed_receipt_email_still_completes_the_checkout()
+    {
+        Mail::shouldReceive('send')->andThrow(new \RuntimeException('mail server down'));
+        $order = $this->createOrder();
+        $this->pin->respondWith(new Response(201, [], json_encode(['response' => ['token' => 'ch_test123']])));
+
+        $this->payByCard()->assertRedirect(route('checkout.thankyou'));
+
+        $this->assertEquals(3, $order->fresh()->order_status_id);
+        $this->assertSame($order->id, session('paid_order'));
+    }
+
+    public function test_thank_you_page_can_be_refreshed_without_sending_email()
+    {
+        $this->createOrder([
+            'line1' => '1 Main St',
+            'cart' => json_encode(['row1' => ['name' => 'Farm Pack', 'price' => 25]]),
+        ]);
+        $this->pin->respondWith(new Response(201, [], json_encode(['response' => ['token' => 'ch_test123']])));
+        $this->payByCard();
+
+        Mail::spy();
+        $this->get('/checkout/thankyou')->assertOk()->assertSee('John Doe')->assertSee('Farm Pack');
+        $this->get('/checkout/thankyou')->assertOk()->assertSee('1 Main St');
+
+        Mail::shouldNotHaveReceived('send');
+    }
+
+    public function test_resubmitting_the_card_form_after_paying_shows_the_thank_you_page()
+    {
+        $this->createOrder();
+        $this->pin->respondWith(new Response(201, [], json_encode(['response' => ['token' => 'ch_test123']])));
+        $this->payByCard();
+
+        $this->get('/checkout/card')->assertRedirect(route('checkout.thankyou'));
+        $this->payByCard()->assertRedirect(route('checkout.thankyou'));
+        $this->assertSame(1, $this->pin->charges);
+    }
+
+    public function test_thank_you_page_needs_a_paid_order()
+    {
+        $this->get('/checkout/thankyou')->assertRedirect('/cart');
+
+        $this->createOrder();
+        $this->get('/checkout/thankyou')->assertRedirect('/cart');
     }
 }
 

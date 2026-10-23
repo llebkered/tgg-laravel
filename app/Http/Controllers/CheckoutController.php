@@ -133,7 +133,7 @@ class CheckoutController extends Controller
 
         // Already paid (e.g. back button after paying)
         $order = Order::where('id', '=', $request->session()->get('order'))->first();
-        if ($order && $order->order_status_id == 3) {
+        if ($this->alreadyPaid($request, $order)) {
             return redirect()->route('checkout.thankyou');
         }
 
@@ -243,14 +243,14 @@ class CheckoutController extends Controller
 
         $order = Order::where('id', '=', $request->session()->get('order'))->first();
 
+        // Already paid (e.g. back button or a resubmitted form)
+        if ($this->alreadyPaid($request, $order)) {
+            return redirect()->route('checkout.thankyou');
+        }
+
         // Don't proceed if order is null
         if (is_null($order)) {
             return redirect('/cart');
-        }
-
-        // Already paid (e.g. back button or a resubmitted form)
-        if ($order->order_status_id == 3) {
-            return redirect()->route('checkout.thankyou');
         }
 
         // Claim the order so only one request can charge it. The update is
@@ -282,6 +282,8 @@ class CheckoutController extends Controller
             $order->charge_token = $body->response->token ?? null;
             $order->save();
 
+            $this->completePaidOrder($request, $order);
+
             return redirect()->route('checkout.thankyou')->with('success_message', 'Your payment has been successful.');
         }
 
@@ -298,6 +300,53 @@ class CheckoutController extends Controller
         // 5xx or any other response: the outcome is unknown, so keep the order
         // claimed rather than risk charging the card twice.
         return $this->paymentUnconfirmed($order, $status . ' ' . $result->getBody());
+    }
+
+    /**
+     * Email the receipt, then empty the cart and end the checkout. The paid
+     * order stays in the session so the thank-you page can show it, even on
+     * refresh.
+     */
+    private function completePaidOrder(Request $request, Order $order)
+    {
+        try {
+            $orderDetails = $this->getOrderDetails($request);
+            $orderDetails['subject'] = "Toad Gully Growers Invoice";
+
+            $pdf = PDF::loadView('emails.orders.paid', compact('orderDetails'));
+
+            Mail::send('emails.orders.paid', compact('orderDetails'), function ($message) use ($orderDetails, $pdf) {
+                $message->to($orderDetails["email"], $orderDetails["name"])
+                    ->bcc('sales@toadgully.com.au')
+                    ->subject($orderDetails["subject"])
+                    ->attachData($pdf->output(), "invoice.pdf");
+            });
+        } catch (\Throwable $e) {
+            // The card has been charged, so a failed email must not stop the
+            // checkout finishing.
+            report($e);
+        }
+
+        // TODO Send alert to TGG
+        // Mail::send(new OrderPaid($emailOrder));
+
+        Cart::instance('cart')->destroy();
+
+        $request->session()->forget(['customer', 'order']);
+        $request->session()->put('paid_order', $order->id);
+    }
+
+    /**
+     * True when the current order is paid, or the checkout has already
+     * finished with a paid order.
+     */
+    private function alreadyPaid(Request $request, ?Order $order)
+    {
+        if ($order) {
+            return $order->order_status_id == 3;
+        }
+
+        return $request->session()->has('paid_order');
     }
 
     /**
@@ -366,36 +415,19 @@ class CheckoutController extends Controller
     public function thankyou(Request $request)
     {
         $page = Page::where('slug', '=', 'thankyou')->first();
-        // update order status to paid
-        $order = Order::where('id', '=', $request->session()->get('order'))->first();
-        // dd($order);
-        // $order['order_status_id'] = 2; // Invoiced
-        // $order->save();
 
-        $cart = json_decode($order['cart']);
+        // Only shows the order. The receipt is emailed when the payment is
+        // made, so refreshing this page is safe.
+        $order = Order::find($request->session()->get('paid_order') ?? $request->session()->get('order'));
 
-        // send order email
-        $orderDetails = $this->getOrderDetails($request);
-        $orderDetails['subject'] = "Toad Gully Growers Invoice";
+        if (is_null($order) || $order->order_status_id != 3) {
+            return redirect('/cart');
+        }
 
-        $pdf = PDF::loadView('emails.orders.paid', compact('orderDetails'));
+        // Items as they were when the order was placed
+        $items = (array) json_decode($order->cart ?? '[]');
 
-        Mail::send('emails.orders.paid', compact('orderDetails'), function ($message) use ($orderDetails, $pdf) {
-            $message->to($orderDetails["email"], $orderDetails["name"])
-                ->bcc('sales@toadgully.com.au')
-                ->subject($orderDetails["subject"])
-                ->attachData($pdf->output(), "invoice.pdf");
-        });
-        // TODO Send alert to TGG
-        // Mail::send(new OrderPaid($emailOrder));
-
-        // destroy cart
-        Cart::instance('cart')->destroy();
-
-        // Forget order & customer
-        $request->session()->forget(['customer', 'order']);
-
-        return view('checkout.thankyou', ['page' => $page, 'order' => $orderDetails, 'cart' => $cart]);
+        return view('checkout.thankyou', ['page' => $page, 'order' => $order, 'items' => $items]);
     }
 
 

@@ -26,7 +26,7 @@
             {{ $order->city }}, {{ $order->postcode }} {{ $order->state }}</p>
 
         <table class="table">
-            @foreach ($order->products as $item)
+            @foreach ($items as $item)
             <tr>
                 <td>
                     {{ $item->name }}
