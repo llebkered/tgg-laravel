@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\Order;
 use App\Models\Page;
 use App\Models\Product;
+use App\Models\Variation;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -77,11 +78,22 @@ class CheckoutControllerTest extends TestCase
     private function correctlyFillCart()
     {
         return $this->post('/cart', [
-            'id' => '293ad',
-            'name' => 'Product 1',
-            'qty' => 1,
-            'price' => 100,
+            'id' => Variation::where('slug', 'small')->value('id'),
         ]);
+    }
+
+    private function addVariationToCart($price)
+    {
+        $variation = Product::first()->variations()->create([
+            'title' => 'Custom Pack',
+            'slug' => 'custom',
+            'image' => 'https://via.placeholder.com/150',
+            'description' => 'A pack at a set price',
+            'price' => $price,
+            'is_published' => true,
+        ]);
+
+        return $this->post('/cart', ['id' => $variation->id]);
     }
 
     private function correctlyFillCheckoutForm()
@@ -204,7 +216,7 @@ class CheckoutControllerTest extends TestCase
     public function test_order_records_the_gst_included_in_the_total()
     {
         $this->createCheckoutPage(true);
-        $this->post('/cart', ['id' => '293ad', 'name' => 'Product 1', 'qty' => 1, 'price' => 110]);
+        $this->addVariationToCart(110);
 
         $this->correctlyFillCheckoutForm();
 
@@ -216,7 +228,7 @@ class CheckoutControllerTest extends TestCase
     public function test_order_total_of_a_thousand_dollars_or_more_is_saved()
     {
         $this->createCheckoutPage(true);
-        $this->post('/cart', ['id' => '293ad', 'name' => 'Product 1', 'qty' => 1, 'price' => 1234.50]);
+        $this->addVariationToCart(1234.50);
 
         $this->correctlyFillCheckoutForm()->assertRedirect('/checkout/delivery');
 

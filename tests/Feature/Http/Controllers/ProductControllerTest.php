@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers;
 use Tests\TestCase;
 use App\Models\Page;
 use App\Models\Product;
+use App\Models\Variation;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -147,10 +148,7 @@ class ProductControllerTest extends TestCase
         $this->setupProductPage(true);
 
         $response = $this->post('/cart', [
-            'id' => '293ad',
-            'name' => 'Product 1',
-            'qty' => 1,
-            'price' => 100,
+            'id' => Variation::where('slug', 'small')->value('id'),
         ]);
 
         // $response->dumpHeaders();
@@ -160,6 +158,10 @@ class ProductControllerTest extends TestCase
         // assert that the product was added to the cart
         $response->assertStatus(302);
         $response->assertSessionHasNoErrors();
+
+        $item = Cart::instance('cart')->content()->first();
+        $this->assertSame('Product 1 - Small Pack', $item->name);
+        $this->assertEquals(100, $item->price);
 
     }
 }

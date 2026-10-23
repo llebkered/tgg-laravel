@@ -91,10 +91,7 @@ class CartControllerTest extends TestCase
 
         // fake adding an item to the cart
         $response = $this->post('/cart', [
-            'id' => '293ad',
-            'name' => 'Product 1',
-            'qty' => 1,
-            'price' => 100,
+            'id' => Variation::where('slug', 'small')->value('id'),
         ]);
 
         // check if the cart page loads
@@ -153,6 +150,41 @@ class CartControllerTest extends TestCase
         $this->get('/cart')->assertOk()->assertSee('Product 1 - Small Pack');
     }
 
+    public function test_price_and_name_come_from_the_product_not_the_form()
+    {
+        $this->createCartPage();
+        $small = Variation::where('slug', 'small')->first();
+
+        $this->post('/cart', ['id' => $small->id, 'name' => 'Free stuff', 'price' => 0.01]);
+
+        $item = Cart::instance('cart')->content()->first();
+        $this->assertSame('Product 1 - Small Pack', $item->name);
+        $this->assertEquals(100, $item->price);
+        $this->assertSame('100.00', Cart::instance('cart')->total(2, '.', ''));
+    }
+
+    public function test_unavailable_items_cannot_be_added()
+    {
+        $this->createCartPage();
+        $small = Variation::where('slug', 'small')->first();
+        $medium = Variation::where('slug', 'medium')->first();
+        $medium->update(['is_published' => false]);
+
+        // Unknown variation, unpublished variation
+        $this->post('/cart', ['id' => 99999])->assertSessionHas('danger_message');
+        $this->post('/cart', ['id' => $medium->id])->assertSessionHas('danger_message');
+
+        // Out of stock product
+        $small->product->update(['stocked' => false]);
+        $this->post('/cart', ['id' => $small->id])->assertSessionHas('danger_message');
+
+        // Unpublished product
+        $small->product->update(['stocked' => true, 'published' => false]);
+        $this->post('/cart', ['id' => $small->id])->assertSessionHas('danger_message');
+
+        $this->assertSame(0, Cart::instance('cart')->count());
+    }
+
     public function test_cart_can_remove_item()
     {
         // $this->withoutExceptionHandling();
@@ -161,10 +193,7 @@ class CartControllerTest extends TestCase
 
         // fake adding an item to the cart
         $response = $this->post('/cart', [
-            'id' => '293ad',
-            'name' => 'Product 1',
-            'qty' => 1,
-            'price' => 100,
+            'id' => Variation::where('slug', 'small')->value('id'),
         ]);
 
         // check if the cart page loads

@@ -47,8 +47,6 @@
                         <form action="{{ route('cart.store') }}" method="POST">
                             {{ csrf_field() }}
                             <input type="hidden" name="id" value="{{ $variation->id}}">
-                            <input type="hidden" name="name" value="{{ $product->title ." - ".$variation->title }}">
-                            <input type="hidden" name="price" value="{{ $variation->price }}">
                             <button type="submit" class="button is-primary is-outlined">Add to cart</button>
                         </form>
                     </div>

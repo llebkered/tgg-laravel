@@ -51,17 +51,19 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
+        // Only the variation id comes from the form. The name and price come
+        // from the database, so they can't be changed in the browser.
+        $variation = Variation::with('product')->find($request->input('id'));
+        $product = $variation?->product;
 
-        Cart::instance('cart')->add($request->id, $request->name, 1, $request->price);
-        // ->associate('App\Models\Product');
+        // Only items the product page offers can be added
+        if (! $variation?->is_published || ! $product?->published || ! $product->stocked) {
+            return back()->with('danger_message', 'Sorry, that item is not available.');
+        }
 
-        // redirect back to the cart page and display a success message
+        Cart::instance('cart')->add($variation->id, $product->title . ' - ' . $variation->title, 1, $variation->price);
+
         return back()->with('success_message', 'Item was added to your cart.');
-
-
-
-
-        //return redirect()->route('cart.index')->with('success_message', 'Item was added to your cart.');
     }
 
     /**
