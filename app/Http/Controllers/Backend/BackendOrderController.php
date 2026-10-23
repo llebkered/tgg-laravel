@@ -143,10 +143,6 @@ class BackendOrderController extends Controller
         // send order email
         $orderDetails = Order::find($id);
 
-        $products = json_decode($orderDetails->cart);
-
-        $orderDetails->products = $products;
-
         return view('backend.order.orderShipped')->with('order', $orderDetails);
     }
 
@@ -159,10 +155,6 @@ class BackendOrderController extends Controller
                 'tracking'
             ]
         ));
-
-        $products = json_decode($orderDetails->cart);
-
-        $orderDetails->products = $products;
         $orderDetails['subject'] = "Order from Toad Gully Growers has been shipped";
 
         Mail::send('emails.orders.shipped', compact('orderDetails'), function ($message) use ($orderDetails) {

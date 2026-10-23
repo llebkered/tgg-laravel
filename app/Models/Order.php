@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\OrderStatus;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +19,14 @@ class Order extends Model
     public static function gstIncluded($total)
     {
         return round($total / 11, 2);
+    }
+
+    /**
+     * The items ordered, as they were in the cart when the order was placed.
+     */
+    protected function products(): Attribute
+    {
+        return Attribute::get(fn () => (array) json_decode($this->cart ?? '[]'));
     }
 
     public function isPaid()

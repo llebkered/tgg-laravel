@@ -3,6 +3,9 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Enums\OrderStatus;
+use App\Mail\OrderInvoiceMail;
+use App\Mail\OrderPaidMail;
+use App\Mail\PaymentUnconfirmedMail;
 use App\Models\Order;
 use App\Models\Page;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -221,6 +224,21 @@ class CardPaymentTest extends TestCase
         Http::assertSentCount(1);
     }
 
+    public function test_gateway_error_alerts_staff()
+    {
+        $order = $this->createOrder();
+        $this->fakePin([502, ['error' => 'gateway_error']]);
+
+        $this->payByCard();
+
+        Mail::assertSent(PaymentUnconfirmedMail::class, function (PaymentUnconfirmedMail $mail) use ($order) {
+            return $mail->hasTo('sales@toadgully.com.au')
+                && $mail->hasSubject('Check card payment for order ' . $order->id)
+                && str_contains($mail->detail, 'gateway_error');
+        });
+        Mail::assertNotSent(OrderPaidMail::class);
+    }
+
     public function test_timeout_blocks_retries()
     {
         $order = $this->createOrder();
@@ -244,14 +262,19 @@ class CardPaymentTest extends TestCase
 
     public function test_successful_payment_emails_the_receipt_and_ends_the_checkout()
     {
-        Mail::spy();
         Cart::instance('cart')->add('1', 'Farm Pack', 1, 25.00);
         $order = $this->createOrder();
         $this->fakePin(self::PAID);
 
         $this->payByCard();
 
-        Mail::shouldHaveReceived('send')->once();
+        Mail::assertSent(OrderPaidMail::class, function (OrderPaidMail $mail) use ($order) {
+            return $mail->order->is($order)
+                && $mail->hasTo('john@test.com', 'John Doe')
+                && $mail->hasBcc('sales@toadgully.com.au')
+                && $mail->hasSubject('Toad Gully Growers Invoice');
+        });
+        Mail::assertSentCount(1);
         $this->assertSame(0, Cart::instance('cart')->count());
         $this->assertNull(session('order'));
         $this->assertSame($order->id, session('paid_order'));
@@ -259,7 +282,7 @@ class CardPaymentTest extends TestCase
 
     public function test_failed_receipt_email_still_completes_the_checkout()
     {
-        Mail::shouldReceive('send')->andThrow(new \RuntimeException('mail server down'));
+        Mail::shouldReceive('to')->andThrow(new \RuntimeException('mail server down'));
         $order = $this->createOrder();
         $this->fakePin(self::PAID);
 
@@ -278,11 +301,10 @@ class CardPaymentTest extends TestCase
         $this->fakePin(self::PAID);
         $this->payByCard();
 
-        Mail::spy();
         $this->get('/checkout/thankyou')->assertOk()->assertSee('John Doe')->assertSee('Farm Pack');
         $this->get('/checkout/thankyou')->assertOk()->assertSee('1 Main St');
 
-        Mail::shouldNotHaveReceived('send');
+        Mail::assertSentCount(1);
     }
 
     public function test_resubmitting_the_card_form_after_paying_shows_the_thank_you_page()
@@ -298,13 +320,12 @@ class CardPaymentTest extends TestCase
 
     public function test_direct_deposit_does_not_change_a_paid_order()
     {
-        Mail::spy();
         $order = $this->createOrder(['order_status_id' => OrderStatus::Paid->value]);
 
         $this->get('/checkout/directdeposit')->assertRedirect(route('checkout.thankyou'));
 
         $this->assertEquals(OrderStatus::Paid->value, $order->fresh()->order_status_id);
-        Mail::shouldNotHaveReceived('send');
+        Mail::assertNothingSent();
     }
 
     public function test_direct_deposit_after_paying_by_card_shows_the_thank_you_page()
@@ -320,7 +341,6 @@ class CardPaymentTest extends TestCase
 
     public function test_direct_deposit_is_blocked_while_a_card_payment_is_in_progress()
     {
-        Mail::spy();
         $order = $this->createOrder(['payment_started_at' => now()]);
 
         $response = $this->get('/checkout/directdeposit');
@@ -328,7 +348,7 @@ class CardPaymentTest extends TestCase
         $response->assertRedirect(route('checkout.card'));
         $response->assertSessionHas('danger_message');
         $this->assertEquals(OrderStatus::InCart->value, $order->fresh()->order_status_id);
-        Mail::shouldNotHaveReceived('send');
+        Mail::assertNothingSent();
     }
 
     public function test_thank_you_page_needs_a_paid_order()
@@ -337,5 +357,33 @@ class CardPaymentTest extends TestCase
 
         $this->createOrder();
         $this->get('/checkout/thankyou')->assertRedirect('/cart');
+    }
+
+    public function test_direct_deposit_emails_the_invoice_and_ends_the_checkout()
+    {
+        Cart::instance('cart')->add('1', 'Farm Pack', 1, 25.00);
+        $order = $this->createOrder(['cart' => json_encode(['row1' => ['name' => 'Farm Pack', 'price' => 25]])]);
+
+        $this->get('/checkout/directdeposit')->assertOk()->assertSee('Farm Pack');
+
+        $this->assertEquals(OrderStatus::Invoiced->value, $order->fresh()->order_status_id);
+        Mail::assertSent(OrderInvoiceMail::class, function (OrderInvoiceMail $mail) use ($order) {
+            return $mail->order->is($order)
+                && $mail->hasTo('john@test.com', 'John Doe')
+                && $mail->hasBcc('sales@toadgully.com.au');
+        });
+        Mail::assertSentCount(1);
+        $this->assertSame(0, Cart::instance('cart')->count());
+        $this->assertNull(session('order'));
+    }
+
+    public function test_failed_invoice_email_still_shows_the_direct_deposit_page()
+    {
+        Mail::shouldReceive('to')->andThrow(new \RuntimeException('mail server down'));
+        $order = $this->createOrder();
+
+        $this->get('/checkout/directdeposit')->assertOk()->assertSee('Your order number is');
+
+        $this->assertEquals(OrderStatus::Invoiced->value, $order->fresh()->order_status_id);
     }
 }

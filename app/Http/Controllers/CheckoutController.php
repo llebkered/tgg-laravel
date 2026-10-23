@@ -4,20 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Page;
 use App\Models\Order;
-use App\Mail\OrderPaid;
 use App\Models\Address;
 use App\Models\Customer;
-use App\Mail\OrderInvoice;
 use Illuminate\Http\Request;
 use App\Actions\ChargeOrder;
 use App\Enums\ChargeStatus;
 use App\Enums\OrderStatus;
+use App\Events\OrderInvoiced;
+use App\Events\OrderPaid;
 use App\Http\Requests\CheckoutCardRequest;
 use App\Http\Requests\CheckoutContactRequest;
 use App\Http\Requests\CheckoutDeliveryRequest;
-// use Barryvdh\DomPDF\Facade\Pdf;
-use PDF;
-use Illuminate\Support\Facades\Mail;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use App\Models\Variation;
 
@@ -236,37 +233,19 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Email the receipt, then empty the cart and end the checkout. The paid
-     * order stays in the session so the thank-you page can show it, even on
-     * refresh.
+     * Empty the cart, end the checkout and send the receipt. The paid order
+     * stays in the session so the thank-you page can show it, even on refresh.
      */
     private function completePaidOrder(Request $request, Order $order)
     {
-        try {
-            $orderDetails = $this->getOrderDetails($request);
-            $orderDetails['subject'] = "Toad Gully Growers Invoice";
-
-            $pdf = PDF::loadView('emails.orders.paid', compact('orderDetails'));
-
-            Mail::send('emails.orders.paid', compact('orderDetails'), function ($message) use ($orderDetails, $pdf) {
-                $message->to($orderDetails["email"], $orderDetails["name"])
-                    ->bcc('sales@toadgully.com.au')
-                    ->subject($orderDetails["subject"])
-                    ->attachData($pdf->output(), "invoice.pdf");
-            });
-        } catch (\Throwable $e) {
-            // The card has been charged, so a failed email must not stop the
-            // checkout finishing.
-            report($e);
-        }
-
-        // TODO Send alert to TGG
-        // Mail::send(new OrderPaid($emailOrder));
-
         Cart::instance('cart')->destroy();
 
         $request->session()->forget(['customer', 'order']);
         $request->session()->put('paid_order', $order->id);
+
+        // The card has been charged, so a failed email must not stop the
+        // checkout finishing. rescue() reports the error instead.
+        rescue(fn () => OrderPaid::dispatch($order));
     }
 
     /**
@@ -305,28 +284,14 @@ class CheckoutController extends Controller
         $order->order_status_id = OrderStatus::Invoiced->value;
         $order->save();
 
-        // send order email
-        $orderDetails = $this->getOrderDetails($request);
-
-        $orderDetails['subject'] = "Toad Gully Growers Invoice";
-
-        $pdf = PDF::loadView('emails.orders.invoice', compact('orderDetails'));
-
-        // Send invoice to customer. bcc TGG
-        Mail::send('emails.orders.invoice', compact('orderDetails'), function ($message) use ($orderDetails, $pdf) {
-            $message->to($orderDetails["email"], $orderDetails["name"])
-                ->bcc('sales@toadgully.com.au')
-                ->subject($orderDetails["subject"])
-                ->attachData($pdf->output(), "invoice.pdf");
-        });
-
-        // destroy cart
         Cart::instance('cart')->destroy();
-
-        // Forget order & customer
         $request->session()->forget(['customer', 'order']);
 
-        return view('checkout.directdeposit', ['page' => $page, 'order' => $orderDetails]);
+        // The order is placed and this page shows how to pay, so a failed
+        // email must not stop it showing. rescue() reports the error instead.
+        rescue(fn () => OrderInvoiced::dispatch($order));
+
+        return view('checkout.directdeposit', ['page' => $page, 'order' => $order]);
     }
 
 
@@ -342,44 +307,6 @@ class CheckoutController extends Controller
             return redirect('/cart');
         }
 
-        // Items as they were when the order was placed
-        $items = (array) json_decode($order->cart ?? '[]');
-
-        return view('checkout.thankyou', ['page' => $page, 'order' => $order, 'items' => $items]);
-    }
-
-
-
-
-
-    protected function getOrderDetails(Request $request)
-    {
-        // get current order
-        $order = Order::where('id', '=', $request->session()->get('order'))->first();
-
-        $products = Cart::instance('cart')->content();
-
-        $order["products"] = $products;
-
-
-        // if (count($products)>0) {
-        //     foreach ($products as $item){
-        //         $cartItems[] = $item->id;
-        //     }
-
-        //     $variations = Variation::find($cartItems);
-        //  }
-
-
-        // TODO attach variations to product to get product code
-
-        //  foreach ($order['products'] as $item ) {
-        //      $item->code = $variations[ $item->id ];
-        //     dd($item);
-        //  }
-
-
-
-        return $order;
+        return view('checkout.thankyou', ['page' => $page, 'order' => $order]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Actions;
 use App\Enums\ChargeStatus;
 use App\Enums\OrderStatus;
 use App\Libraries\Pin\PinPayments;
+use App\Mail\PaymentUnconfirmedMail;
 use App\Models\Order;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -77,14 +78,7 @@ class ChargeOrder
         Log::error('Card payment outcome unknown for order ' . $order->id . ': ' . $detail);
 
         try {
-            Mail::raw(
-                'The card payment for order ' . $order->id . ' (' . $order->name . ', ' . $order->email . ', $' . $order->total . ") could not be confirmed.\n\n"
-                . "Check the Pin Payments dashboard to see whether the card was charged, then update the order.\n\n"
-                . 'Pin response: ' . $detail,
-                function ($message) use ($order) {
-                    $message->to('sales@toadgully.com.au')->subject('Check card payment for order ' . $order->id);
-                }
-            );
+            Mail::to(config('tgg.sales_email'))->send(new PaymentUnconfirmedMail($order, $detail));
         } catch (\Throwable $e) {
             report($e);
         }
@@ -110,11 +104,11 @@ class ChargeOrder
     }
 
     /**
-     * The names of the items ordered, as saved on the order.
+     * The names of the items ordered.
      */
     private function description(Order $order)
     {
-        return collect((array) json_decode($order->cart ?? '[]'))
+        return collect($order->products)
             ->map(fn ($item) => $item->name . ' <br> ')
             ->implode('');
     }
