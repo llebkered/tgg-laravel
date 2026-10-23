@@ -13,6 +13,17 @@ class Order extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'payment_started_at' => 'datetime',
+    ];
+
+    /**
+     * How long a card payment can take. Pin calls time out after 60 seconds,
+     * so a payment started longer ago than this has finished one way or
+     * another.
+     */
+    public const PAYMENT_TIMEOUT_MINUTES = 2;
+
     /**
      * The GST in a GST-inclusive amount. At 10% GST that is 1/11 of the total.
      */
@@ -42,6 +53,26 @@ class Order extends Model
     public function isPaid()
     {
         return $this->order_status_id == OrderStatus::Paid->value;
+    }
+
+    /**
+     * A card payment was started but its result is unknown, so the order is
+     * blocked until staff check Pin. False while a payment is still running.
+     */
+    public function paymentNeedsChecking()
+    {
+        return ! $this->isPaid()
+            && $this->payment_started_at
+            && $this->payment_started_at->lte(now()->subMinutes(self::PAYMENT_TIMEOUT_MINUTES));
+    }
+
+    /**
+     * Limit a query to orders whose card payment needs checking.
+     */
+    public function scopePaymentNeedsChecking($query)
+    {
+        return $query->where('order_status_id', '!=', OrderStatus::Paid->value)
+            ->where('payment_started_at', '<=', now()->subMinutes(self::PAYMENT_TIMEOUT_MINUTES));
     }
 
     public function order_status()

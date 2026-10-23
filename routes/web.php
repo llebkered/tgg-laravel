@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Checkout;
 use App\Http\Controllers\PaulowniaController;
 use App\Http\Controllers\Backend\BackendController;
+use App\Http\Controllers\Backend\OrderPaymentController;
 use App\Http\Controllers\Backend\BackendAuthController;
 use App\Http\Controllers\Backend\BackendPageController;
 use App\Http\Controllers\Backend\BackendUserController;
@@ -95,6 +96,8 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
     Route::get('/orders/{order}/sendshippedemail', [BackendOrderController::class, 'showOrderShippedEmail'])->name('backend.orders.sendshippedemail');
     Route::post('/orders/{order}/sendshippedemail', [BackendOrderController::class, 'sendOrderShippedEmail']);
     Route::get('/orders/{order}/delete', [BackendOrderController::class, 'destroy'])->name('backend.orders.delete');
+    Route::post('/orders/{order}/payment/paid', [OrderPaymentController::class, 'markPaid'])->name('backend.orders.payment.paid');
+    Route::post('/orders/{order}/payment/release', [OrderPaymentController::class, 'release'])->name('backend.orders.payment.release');
     Route::get('/medialibary/{mediaId}/delete', [ MediaLibraryController::class, 'delete']);
 
     Route::resource('/pages', BackendPageController::class, ['as' => 'backend']);

@@ -78,9 +78,8 @@ class BackendOrderController extends Controller
             'Qld' => 'Queensland',
             'Vic' => 'Victoria'
         ];
-        $cart = json_decode($order->cart);
         $order_statuses = OrderStatus::all();
-        return view('backend.order.edit', compact(['cart', 'order', 'order_statuses', 'states']));
+        return view('backend.order.edit', compact(['order', 'order_statuses', 'states']));
     }
 
     /**

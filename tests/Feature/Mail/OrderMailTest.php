@@ -100,5 +100,6 @@ class OrderMailTest extends TestCase
         $mail->assertHasSubject('Check card payment for order ' . $order->id);
         $mail->assertSeeInText('John Doe, john@test.com, $110.00');
         $mail->assertSeeInText('Pin response: 502 {"error":"gateway_error"}');
+        $mail->assertSeeInText(route('backend.orders.edit', $order->id));
     }
 }

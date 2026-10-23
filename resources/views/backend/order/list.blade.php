@@ -26,7 +26,9 @@
             // dd($status['title']);
             @endphp
             {{ $status['title'] }} --}}
-     
+            @if ($order->paymentNeedsChecking())
+            <span class="tag is-warning">Payment unconfirmed</span>
+            @endif
 
         </td>
         <td><a href="{{ route('backend.orders.edit', $order->id ) }}"

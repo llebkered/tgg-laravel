@@ -25,6 +25,51 @@
 </section>
 
 <section>
+    @if ($order->paymentNeedsChecking())
+    <div class="container mb-6">
+        <div class="notification is-warning">
+            <p><strong>Card payment not confirmed.</strong>
+                A card payment was started on
+                {{ $order->payment_started_at->timezone('Australia/Melbourne')->format('j M Y, g:i a') }}
+                but its result is unknown, so the order can't be charged again until it's resolved.</p>
+            <p class="mt-2">Check the Pin Payments dashboard for a charge to {{ $order->email }}
+                for ${{ number_format($order->total, 2) }}, then:</p>
+
+            <div class="columns mt-4">
+                <div class="column">
+                    <form action="{{ route('backend.orders.payment.paid', $order->id) }}" method="POST"
+                        onsubmit="return confirm('Mark order #{{ $order->id }} as paid?')">
+                        @csrf
+                        <div class="field">
+                            <label class="label" for="charge_token">Pin charge token (optional)</label>
+                            <div class="control">
+                                <input class="input" type="text" id="charge_token" name="charge_token" placeholder="ch_...">
+                            </div>
+                        </div>
+                        <label class="checkbox">
+                            <input type="checkbox" name="email_receipt" value="1" checked>
+                            Email the receipt to the customer
+                        </label>
+                        <div class="mt-3">
+                            <button type="submit" class="button is-success">The card was charged: mark as paid</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="column">
+                    <form action="{{ route('backend.orders.payment.release', $order->id) }}" method="POST"
+                        onsubmit="return confirm('Release order #{{ $order->id }} so it can be paid again?')">
+                        @csrf
+                        <p>If there's no charge in Pin, release the order so it can be paid again.</p>
+                        <div class="mt-3">
+                            <button type="submit" class="button is-danger is-outlined">No charge in Pin: release the order</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     {{-- <div class="container">
 
         <div class="columns has-background-light mb-6">
@@ -170,7 +215,7 @@
             <div class="content">
                 <h3>Order Items</h3>
                 <table>
-                    @foreach ($cart as $item)
+                    @foreach ($order->products as $item)
                     <tr>
                         <td>{{ $item->qty }} x {{ $item->name }} {{ $item->qty }}</td>
                         <td class="has-text-right"> ${{ $item->subtotal }}</td>
