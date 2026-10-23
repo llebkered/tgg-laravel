@@ -14,6 +14,7 @@ class Order extends Model
     protected $guarded = [];
 
     protected $casts = [
+        'order_status_id' => OrderStatus::class,
         'payment_started_at' => 'datetime',
     ];
 
@@ -52,7 +53,7 @@ class Order extends Model
 
     public function isPaid()
     {
-        return $this->order_status_id == OrderStatus::Paid->value;
+        return $this->order_status_id === OrderStatus::Paid;
     }
 
     /**

@@ -50,7 +50,7 @@ class ChargeOrder
         }
 
         if ($response->status() == 201) {
-            $order->order_status_id = OrderStatus::Paid->value;
+            $order->order_status_id = OrderStatus::Paid;
             $order->charge_token = $response->json('response.token');
             $order->save();
 

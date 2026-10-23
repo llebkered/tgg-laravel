@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\Order;
-use App\Models\OrderStatus;
-use App\Enums\OrderStatus as OrderStatusId;
+use App\Enums\OrderStatus;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Resources\OrderResource;
@@ -20,11 +20,9 @@ class BackendOrderController extends Controller
     public function index()
     {
         $orders = Order::orderBy('id', 'DESC')->get();
-        $openOrders = Order::whereIn('order_status_id', OrderStatusId::open())->orderBy('id', 'DESC')->get();
+        $openOrders = Order::whereIn('order_status_id', OrderStatus::open())->orderBy('id', 'DESC')->get();
 
-        $order_statuses = OrderStatus::all();
-
-        return view('backend.order.index', compact(['orders', 'openOrders', 'order_statuses']));
+        return view('backend.order.index', compact(['orders', 'openOrders']));
     }
 
     /**
@@ -78,7 +76,7 @@ class BackendOrderController extends Controller
             'Qld' => 'Queensland',
             'Vic' => 'Victoria'
         ];
-        $order_statuses = OrderStatus::all();
+        $order_statuses = OrderStatus::cases();
         return view('backend.order.edit', compact(['order', 'order_statuses', 'states']));
     }
 
@@ -91,6 +89,9 @@ class BackendOrderController extends Controller
      */
     public function update(Order $order, Request $request)
     {
+        $request->validate([
+            'order_status_id' => ['required', Rule::enum(OrderStatus::class)],
+        ]);
 
 
         // update data

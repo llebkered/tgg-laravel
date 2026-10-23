@@ -34,7 +34,7 @@ class DirectDepositController extends Controller
             return redirect()->route('checkout.card')->with('danger_message', self::PAYMENT_IN_PROGRESS);
         }
 
-        $order->order_status_id = OrderStatus::Invoiced->value;
+        $order->order_status_id = OrderStatus::Invoiced;
         $order->save();
 
         Cart::instance('cart')->destroy();

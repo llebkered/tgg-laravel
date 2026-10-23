@@ -35,7 +35,7 @@ class ContactController extends Controller
 
         $order = Order::create([
             'customer_id' => $customer->id,
-            'order_status_id' => OrderStatus::InCart->value,
+            'order_status_id' => OrderStatus::InCart,
             'cart' => json_encode($cart->content()),
             'tax' => $cart->tax(2, '.', ''),
             'gst' => Order::gstIncluded($total),

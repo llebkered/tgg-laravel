@@ -3,8 +3,8 @@
 namespace App\Enums;
 
 /**
- * Order status ids. These match the rows of the order_statuses table, which
- * holds the titles shown in the admin.
+ * Order status ids. Order::$order_status_id is cast to this enum. The ids
+ * match the rows of the order_statuses table.
  */
 enum OrderStatus: int
 {
@@ -15,6 +15,22 @@ enum OrderStatus: int
     case OnHold = 5;
     case Cancelled = 6;
     case Refunded = 7;
+
+    /**
+     * The name shown to staff. Matches the order_statuses table titles.
+     */
+    public function label(): string
+    {
+        return match ($this) {
+            self::InCart => 'In Cart',
+            self::Invoiced => 'Invoiced',
+            self::Paid => 'Paid',
+            self::Shipped => 'Shipped',
+            self::OnHold => 'On Hold',
+            self::Cancelled => 'Cancelled',
+            self::Refunded => 'Refunded',
+        };
+    }
 
     /**
      * Statuses of orders that still need work.

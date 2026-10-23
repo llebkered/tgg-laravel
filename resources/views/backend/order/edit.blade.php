@@ -113,10 +113,9 @@
                     <div class="control">
                         <div class="select">
                             <select name="order_status_id">
-                                @foreach ($order_statuses as $key => $value)
-                                <option value="{{ $value->id }}"
-                                    {{ ($order->order_status_id == $value->id) ? 'selected' : ''}}>
-                                    {{ $value->title }}</option>
+                                @foreach ($order_statuses as $status)
+                                <option value="{{ $status->value }}" @selected($order->order_status_id === $status)>
+                                    {{ $status->label() }}</option>
                                 @endforeach
                             </select>
                         </div>

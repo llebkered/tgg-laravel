@@ -17,15 +17,7 @@
             @if ($order->line2){{$order->line2}}<br /> @endif
             {{ $order->city }}, {{ $order->state }} {{ $order->postcode }}</td>
         <td>
-            {{-- {{ $order->order_status->title }} --}}
-            {{ $order->order_status }}
-            {{ $order->order_status_id }}
-            {{-- {{ $order_statuses[$order->order_status_id]->title }} --}}
-            {{-- @php
-            $status = (array)json_decode(json_encode($order->order_status));
-            // dd($status['title']);
-            @endphp
-            {{ $status['title'] }} --}}
+            {{ $order->order_status_id?->label() }}
             @if ($order->paymentNeedsChecking())
             <span class="tag is-warning">Payment unconfirmed</span>
             @endif
