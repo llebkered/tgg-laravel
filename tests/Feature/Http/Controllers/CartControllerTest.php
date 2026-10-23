@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers;
 use Tests\TestCase;
 use App\Models\Page;
 use App\Models\Product;
+use App\Models\Variation;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -98,6 +99,15 @@ class CartControllerTest extends TestCase
 
         // check if the cart page loads
         $response->assertStatus(302);
+    }
+
+    public function test_cart_shows_the_gst_included_in_the_total()
+    {
+        $this->createCartPage();
+        $variation = Variation::where('slug', 'small')->first();
+        $this->post('/cart', ['id' => $variation->id, 'name' => 'Small Pack', 'qty' => 1, 'price' => 100]);
+
+        $this->get('/cart')->assertOk()->assertSeeInOrder(['Includes GST', '$9.09']);
     }
 
     public function test_cart_can_remove_item()

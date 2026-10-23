@@ -11,6 +11,14 @@ class Order extends Model
 
     protected $guarded = [];
 
+    /**
+     * The GST in a GST-inclusive amount. At 10% GST that is 1/11 of the total.
+     */
+    public static function gstIncluded($total)
+    {
+        return round($total / 11, 2);
+    }
+
     public function order_status()
     {
         // return ['orderStatus'];

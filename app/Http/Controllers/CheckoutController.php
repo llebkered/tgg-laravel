@@ -60,9 +60,11 @@ class CheckoutController extends Controller
         // $orderDetails['customer_id']  = $request->session()->get('customer');
         $orderDetails['order_status_id'] = 1;
         $orderDetails['cart'] = json_encode(Cart::instance('cart')->content());
-        $orderDetails['tax'] = Cart::instance('cart')->tax();
-        $orderDetails['gst'] = number_format(str_replace(',', '', Cart::instance('cart')->total()) / 10, 2); //(float)Cart::total() / 10;
-        $orderDetails['total'] = Cart::instance('cart')->total();
+        // Unformatted amounts, so totals of $1,000 or more save correctly
+        $total = Cart::instance('cart')->total(2, '.', '');
+        $orderDetails['tax'] = Cart::instance('cart')->tax(2, '.', '');
+        $orderDetails['gst'] = Order::gstIncluded($total);
+        $orderDetails['total'] = $total;
         $orderDetails['name'] = $request->post('name');
         $orderDetails['email'] = $request->post('email');
         $orderDetails['phone'] = $request->post('phone');

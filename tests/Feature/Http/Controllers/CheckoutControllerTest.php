@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers;
 
 use Tests\TestCase;
+use App\Models\Order;
 use App\Models\Page;
 use App\Models\Product;
 use Illuminate\Support\Facades\Http;
@@ -198,6 +199,30 @@ class CheckoutControllerTest extends TestCase
         $response = $this->correctlyFillCheckoutForm();
 
         $response->assertRedirect('/checkout/delivery');
+    }
+
+    public function test_order_records_the_gst_included_in_the_total()
+    {
+        $this->createCheckoutPage(true);
+        $this->post('/cart', ['id' => '293ad', 'name' => 'Product 1', 'qty' => 1, 'price' => 110]);
+
+        $this->correctlyFillCheckoutForm();
+
+        $order = Order::first();
+        $this->assertEquals(110.00, $order->total);
+        $this->assertEquals(10.00, $order->gst);
+    }
+
+    public function test_order_total_of_a_thousand_dollars_or_more_is_saved()
+    {
+        $this->createCheckoutPage(true);
+        $this->post('/cart', ['id' => '293ad', 'name' => 'Product 1', 'qty' => 1, 'price' => 1234.50]);
+
+        $this->correctlyFillCheckoutForm()->assertRedirect('/checkout/delivery');
+
+        $order = Order::first();
+        $this->assertEquals(1234.50, $order->total);
+        $this->assertEquals(112.23, $order->gst);
     }
 
     public function test_delivery_form_should_show_after_contact_info()

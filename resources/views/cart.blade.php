@@ -32,7 +32,7 @@
                 @foreach(Cart::instance('cart')->content() as $row)
                 <tr>
                     <td>
-                        <img src="{{ $variations[$i]->product->getFirstMedia('featured_image')->getUrl('thumb') }}"
+                        <img src="{{ $variations[$i]->product->getFirstMediaUrl('featured_image', 'thumb') }}"
                             alt="{{ $row->name }}">
                     </td>
                     <td>{{ $variations[$i]->product->code }}
@@ -71,7 +71,7 @@
                 </tr>
                 <tr>
                     <td colspan="3">&nbsp;</td>
-                    <td class="has-text-right">GST</td>
+                    <td class="has-text-right">Includes GST</td>
                     <td class="has-text-right">${{ $gst }}</td>
                     <td></td>
                     <td></td>

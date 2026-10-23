@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Page;
 use NumberFormatter;
 use App\Models\Variation;
@@ -29,7 +30,7 @@ class CartController extends Controller
         $variations = [];
         $cart = Cart::instance('cart')->content();
 
-        $gst = number_format(str_replace(',', '', Cart::total()) / 10, 2);
+        $gst = number_format(Order::gstIncluded(Cart::instance('cart')->total(2, '.', '')), 2);
 
         if (count($cart) > 0) {
             foreach ($cart as $item) {
