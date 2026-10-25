@@ -13,6 +13,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class CardPaymentTest extends TestCase
@@ -120,6 +121,54 @@ class CardPaymentTest extends TestCase
                 && $request['metadata'] === ['order_id' => (string) $order->id]
                 && $request['email'] === 'john@test.com';
         });
+    }
+
+    /**
+     * Pin's test cards for a successful charge.
+     * https://pinpayments.com/developers/api-reference/test-cards
+     */
+    public static function acceptedCards(): array
+    {
+        return [
+            'Visa' => ['4200000000000000', '123'],
+            'Mastercard' => ['5520000000000000', '123'],
+            'Mastercard 2-series' => ['2223000048400011', '123'],
+            'American Express' => ['372000000000000', '1234'],
+        ];
+    }
+
+    #[DataProvider('acceptedCards')]
+    public function test_each_card_brand_is_sent_to_pin($number, $cvc)
+    {
+        $this->createOrder();
+        $this->fakePin(self::PAID);
+
+        $this->payByCard(['number' => $number, 'cvc' => $cvc])
+            ->assertSessionHasNoErrors()
+            ->assertRedirect(route('checkout.thankyou'));
+
+        Http::assertSent(fn (Request $request) => $request['card']['number'] === $number);
+    }
+
+    public function test_mistyped_card_number_is_explained_without_contacting_pin()
+    {
+        $this->createOrder();
+
+        $response = $this->payByCard(['number' => '4200000000000001']);
+
+        $response->assertSessionHasErrors(['number' => 'The card number is not valid. Please check it for typing mistakes.']);
+        Http::assertNothingSent();
+
+        // and the customer sees it on the card form
+        $this->get(route('checkout.card'))->assertSee('The card number is not valid. Please check it for typing mistakes.');
+    }
+
+    public function test_wrong_length_security_code_is_explained()
+    {
+        $this->createOrder();
+
+        $this->payByCard(['number' => '372000000000000', 'cvc' => '123'])
+            ->assertSessionHasErrors(['cvc' => 'Please check the security code (CVC). It is the 3 digits on the back of the card, or 4 digits on the front for American Express.']);
     }
 
     public function test_missing_pin_key_fails_without_blocking_the_order()

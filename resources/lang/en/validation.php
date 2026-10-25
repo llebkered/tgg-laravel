@@ -129,6 +129,19 @@ return [
     |
     */
 
+    // Messages for the card payment form's card rules (laravel-validation-rules/credit-card)
+    'credit_card' => [
+        'card_invalid' => 'Please check the card number. We accept Visa, Mastercard and American Express.',
+        'card_pattern_invalid' => 'Please check the card number. We accept Visa, Mastercard and American Express.',
+        'card_length_invalid' => 'The card number is the wrong length. Please check it and try again.',
+        'card_checksum_invalid' => 'The card number is not valid. Please check it for typing mistakes.',
+        'card_cvc_invalid' => 'Please check the security code (CVC). It is the 3 digits on the back of the card, or 4 digits on the front for American Express.',
+        'card_expiration_month_invalid' => 'Please check the expiry month.',
+        'card_expiration_year_invalid' => 'Please check the expiry year. The card may have expired.',
+        'card_expiration_date_invalid' => 'The card has expired. Please check the expiry date or use another card.',
+        'card_expiration_date_format_invalid' => 'Please check the expiry date.',
+    ],
+
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
