@@ -16,6 +16,8 @@
         <li><a href="{{ route('backend.products.index') }}"><span class="material-icons">nature</span> Products</a></li>
         <li><a href="{{ route('backend.orders.index') }}"><span class="material-icons">payments</span> Orders</a></li>
         <li><a href="{{ route('backend.users') }}"><span class="material-icons">supervised_user_circle</span> Users</a></li>
+        <li><a href="{{ route('backend.guide') }}"><span class="material-icons">help_outline</span> Help</a></li>
+        <li><a href="{{ route('backend.guide', 'developer') }}"><span class="material-icons">code</span> Developer Guide</a></li>
     </ul>
     <hr class="navbar-divider">
     <ul class="menu-list">
