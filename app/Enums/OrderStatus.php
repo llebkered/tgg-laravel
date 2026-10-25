@@ -39,4 +39,13 @@ enum OrderStatus: int
     {
         return [self::InCart->value, self::Invoiced->value, self::Paid->value];
     }
+
+    /**
+     * Statuses of orders that have been paid for or closed off, so an
+     * unfinished card payment no longer needs checking.
+     */
+    public static function settled(): array
+    {
+        return [self::Paid->value, self::Shipped->value, self::Cancelled->value, self::Refunded->value];
+    }
 }

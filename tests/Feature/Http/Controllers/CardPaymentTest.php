@@ -157,6 +157,18 @@ class CardPaymentTest extends TestCase
         Http::assertSentCount(0);
     }
 
+    public function test_settled_orders_are_never_charged()
+    {
+        // e.g. a shipped order whose earlier unconfirmed payment was released
+        foreach ([OrderStatus::Shipped, OrderStatus::Cancelled, OrderStatus::Refunded] as $status) {
+            $this->createOrder(['order_status_id' => $status->value]);
+
+            $this->payByCard()->assertSessionHas('danger_message');
+        }
+
+        Http::assertSentCount(0);
+    }
+
     public function test_declined_card_can_be_retried()
     {
         $order = $this->createOrder();

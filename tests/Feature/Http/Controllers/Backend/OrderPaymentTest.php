@@ -67,6 +67,21 @@ class OrderPaymentTest extends TestCase
         }
     }
 
+    public function test_order_screen_hides_the_panel_once_the_order_has_moved_on_from_paid()
+    {
+        $this->signInAsAdmin();
+
+        foreach ([OrderStatus::Shipped, OrderStatus::Cancelled, OrderStatus::Refunded] as $status) {
+            $order = $this->order(['order_status_id' => $status->value, 'payment_started_at' => now()->subHour()]);
+
+            $this->get(route('backend.orders.edit', $order->id))
+                ->assertOk()
+                ->assertDontSee('Card payment not confirmed');
+        }
+
+        $this->get(route('backend.orders.index'))->assertOk()->assertDontSee('Payment unconfirmed');
+    }
+
     public function test_order_list_flags_unconfirmed_payments()
     {
         $this->signInAsAdmin();

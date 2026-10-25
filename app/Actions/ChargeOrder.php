@@ -31,8 +31,9 @@ class ChargeOrder
 
         // Claim the order so only one request can charge it. The update is
         // atomic, so a double click or resubmit finds the order already claimed.
+        // Orders already paid for or closed off (e.g. shipped) are never charged.
         $claimed = Order::where('id', '=', $order->id)
-            ->where('order_status_id', '!=', OrderStatus::Paid->value)
+            ->whereNotIn('order_status_id', OrderStatus::settled())
             ->whereNull('payment_started_at')
             ->update(['payment_started_at' => now()]);
 

@@ -63,7 +63,7 @@ class Order extends Model
      */
     public function paymentNeedsChecking()
     {
-        return ! $this->isPaid()
+        return ! in_array($this->order_status_id?->value, OrderStatus::settled(), true)
             && $this->payment_started_at
             && $this->payment_started_at->lte(now()->subMinutes(self::PAYMENT_TIMEOUT_MINUTES));
     }
@@ -73,7 +73,7 @@ class Order extends Model
      */
     public function scopePaymentNeedsChecking($query)
     {
-        return $query->where('order_status_id', '!=', OrderStatus::Paid->value)
+        return $query->whereNotIn('order_status_id', OrderStatus::settled())
             ->where('payment_started_at', '<=', now()->subMinutes(self::PAYMENT_TIMEOUT_MINUTES));
     }
 
