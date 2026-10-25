@@ -139,12 +139,25 @@ Occasionally the site sends a card payment to Pin Payments (the card processor) 
 **To resolve it:**
 
 1. Open the order. A yellow **Card payment not confirmed** box shows when the payment was attempted, the customer's email and the amount.
-2. Sign in to the **Pin Payments dashboard** and look for a charge to that email for that amount, at about that time.
+2. Read the **Pin status** line in the box. The site asks Pin automatically when you open the order and tells you what it found:
+   - **Charged**: Pin has one successful charge for this order. Its charge token is already filled in.
+   - **2 possible charges** (or more): check the list under **Card payment in Pin** and pick the right one.
+   - **Not charged**: Pin only has a failed attempt, for example a declined card.
+   - **No charge found**: Pin has no successful charge to the customer's email for this amount around that time.
+   - **Couldn't check**: Pin didn't answer. Sign in to the **Pin Payments dashboard** and search for the customer's email instead.
+
+   The full list of charges Pin found is shown under **Card payment in Pin**, with the amount, time, result and token of each.
 3. Then do one of these:
-   - **If there is a charge:** optionally paste the Pin charge token (it starts with `ch_`) into the box, leave **Email the receipt to the customer** ticked if they should get a receipt, and click **The card was charged: mark as paid**. The order becomes **Paid**.
-   - **If there is no charge:** click **No charge in Pin: release the order**. The customer can then pay again. You may want to contact them to let them know.
+   The box's **What to do** line says which option to choose, and that option is marked **Recommended**.
+
+   - **The card was charged:** check the Pin charge token (it's filled in when the status is **Charged**), leave **Email the receipt to the customer** ticked if they should get a receipt, and click **Mark as paid**. The order becomes **Paid**. If several charges were found, click **Mark paid with this charge** next to the right one in the list instead.
+   - **The card wasn't charged:** click **Release the order**. The customer can then pay again. They aren't told automatically, so contact them to let them know.
 
 Once the order is Paid, Shipped, Cancelled or Refunded, the warning disappears and the order can't be charged again.
+
+### Checking a card payment in Pin
+
+Any order paid by card has a **Card payment in Pin** box showing its Pin charge token. Click **Check with Pin** to see the charge's current status in Pin, for example after a refund. Charges made from 25 October 2026 onwards also start with the order number in Pin, e.g. "Order #123", so you can search for them by order number in the Pin dashboard.
 
 ---
 
@@ -331,7 +344,7 @@ While it's on:
 | Find new orders to send | **Orders**, then sort by **Status** and look for **Paid** |
 | Confirm a direct deposit | Open the order and set the status to **Paid** |
 | Tell a customer their order has shipped | Open the order, click **Send Order Shipped Email**, then set the status to **Shipped** |
-| Fix a "Payment unconfirmed" order | Check Pin, then **mark as paid** or **release the order** |
+| Fix a "Payment unconfirmed" order | Open the order, read the **Pin status**, then click **Mark as paid** or **Release the order** |
 | Stop selling something for a while | Set the product to **Not In Stock**, or the variation to **Unavailable** |
 | Hide a product completely | Set the product to **Not Published** |
 | Change a price | Open the product and **edit** the variation |

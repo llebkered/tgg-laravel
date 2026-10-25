@@ -97,7 +97,7 @@ class CardPaymentTest extends TestCase
     public function test_charge_is_sent_to_pin_with_the_card_and_order_details()
     {
         config(['pin.host' => 'test-api.pinpayments.com', 'pin.secret' => 'secret_key']);
-        $this->createOrder([
+        $order = $this->createOrder([
             'line1' => '1 Main St',
             'city' => 'Melbourne',
             'postcode' => '3000',
@@ -107,7 +107,7 @@ class CardPaymentTest extends TestCase
 
         $this->payByCard();
 
-        Http::assertSent(function (Request $request) {
+        Http::assertSent(function (Request $request) use ($order) {
             return $request->url() === 'https://test-api.pinpayments.com/1/charges'
                 && $request->hasHeader('Authorization', 'Basic ' . base64_encode('secret_key:'))
                 && $request['card']['number'] === '4200000000000000'
@@ -116,7 +116,8 @@ class CardPaymentTest extends TestCase
                 && $request['card']['name'] === 'Johnny Doe'
                 && $request['card']['address_line1'] === '1 Main St'
                 && $request['card']['address_postcode'] === '3000'
-                && $request['description'] === 'Farm Pack <br> Estate Pack <br> '
+                && $request['description'] === 'Order #' . $order->id . ': Farm Pack <br> Estate Pack <br> '
+                && $request['metadata'] === ['order_id' => (string) $order->id]
                 && $request['email'] === 'john@test.com';
         });
     }
@@ -318,7 +319,7 @@ class CardPaymentTest extends TestCase
 
     public function test_thank_you_page_can_be_refreshed_without_sending_email()
     {
-        $this->createOrder([
+        $order = $this->createOrder([
             'line1' => '1 Main St',
             'cart' => json_encode(['row1' => ['name' => 'Farm Pack', 'price' => 25]]),
         ]);

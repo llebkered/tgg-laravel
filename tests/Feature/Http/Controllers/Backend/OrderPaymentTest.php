@@ -7,6 +7,7 @@ use App\Mail\OrderPaidMail;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
@@ -19,6 +20,8 @@ class OrderPaymentTest extends TestCase
         parent::setUp();
 
         Mail::fake();
+        // Opening an unconfirmed order asks Pin; these tests don't need its answer
+        Http::fake(['*/1/charges/search*' => Http::response(['response' => []])]);
     }
 
     private function signInAsAdmin(): void
@@ -49,8 +52,8 @@ class OrderPaymentTest extends TestCase
         $this->get(route('backend.orders.edit', $order->id))
             ->assertOk()
             ->assertSee('Card payment not confirmed')
-            ->assertSee('mark as paid')
-            ->assertSee('release the order');
+            ->assertSee('Mark as paid')
+            ->assertSee('Release the order');
     }
 
     public function test_order_screen_hides_the_panel_while_a_payment_is_running_or_when_paid()

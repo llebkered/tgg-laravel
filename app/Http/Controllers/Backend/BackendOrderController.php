@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Actions\FindOrderCharges;
 use App\Models\Order;
 use App\Enums\OrderStatus;
 use App\Mail\OrderShippedMail;
@@ -67,7 +68,7 @@ class BackendOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Order $order)
+    public function edit(Order $order, Request $request, FindOrderCharges $findCharges)
     {
         $states = [
             'ACT' => 'ACT',
@@ -78,7 +79,22 @@ class BackendOrderController extends Controller
             'Vic' => 'Victoria'
         ];
         $order_statuses = OrderStatus::cases();
-        return view('backend.order.edit', compact(['order', 'order_statuses', 'states']));
+
+        // Pin is asked only when staff ask, or when a card payment needs
+        // checking, so opening other orders never waits on Pin
+        $pinCharges = null;
+        $pinError = null;
+        if ($request->boolean('check_pin') || $order->paymentNeedsChecking()) {
+            try {
+                $pinCharges = $findCharges($order);
+            } catch (\Throwable $e) {
+                report($e);
+                $pinError = $e->getMessage();
+            }
+        }
+        $pinSearchDates = $findCharges->searchDates($order);
+
+        return view('backend.order.edit', compact(['order', 'order_statuses', 'states', 'pinCharges', 'pinError', 'pinSearchDates']));
     }
 
     /**

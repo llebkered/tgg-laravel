@@ -26,24 +26,72 @@
 
 <section>
     @if ($order->paymentNeedsChecking())
+    @php
+    $pinMatches = $pinCharges ? \App\Actions\FindOrderCharges::matching($pinCharges) : collect();
+    $pinFailed = $pinCharges ? $pinCharges->where('success', false)->where('matches_amount', true) : collect();
+    $pinMatch = $pinMatches->count() === 1 ? $pinMatches->first() : null;
+    // What Pin's answer means for this order: charged, several, not_charged or unknown
+    $pinVerdict = match (true) {
+        (bool) $pinError => 'unknown',
+        (bool) $pinMatch => 'charged',
+        $pinMatches->count() > 1 => 'several',
+        default => 'not_charged',
+    };
+    $amount = '$' . number_format($order->total, 2);
+    $startedAt = $order->payment_started_at->timezone('Australia/Melbourne');
+    @endphp
     <div class="container mb-6">
         <div class="notification is-warning">
-            <p><strong>Card payment not confirmed.</strong>
-                A card payment was started on
-                {{ $order->payment_started_at->timezone('Australia/Melbourne')->format('j M Y, g:i a') }}
-                but its result is unknown, so the order can't be charged again until it's resolved.</p>
-            <p class="mt-2">Check the Pin Payments dashboard for a charge to {{ $order->email }}
-                for ${{ number_format($order->total, 2) }}, then:</p>
+            <h2 class="title is-5 mb-3">Card payment not confirmed</h2>
+            <p>On {{ $startedAt->format('j M Y') }} at {{ $startedAt->format('g:i a') }}, {{ $order->email }} tried to pay
+                <strong>{{ $amount }}</strong> by card, but the website never heard back from Pin Payments.
+                It doesn't know whether the card was charged.</p>
+            <p class="mt-2">The customer was told not to pay again. The order can't be paid until you choose one of the options below.</p>
+
+            <div class="box mt-4 mb-4">
+                <p class="heading mb-1">Pin status</p>
+                @if ($pinVerdict === 'unknown')
+                <p class="is-size-5 mb-2"><span class="tag is-medium is-light">Couldn't check</span></p>
+                <p>{{ $pinError }}</p>
+                <p class="mt-2"><strong>What to do:</strong> Check the Pin Payments dashboard for a charge to {{ $order->email }} for {{ $amount }}
+                    around {{ $startedAt->format('g:i a') }} on {{ $startedAt->format('j M Y') }}, then choose an option below.</p>
+                @elseif ($pinVerdict === 'charged')
+                <p class="is-size-5 mb-2"><span class="tag is-medium is-success">Charged</span></p>
+                <p>Pin has a successful charge of ${{ number_format($pinMatch['amount'], 2) }} to {{ $order->email }}
+                    on {{ $pinMatch['created_at']?->timezone('Australia/Melbourne')->format('j M Y, g:i a') }}
+                    (<code>{{ $pinMatch['token'] }}</code>).</p>
+                <p class="mt-2"><strong>What to do:</strong> The card was charged, so mark the order as paid. The charge token is already filled in.</p>
+                @elseif ($pinVerdict === 'several')
+                <p class="is-size-5 mb-2"><span class="tag is-medium is-warning">{{ $pinMatches->count() }} possible charges</span></p>
+                <p>Pin has more than one successful charge that could be this order's.</p>
+                <p class="mt-2"><strong>What to do:</strong> Find the right one in the list under <a href="#pin">Card payment in Pin</a>
+                    and click <strong>Mark paid with this charge</strong> next to it.</p>
+                @else
+                <p class="is-size-5 mb-2"><span class="tag is-medium is-danger">{{ $pinFailed->isNotEmpty() ? 'Not charged' : 'No charge found' }}</span></p>
+                @if ($pinFailed->isNotEmpty())
+                <p>Pin only has a failed attempt for {{ $amount }}{{ $pinFailed->first()['message'] ? ' (' . $pinFailed->first()['message'] . ')' : '' }}.</p>
+                @else
+                <p>Pin has no successful charge to {{ $order->email }} for {{ $amount }}
+                    between {{ $pinSearchDates[0]->format('j M Y') }} and {{ $pinSearchDates[1]->copy()->subDay()->format('j M Y') }}.</p>
+                @endif
+                <p class="mt-2"><strong>What to do:</strong> The card wasn't charged, so release the order, then let the customer know they can pay again.</p>
+                @endif
+            </div>
 
             <div class="columns mt-4">
                 <div class="column">
                     <form action="{{ route('backend.orders.payment.paid', $order->id) }}" method="POST"
                         onsubmit="return confirm('Mark order #{{ $order->id }} as paid?')">
                         @csrf
+                        <h3 class="title is-6 mb-2">
+                            The card was charged
+                            @if ($pinVerdict === 'charged')<span class="tag is-success is-light">Recommended</span>@endif
+                        </h3>
+                        <p class="mb-3">The order becomes Paid.</p>
                         <div class="field">
-                            <label class="label" for="charge_token">Pin charge token (optional)</label>
+                            <label class="label" for="charge_token">Pin charge token <span class="has-text-weight-normal">(starts with ch_, optional, for your records)</span></label>
                             <div class="control">
-                                <input class="input" type="text" id="charge_token" name="charge_token" placeholder="ch_...">
+                                <input class="input" type="text" id="charge_token" name="charge_token" placeholder="ch_..." value="{{ $pinMatch['token'] ?? '' }}">
                             </div>
                         </div>
                         <label class="checkbox">
@@ -51,7 +99,7 @@
                             Email the receipt to the customer
                         </label>
                         <div class="mt-3">
-                            <button type="submit" class="button is-success">The card was charged: mark as paid</button>
+                            <button type="submit" class="button is-success {{ $pinVerdict === 'charged' ? '' : 'is-outlined' }}">Mark as paid</button>
                         </div>
                     </form>
                 </div>
@@ -59,9 +107,13 @@
                     <form action="{{ route('backend.orders.payment.release', $order->id) }}" method="POST"
                         onsubmit="return confirm('Release order #{{ $order->id }} so it can be paid again?')">
                         @csrf
-                        <p>If there's no charge in Pin, release the order so it can be paid again.</p>
+                        <h3 class="title is-6 mb-2">
+                            The card wasn't charged
+                            @if ($pinVerdict === 'not_charged')<span class="tag is-danger is-light">Recommended</span>@endif
+                        </h3>
+                        <p class="mb-3">Releasing the order lets the customer pay again. They aren't told automatically, so contact them to let them know.</p>
                         <div class="mt-3">
-                            <button type="submit" class="button is-danger is-outlined">No charge in Pin: release the order</button>
+                            <button type="submit" class="button is-danger {{ $pinVerdict === 'not_charged' ? '' : 'is-outlined' }}">Release the order</button>
                         </div>
                     </form>
                 </div>
@@ -69,6 +121,8 @@
         </div>
     </div>
     @endif
+
+    @include('backend.order.pin-charges')
 
     {{-- <div class="container">
 

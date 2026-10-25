@@ -105,15 +105,17 @@ class ChargeOrder
             'description' => $this->description($order),
             'amount' => (int) round($order->total * 100),
             'email' => $order->email,
+            // Lets a charge be found by order number in Pin
+            'metadata' => ['order_id' => (string) $order->id],
         ];
     }
 
     /**
-     * The names of the items ordered.
+     * The order number and the names of the items ordered.
      */
     private function description(Order $order)
     {
-        return collect($order->products)
+        return 'Order #' . $order->id . ': ' . collect($order->products)
             ->map(fn ($item) => $item->name . ' <br> ')
             ->implode('');
     }

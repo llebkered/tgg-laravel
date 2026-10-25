@@ -203,6 +203,15 @@ An order is shown as needing attention ("payment unconfirmed") when `payment_sta
 
 Both use the same atomic `paymentNeedsChecking()` scope, so two staff clicking at once can't both act.
 
+Each charge is sent to Pin with `Order #<id>:` at the start of its description and `metadata[order_id]`, so charges can be found by order in Pin.
+
+**Check with Pin.** The order screen's "Card payment in Pin" panel ([pin-charges.blade.php](../resources/views/backend/order/pin-charges.blade.php)) shows on orders with a `charge_token` or `payment_started_at`. Clicking **Check with Pin** reloads the order with `?check_pin=1`, and [FindOrderCharges](../app/Actions/FindOrderCharges.php) then asks Pin:
+
+- with a `charge_token`, it fetches that charge (`GET /1/charges/{token}`)
+- otherwise it searches charges by the order's email, from the day before the payment started to two days after (`GET /1/charges/search`), and flags charges matching the order total or its `order_id` metadata
+
+Pin is only asked when staff click the button, so opening an order never waits on Pin. Errors, timeouts (20 seconds) and a missing key are shown in the panel and reported, and the rest of the order screen still works.
+
 ### Order statuses
 
 `OrderStatus` is an int-backed enum ([app/Enums/OrderStatus.php](../app/Enums/OrderStatus.php)). `Order::$order_status_id` is cast to it, and the ids match the `order_statuses` table.

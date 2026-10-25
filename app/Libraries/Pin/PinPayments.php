@@ -2,6 +2,7 @@
 
 namespace App\Libraries\Pin;
 
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
@@ -17,12 +18,32 @@ class PinPayments
      */
     public function charge(array $charge): Response
     {
-        $this->ensureConfigured();
-
-        return Http::withBasicAuth(config('pin.secret'), '')
-            ->acceptJson()
+        return $this->request()
             ->timeout(60)
-            ->post('https://' . config('pin.host') . '/1/charges', $charge);
+            ->post($this->url('charges'), $charge);
+    }
+
+    /**
+     * Look up one charge by its token (ch_...). Errors are returned, as for
+     * charge().
+     */
+    public function findCharge(string $token): Response
+    {
+        return $this->request()
+            ->timeout(20)
+            ->get($this->url('charges/' . rawurlencode($token)));
+    }
+
+    /**
+     * Search charges. Pin matches `query` against the email, description and
+     * metadata, among others; dates are YYYY/MM/DD. Errors are returned, as
+     * for charge().
+     */
+    public function searchCharges(array $query): Response
+    {
+        return $this->request()
+            ->timeout(20)
+            ->get($this->url('charges/search'), $query);
     }
 
     /**
@@ -33,5 +54,17 @@ class PinPayments
         if (blank(config('pin.secret'))) {
             throw new RuntimeException('Pin Payments is not configured. Set PIN_SECRET in .env.');
         }
+    }
+
+    private function request(): PendingRequest
+    {
+        $this->ensureConfigured();
+
+        return Http::withBasicAuth(config('pin.secret'), '')->acceptJson();
+    }
+
+    private function url(string $path): string
+    {
+        return 'https://' . config('pin.host') . '/1/' . $path;
     }
 }
