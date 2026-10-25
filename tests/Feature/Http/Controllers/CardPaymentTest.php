@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
 use App\Mail\OrderInvoiceMail;
 use App\Mail\OrderPaidMail;
 use App\Mail\PaymentUnconfirmedMail;
@@ -83,6 +84,26 @@ class CardPaymentTest extends TestCase
         $order->refresh();
         $this->assertSame(OrderStatus::Paid, $order->order_status_id);
         $this->assertSame('ch_test123', $order->charge_token);
+    }
+
+    public function test_card_payment_records_the_payment_method()
+    {
+        $order = $this->createOrder();
+        $this->fakePin(self::PAID);
+
+        $this->payByCard();
+
+        $this->assertSame(PaymentMethod::Card, $order->fresh()->payment_method);
+    }
+
+    public function test_declined_card_does_not_record_a_payment_method()
+    {
+        $order = $this->createOrder();
+        $this->fakePin([400, ['error' => 'card_declined', 'error_description' => 'The card was declined']]);
+
+        $this->payByCard();
+
+        $this->assertNull($order->fresh()->payment_method);
     }
 
     public function test_charge_amount_is_the_order_total_in_cents()
@@ -441,6 +462,7 @@ class CardPaymentTest extends TestCase
         $this->get('/checkout/directdeposit')->assertOk()->assertSee('Farm Pack');
 
         $this->assertSame(OrderStatus::Invoiced, $order->fresh()->order_status_id);
+        $this->assertSame(PaymentMethod::DirectDeposit, $order->fresh()->payment_method);
         Mail::assertSent(OrderInvoiceMail::class, function (OrderInvoiceMail $mail) use ($order) {
             return $mail->order->is($order)
                 && $mail->hasTo('john@test.com', 'John Doe')

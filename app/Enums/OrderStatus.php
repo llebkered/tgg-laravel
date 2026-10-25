@@ -33,11 +33,12 @@ enum OrderStatus: int
     }
 
     /**
-     * Statuses of orders that still need work.
+     * Statuses of orders that still need work. In Cart orders are left out:
+     * they're checkouts the customer hasn't finished, often abandoned.
      */
     public static function open(): array
     {
-        return [self::InCart->value, self::Invoiced->value, self::Paid->value];
+        return [self::Invoiced->value, self::Paid->value];
     }
 
     /**

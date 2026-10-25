@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Enums\ChargeStatus;
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
 use App\Libraries\Pin\PinPayments;
 use App\Mail\PaymentUnconfirmedMail;
 use App\Models\Order;
@@ -52,6 +53,7 @@ class ChargeOrder
 
         if ($response->status() == 201) {
             $order->order_status_id = OrderStatus::Paid;
+            $order->payment_method = PaymentMethod::Card;
             $order->charge_token = $response->json('response.token');
             $order->save();
 

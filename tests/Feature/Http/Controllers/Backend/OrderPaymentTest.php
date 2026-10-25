@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers\Backend;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
 use App\Mail\OrderPaidMail;
 use App\Models\Order;
 use App\Models\User;
@@ -106,6 +107,7 @@ class OrderPaymentTest extends TestCase
         $order->refresh();
         $this->assertTrue($order->isPaid());
         $this->assertSame('ch_abc123', $order->charge_token);
+        $this->assertSame(PaymentMethod::Card, $order->payment_method);
         Mail::assertSent(OrderPaidMail::class, fn ($mail) => $mail->order->is($order) && $mail->hasTo('john@test.com'));
     }
 

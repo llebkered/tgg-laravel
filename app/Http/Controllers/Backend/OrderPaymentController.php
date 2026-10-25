@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
 use App\Events\OrderPaid;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
 /**
- * Resolves card payments whose result is unknown, once staff have checked
- * the Pin Payments dashboard.
+ * Payments staff record by hand: card payments whose result was unknown, once
+ * checked in Pin, and direct deposits once they reach the bank.
  */
 class OrderPaymentController extends Controller
 {
@@ -29,6 +30,7 @@ class OrderPaymentController extends Controller
             ->update([
                 'order_status_id' => OrderStatus::Paid->value,
                 'charge_token' => $data['charge_token'] ?? null,
+                'payment_method' => PaymentMethod::Card->value,
             ]);
 
         if (! $updated) {
@@ -37,6 +39,33 @@ class OrderPaymentController extends Controller
 
         if ($request->boolean('email_receipt')) {
             OrderPaid::dispatch($order->fresh());
+        }
+
+        return back()->with('success_message', 'Order marked as paid.');
+    }
+
+    /**
+     * A direct deposit for an invoiced order has reached the bank: mark the
+     * order paid and, if asked, email the customer a receipt.
+     */
+    public function depositReceived(Request $request, Order $order)
+    {
+        // Atomic, so two staff clicking at once can't both send a receipt
+        $updated = Order::whereKey($order->id)
+            ->where('order_status_id', OrderStatus::Invoiced->value)
+            ->update([
+                'order_status_id' => OrderStatus::Paid->value,
+                'payment_method' => PaymentMethod::DirectDeposit->value,
+            ]);
+
+        if (! $updated) {
+            return back()->with('danger_message', "This order isn't waiting for a direct deposit.");
+        }
+
+        if ($request->boolean('email_receipt')) {
+            OrderPaid::dispatch($order->fresh());
+
+            return back()->with('success_message', 'Order marked as paid. The receipt has been emailed to the customer.');
         }
 
         return back()->with('success_message', 'Order marked as paid.');

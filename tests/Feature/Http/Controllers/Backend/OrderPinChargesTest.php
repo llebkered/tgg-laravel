@@ -217,7 +217,45 @@ class OrderPinChargesTest extends TestCase
         Http::assertSent(fn (Request $request) => $request->url() === 'https://test-api.pinpayments.com/1/charges/ch_paid1');
     }
 
-    public function test_unknown_charge_token_says_so()
+    public function test_checking_pin_sets_an_unknown_payment_method_to_card()
+    {
+        $order = $this->order(['order_status_id' => OrderStatus::Shipped->value, 'created_at' => '2026-10-24 02:00:00']);
+        Http::fake(['*/1/charges/search*' => Http::response(['response' => [$this->pinCharge()]])]);
+
+        $this->get(route('backend.orders.edit', $order->id))
+            ->assertSee("This order's payment method isn't known", false)
+            ->assertSee('Check with Pin');
+
+        $this->checkPin($order)->assertOk()->assertSee('Payment: Card');
+
+        $this->assertSame(\App\Enums\PaymentMethod::Card, $order->fresh()->payment_method);
+        $this->assertSame('ch_found1', $order->fresh()->charge_token);
+    }
+
+    public function test_checking_pin_leaves_the_method_alone_without_a_clear_charge()
+    {
+        $order = $this->order(['order_status_id' => OrderStatus::Shipped->value, 'created_at' => '2026-10-24 02:00:00']);
+        Http::fake(['*/1/charges/search*' => Http::response(['response' => [
+            $this->pinCharge(), $this->pinCharge(['token' => 'ch_found2']),
+        ]])]);
+
+        $this->checkPin($order);
+
+        $this->assertNull($order->fresh()->payment_method);
+    }
+
+    public function test_checking_an_unconfirmed_payment_does_not_set_the_method()
+    {
+        $order = $this->unconfirmedOrder();
+        Http::fake(['*/1/charges/search*' => Http::response(['response' => [$this->pinCharge()]])]);
+
+        $this->checkPin($order);
+
+        $this->assertNull($order->fresh()->payment_method);
+        $this->assertNull($order->fresh()->charge_token);
+    }
+
+        public function test_unknown_charge_token_says_so()
     {
         $order = $this->order(['order_status_id' => OrderStatus::Paid->value, 'charge_token' => 'ch_missing']);
         Http::fake(['*/1/charges/ch_missing' => Http::response(['error' => 'not_found'], 404)]);

@@ -17,7 +17,9 @@ class BackendController extends Controller
     public function index(Request $request)
     {
         $page = [];
-        $orders = Order::sortedBy($request->query('sort'), $request->query('direction'))->get();
+        $orders = Order::sortedBy($request->query('sort'), $request->query('direction'))
+            ->withPaymentMethod($request->query('payment'))
+            ->get();
         $openOrders = Order::whereIn('order_status_id', OrderStatus::open())->orderBy('id', 'DESC')->get();
 
         return view('backend.index', compact(['orders', 'openOrders', 'page']));

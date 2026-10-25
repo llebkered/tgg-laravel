@@ -96,6 +96,7 @@ Route::prefix('backend')->middleware('App\Http\Middleware\AdminAccessMiddleware'
     Route::get('/orders/{order}/delete', [BackendOrderController::class, 'destroy'])->name('backend.orders.delete');
     Route::post('/orders/{order}/payment/paid', [OrderPaymentController::class, 'markPaid'])->name('backend.orders.payment.paid');
     Route::post('/orders/{order}/payment/release', [OrderPaymentController::class, 'release'])->name('backend.orders.payment.release');
+    Route::post('/orders/{order}/payment/deposit', [OrderPaymentController::class, 'depositReceived'])->name('backend.orders.payment.deposit');
     Route::get('/medialibary/{mediaId}/delete', [ MediaLibraryController::class, 'delete']);
 
     Route::resource('/pages', BackendPageController::class, ['as' => 'backend']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Actions\FindOrderCharges;
 use App\Models\Order;
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
 use App\Mail\OrderShippedMail;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -21,7 +22,9 @@ class BackendOrderController extends Controller
      */
     public function index(Request $request)
     {
-        $orders = Order::sortedBy($request->query('sort'), $request->query('direction'))->get();
+        $orders = Order::sortedBy($request->query('sort'), $request->query('direction'))
+            ->withPaymentMethod($request->query('payment'))
+            ->get();
         $openOrders = Order::whereIn('order_status_id', OrderStatus::open())->orderBy('id', 'DESC')->get();
 
         return view('backend.order.index', compact(['orders', 'openOrders']));
@@ -79,6 +82,7 @@ class BackendOrderController extends Controller
             'Vic' => 'Victoria'
         ];
         $order_statuses = OrderStatus::cases();
+        $payment_methods = PaymentMethod::cases();
 
         // Pin is asked only when staff ask, or when a card payment needs
         // checking, so opening other orders never waits on Pin
@@ -87,6 +91,13 @@ class BackendOrderController extends Controller
         if ($request->boolean('check_pin') || $order->paymentNeedsChecking()) {
             try {
                 $pinCharges = $findCharges($order);
+
+                // A clear successful charge shows the order was paid by card.
+                // Unconfirmed payments are left for staff to resolve.
+                if (! $order->paymentNeedsChecking()
+                    && $charge = FindOrderCharges::confirmedCharge($order, $pinCharges)) {
+                    FindOrderCharges::recordCardPayment($order, $charge);
+                }
             } catch (\Throwable $e) {
                 report($e);
                 $pinError = $e->getMessage();
@@ -94,7 +105,7 @@ class BackendOrderController extends Controller
         }
         $pinSearchDates = $findCharges->searchDates($order);
 
-        return view('backend.order.edit', compact(['order', 'order_statuses', 'states', 'pinCharges', 'pinError', 'pinSearchDates']));
+        return view('backend.order.edit', compact(['order', 'order_statuses', 'payment_methods', 'states', 'pinCharges', 'pinError', 'pinSearchDates']));
     }
 
     /**
@@ -108,6 +119,7 @@ class BackendOrderController extends Controller
     {
         $request->validate([
             'order_status_id' => ['required', Rule::enum(OrderStatus::class)],
+            'payment_method' => ['nullable', Rule::enum(PaymentMethod::class)],
         ]);
 
 
@@ -116,6 +128,7 @@ class BackendOrderController extends Controller
         $order->update($request->only(
             [
                 'order_status_id',
+                'payment_method',
                 // 'address_id',
                 'name',
                 'line1',

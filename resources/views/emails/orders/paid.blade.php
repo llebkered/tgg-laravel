@@ -55,7 +55,7 @@
                 </tr>
                 <tr>
                     <td class="has-text-right" align="right">
-                        <p>Paid by credit card</p>
+                        <p>Paid{{ $orderDetails->payment_method ? ' by ' . $orderDetails->payment_method->receiptLabel() : '' }}</p>
                     </td>
                 </tr>
 
@@ -66,7 +66,13 @@
                             <tr>
                                 <td>
                                     <p>Dear {{ $orderDetails->name }},</p>
-                                    <p>Thank your for your order. Your order has been paid by credit card</p>
+                                    @if ($orderDetails->payment_method === \App\Enums\PaymentMethod::DirectDeposit)
+                                    <p>Thank you for your order. We have received your direct deposit payment.</p>
+                                    @elseif ($orderDetails->payment_method === \App\Enums\PaymentMethod::Card)
+                                    <p>Thank you for your order. Your order has been paid by credit card.</p>
+                                    @else
+                                    <p>Thank you for your order. Your order has been paid.</p>
+                                    @endif
                                     <p>Your order number is: {{ $orderDetails->id }}.</p>
                                     <p>Your plants will be dispatched within the next few business days and we will
                                         inform you with tracking.</p>

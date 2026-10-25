@@ -180,7 +180,7 @@ Checkout uses one controller per step under `app/Http/Controllers/Checkout/`. Th
 | 1. Contact | `GET/POST /checkout` | `ContactController` | Refreshes the cart. Creates the `Customer` and the `Order` (status **InCart**) with a JSON snapshot of the cart and its totals. |
 | 2. Delivery | `GET/POST /checkout/delivery` | `DeliveryController` | Saves the address on the order. |
 | 3a. Card | `GET/POST /checkout/card` | `CardPaymentController` | Charges the card through `ChargeOrder`. On success the order becomes **Paid** and the `OrderPaid` event fires. |
-| 3b. Direct deposit | `GET /checkout/directdeposit` | `DirectDepositController` | The order becomes **Invoiced** and the `OrderInvoiced` event fires. This is blocked while a card payment is in progress. |
+| 3b. Direct deposit | `GET /checkout/directdeposit` | `DirectDepositController` | The order becomes **Invoiced** with `payment_method` direct deposit, and the `OrderInvoiced` event fires. This is blocked while a card payment is in progress. |
 | Done | `GET /checkout/thankyou` | `ThankYouController` | Needs a paid order. Safe to refresh. |
 
 `InteractsWithCheckout` holds the shared helpers. `alreadyPaid()` sends a back button press or a resubmitted form to the thank-you page instead of charging again.
@@ -228,7 +228,7 @@ Pin is only asked when staff click the button, so opening an order never waits o
 
 There are two helper lists:
 
-- `OrderStatus::open()` returns InCart, Invoiced and Paid. Used for the "open orders" counts.
+- `OrderStatus::open()` returns Invoiced and Paid. Used for the "open orders" counts. InCart is left out because those are unfinished, often abandoned, checkouts.
 - `OrderStatus::settled()` returns Paid, Shipped, Cancelled and Refunded. These orders can never be charged and never show as payment unconfirmed.
 
 `Order::isPaid()` is true **only** for status Paid. Before using it to mean "money has been received", check whether `settled()` is what you actually need.
@@ -237,11 +237,31 @@ There are two helper lists:
 
 Prices include GST. GST is 1/11 of the total: use `Order::gstIncluded($total)` and `$order->gstAmount()`, not the stored `gst` column. Orders placed before October 2026 stored 1/10. The migration `2026_10_24_000000_correct_gst_on_orders` fixed them and kept the old figure in `gst_as_invoiced`.
 
+### Payment method
+
+`orders.payment_method` records how an order is paid. It's cast to the string-backed `PaymentMethod` enum ([app/Enums/PaymentMethod.php](../app/Enums/PaymentMethod.php)): `card` or `direct_deposit`. It's null for older orders whose method wasn't recorded, shown to staff as "Unknown".
+
+| Set by | Value |
+|---|---|
+| `ChargeOrder` on a successful charge | card |
+| `OrderPaymentController::markPaid` (resolving an unconfirmed card payment) | card |
+| `DirectDepositController` | direct_deposit |
+| `OrderPaymentController::depositReceived` | direct_deposit |
+| Staff, through the order form | any, or Unknown |
+| **Check with Pin** on the order screen, when it finds one clear successful charge and the method is unknown (not for unconfirmed payments) | card |
+| `php artisan orders:match-pin-payments` | card |
+
+**Backfilling from Pin.** `php artisan orders:match-pin-payments` checks every order with an unknown method against Pin (`FindOrderCharges`) and sets it to card when `FindOrderCharges::confirmedCharge()` finds exactly one successful, captured charge that is the order's: the order's own `charge_token`, or a charge with its `order_id` metadata, or a charge to the order's email for its exact amount around when it was placed. It also saves the charge token if the order has none. It never changes an order's status, and it flags charged orders still In Cart. Orders without a clear charge are left alone, since they may have been paid by direct deposit. Use `--dry-run` to preview and `--order=ID` (repeatable) to check chosen orders. It pauses 0.2 seconds between orders to stay inside Pin's rate limits.
+
+The migration `2026_10_25_000000_add_payment_method_to_orders_table` filled in existing orders: a `charge_token` means card, and Invoiced means direct deposit. The order lists filter by it with `?payment=card|direct_deposit|unknown` (`Order::scopeWithPaymentMethod`).
+
+**Payment received.** Invoiced orders show a "Waiting for direct deposit" panel. Its button posts to `backend.orders.payment.deposit`, which atomically moves an Invoiced order to Paid and can dispatch `OrderPaid` to email the receipt. The receipt template (`emails/orders/paid.blade.php`, also used for its PDF) words the payment by `payment_method`.
+
 ### Emails
 
 | Mailable | Trigger | To |
 |---|---|---|
-| `OrderPaidMail` (receipt + PDF) | `OrderPaid` → `SendOrderPaidEmail` (queued) | Customer, BCC sales |
+| `OrderPaidMail` (receipt + PDF) | `OrderPaid` → `SendOrderPaidEmail` (queued). Fired after a card payment, or by staff marking an order paid with the receipt box ticked. | Customer, BCC sales |
 | `OrderInvoiceMail` (invoice + PDF) | `OrderInvoiced` → `SendOrderInvoiceEmail` (queued) | Customer, BCC sales |
 | `OrderShippedMail` | Sent by staff from the backend | Customer, BCC sales |
 | `PaymentUnconfirmedMail` | `ChargeOrder` when the outcome is unknown | Sales |

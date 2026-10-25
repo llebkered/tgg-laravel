@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Mail;
 
+use App\Enums\PaymentMethod;
 use App\Mail\OrderEmailFailedMail;
 use App\Mail\OrderInvoiceMail;
 use App\Mail\OrderPaidMail;
@@ -55,6 +56,28 @@ class OrderMailTest extends TestCase
         $mail->assertSeeInHtml('1 Main St');
 
         $this->assertPdfAttached($mail);
+    }
+
+    public function test_receipt_says_how_the_order_was_paid()
+    {
+        $order = $this->order();
+
+        $order->update(['payment_method' => PaymentMethod::Card]);
+        (new OrderPaidMail($order->fresh()))
+            ->assertSeeInHtml('Paid by credit card')
+            ->assertSeeInHtml('Your order has been paid by credit card.');
+
+        $order->update(['payment_method' => PaymentMethod::DirectDeposit]);
+        (new OrderPaidMail($order->fresh()))
+            ->assertSeeInHtml('Paid by direct deposit')
+            ->assertSeeInHtml('We have received your direct deposit payment.')
+            ->assertDontSeeInHtml('credit card');
+
+        $order->update(['payment_method' => null]);
+        (new OrderPaidMail($order->fresh()))
+            ->assertSeeInHtml('Your order has been paid.')
+            ->assertDontSeeInHtml('credit card')
+            ->assertDontSeeInHtml('direct deposit');
     }
 
     public function test_email_shows_the_correct_gst_for_an_old_order_without_changing_it()

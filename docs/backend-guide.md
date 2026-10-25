@@ -59,7 +59,7 @@ After you save something, a green message appears at the top of the screen to co
 The dashboard shows:
 
 - **Orders**: the total number of orders.
-- **Open Orders**: orders that still need work, meaning they're *In Cart*, *Invoiced* or *Paid*.
+- **Open Orders**: orders that still need work, meaning they're *Invoiced* (waiting for a direct deposit) or *Paid* (ready to send). Unfinished checkouts (*In Cart*) aren't counted.
 - **Site maintenance**: whether the site is open or closed to visitors (see [Maintenance mode](#maintenance-mode)).
 - **The order list**: the same list as the Orders screen.
 
@@ -69,9 +69,10 @@ The dashboard shows:
 
 ### The order list
 
-Click **Orders** in the menu. Each row shows the order number, date, customer, address and status.
+Click **Orders** in the menu. Each row shows the order number, date, customer, address, status and payment method.
 
 - Click a column heading (**Id**, **Date**, **Customer** or **Status**) to sort by it. Click it again to reverse the order.
+- Use the **Payment** buttons above the list to show only **Card**, **Direct deposit** or **Unknown** orders. Orders placed before 25 October 2026 mostly show **Unknown**, because the site didn't record the payment method then.
 - A yellow **Payment unconfirmed** tag means a card payment needs checking. See [Unconfirmed card payments](#unconfirmed-card-payments).
 - Click **edit** to open an order.
 
@@ -92,7 +93,7 @@ Card payments change the order to **Paid** automatically. Every other change is 
 ### Processing a typical order
 
 1. **Card orders** arrive as **Paid**. The customer has already been emailed a receipt.
-   **Direct deposit orders** arrive as **Invoiced**. Check your bank account, and once the money arrives, change the status to **Paid**.
+   **Direct deposit orders** arrive as **Invoiced**. Check your bank account. Once the money arrives, open the order, leave **Email the receipt to the customer** ticked, and click **Payment received** in the blue **Waiting for direct deposit** box. The order becomes **Paid** and the customer gets a receipt saying their direct deposit was received.
 2. Pack and send the order.
 3. Open the order and click **Send Order Shipped Email** (see below).
 4. Change the status to **Shipped** and click **Update Order**.
@@ -102,6 +103,7 @@ Card payments change the order to **Paid** automatically. Every other change is 
 On the order screen you can change:
 
 - the **Order Status**
+- the **Payment method**: Card, Direct deposit or Unknown. You only need this for older orders, to fill in how they were paid. New orders are set automatically.
 - the customer's **name, email, phone and address**
 - **Comments**: private notes for staff. Customers don't see these.
 
@@ -157,7 +159,7 @@ Once the order is Paid, Shipped, Cancelled or Refunded, the warning disappears a
 
 ### Checking a card payment in Pin
 
-Any order paid by card has a **Card payment in Pin** box showing its Pin charge token. Click **Check with Pin** to see the charge's current status in Pin, for example after a refund. Charges made from 25 October 2026 onwards also start with the order number in Pin, e.g. "Order #123", so you can search for them by order number in the Pin dashboard.
+Any order paid by card has a **Card payment in Pin** box showing its Pin charge token. Click **Check with Pin** to see the charge's current status in Pin, for example after a refund. Older orders whose payment method is **Unknown** also have this box. If Pin has one clear successful charge for the order, **Check with Pin** sets its payment method to **Card** automatically. If it finds nothing, the order may have been paid by direct deposit; set the payment method yourself if you know. Charges made from 25 October 2026 onwards also start with the order number in Pin, e.g. "Order #123", so you can search for them by order number in the Pin dashboard.
 
 ---
 
@@ -342,7 +344,7 @@ While it's on:
 | I want to… | Do this |
 |---|---|
 | Find new orders to send | **Orders**, then sort by **Status** and look for **Paid** |
-| Confirm a direct deposit | Open the order and set the status to **Paid** |
+| Confirm a direct deposit | Open the order and click **Payment received** |
 | Tell a customer their order has shipped | Open the order, click **Send Order Shipped Email**, then set the status to **Shipped** |
 | Fix a "Payment unconfirmed" order | Open the order, read the **Pin status**, then click **Mark as paid** or **Release the order** |
 | Stop selling something for a while | Set the product to **Not In Stock**, or the variation to **Unavailable** |

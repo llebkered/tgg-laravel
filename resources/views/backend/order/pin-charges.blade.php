@@ -1,5 +1,7 @@
-{{-- Card payment details from Pin Payments, for orders paid or being paid by card --}}
-@if ($order->charge_token || $order->payment_started_at)
+{{-- Card payment details from Pin Payments, for orders paid or being paid by
+     card, and older placed orders whose payment method isn't known --}}
+@if ($order->charge_token || $order->payment_started_at
+    || (is_null($order->payment_method) && $order->order_status_id !== \App\Enums\OrderStatus::InCart))
 <div class="container mb-6" id="pin">
     <div class="box">
         <h2 class="title is-5">Card payment in Pin</h2>
@@ -12,8 +14,10 @@
         <p class="mb-3">
             @if ($order->charge_token)
             See the charge's current status in Pin.
-            @else
+            @elseif ($order->payment_started_at)
             Look for charges to {{ $order->email }} around the time the payment started.
+            @else
+            This order's payment method isn't known. Look for a card payment by {{ $order->email }} around the time the order was placed.
             @endif
         </p>
         <a href="{{ route('backend.orders.edit', ['order' => $order->id, 'check_pin' => 1]) }}#pin"

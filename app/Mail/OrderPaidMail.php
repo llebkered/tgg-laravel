@@ -3,7 +3,8 @@
 namespace App\Mail;
 
 /**
- * Tax invoice for an order paid by card, with a PDF copy attached.
+ * Tax invoice for a paid order (by card or direct deposit), with a PDF copy
+ * attached.
  */
 class OrderPaidMail extends OrderInvoiceMail
 {

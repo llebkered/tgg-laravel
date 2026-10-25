@@ -18,6 +18,7 @@
                 <div class="column has-text-right">
                     <p>{{ $order->name  }}</p>
                     <p>${{ $order->total  }}</p>
+                    <p>Payment: {{ $order->payment_method?->label() ?? 'Unknown' }}</p>
                 </div>
             </div>
         </div>
@@ -122,6 +123,29 @@
     </div>
     @endif
 
+    @if ($order->order_status_id === \App\Enums\OrderStatus::Invoiced)
+    <div class="container mb-6">
+        <div class="notification is-info is-light">
+            <h2 class="title is-5 mb-3">Waiting for direct deposit</h2>
+            <p>{{ $order->name }} was invoiced on {{ $order->created_at->timezone('Australia/Melbourne')->format('j M Y') }}
+                for <strong>${{ number_format($order->total, 2) }}</strong>. They were asked to use their order number
+                ({{ $order->id }}) and name as the payment reference.</p>
+            <p class="mt-2">When the money is in the bank account, record it here.</p>
+            <form class="mt-4" action="{{ route('backend.orders.payment.deposit', $order->id) }}" method="POST"
+                onsubmit="return confirm('Mark order #{{ $order->id }} as paid by direct deposit?')">
+                @csrf
+                <label class="checkbox">
+                    <input type="checkbox" name="email_receipt" value="1" checked>
+                    Email the receipt to the customer
+                </label>
+                <div class="mt-3">
+                    <button type="submit" class="button is-success">Payment received</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    @endif
+
     @include('backend.order.pin-charges')
 
     {{-- <div class="container">
@@ -177,6 +201,23 @@
                 </div>
             </div>
 
+
+            <div class="columns">
+                <div class="column is-2"><label class="label" for="payment_method">Payment method</label></div>
+                <div class="column">
+                    <div class="control">
+                        <div class="select">
+                            <select name="payment_method" id="payment_method">
+                                <option value="" @selected(is_null($order->payment_method))>Unknown</option>
+                                @foreach ($payment_methods as $method)
+                                <option value="{{ $method->value }}" @selected($order->payment_method === $method)>
+                                    {{ $method->label() }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="columns">
                 <div class="column is-2"><label class="label" for="name">Name</label></div>

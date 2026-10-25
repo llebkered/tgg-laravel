@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Checkout;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
 use App\Events\OrderInvoiced;
 use App\Http\Controllers\Controller;
 use App\Models\Page;
@@ -35,6 +36,7 @@ class DirectDepositController extends Controller
         }
 
         $order->order_status_id = OrderStatus::Invoiced;
+        $order->payment_method = PaymentMethod::DirectDeposit;
         $order->save();
 
         Cart::instance('cart')->destroy();

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,7 @@ class Order extends Model
     protected $casts = [
         'order_status_id' => OrderStatus::class,
         'payment_started_at' => 'datetime',
+        'payment_method' => PaymentMethod::class,
     ];
 
     /**
@@ -102,6 +104,23 @@ class Order extends Model
         // Newest first among orders with the same name, date or status
         if ($column !== 'id') {
             $query->orderBy('id', 'desc');
+        }
+
+        return $query;
+    }
+
+    /**
+     * Filter by payment method: 'card', 'direct_deposit', or 'unknown' for
+     * orders without one. Anything else shows every order.
+     */
+    public function scopeWithPaymentMethod($query, $method = null)
+    {
+        if ($method === 'unknown') {
+            return $query->whereNull('payment_method');
+        }
+
+        if (is_string($method) && $paymentMethod = PaymentMethod::tryFrom($method)) {
+            return $query->where('payment_method', $paymentMethod->value);
         }
 
         return $query;

@@ -80,6 +80,46 @@ class FindOrderCharges
             && ($charge['for_this_order'] || $charge['matches_amount']))->values();
     }
 
+    /**
+     * The one successful charge that is clearly this order's, or null. With a
+     * recorded charge token that's the charge itself. Otherwise it must be
+     * sent with the order's number, or be to the order's email for its exact
+     * amount, and be the only such charge.
+     */
+    public static function confirmedCharge(Order $order, Collection $charges): ?array
+    {
+        if ($order->charge_token) {
+            $charge = $charges->firstWhere('token', $order->charge_token);
+
+            return $charge && $charge['success'] && $charge['captured'] ? $charge : null;
+        }
+
+        $matches = self::matching($charges)->filter(fn (array $charge) => $charge['for_this_order']
+            || strcasecmp((string) $charge['email'], (string) $order->email) === 0);
+
+        return $matches->count() === 1 ? $matches->first() : null;
+    }
+
+    /**
+     * Record that a successful Pin charge paid for this order, if its payment
+     * method isn't known yet. Also saves the charge token if there isn't one.
+     * Doesn't change the order's status.
+     *
+     * @return bool  whether the order was updated
+     */
+    public static function recordCardPayment(Order $order, array $charge): bool
+    {
+        if ($order->payment_method) {
+            return false;
+        }
+
+        $order->payment_method = \App\Enums\PaymentMethod::Card;
+        $order->charge_token ??= $charge['token'];
+        $order->save();
+
+        return true;
+    }
+
     private function ensureSuccessful($response): void
     {
         if ($response->failed()) {
