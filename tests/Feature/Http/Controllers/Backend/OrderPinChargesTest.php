@@ -47,6 +47,7 @@ class OrderPinChargesTest extends TestCase
             'success' => true,
             'captured' => true,
             'amount' => 6700,
+            'currency' => 'AUD',
             'email' => 'john@test.com',
             'description' => 'Farm Pack <br> ',
             'status_message' => 'Success',
@@ -83,6 +84,19 @@ class OrderPinChargesTest extends TestCase
             ->assertOk()
             ->assertSeeInOrder(['Pin status', 'Charged', 'successful charge of $67.00', 'ch_found1', 'mark the order as paid'])
             ->assertSee('id="charge_token" name="charge_token" placeholder="ch_..." value="ch_found1"', false);
+    }
+
+    public function test_a_charge_in_another_currency_does_not_match_the_order()
+    {
+        $order = $this->unconfirmedOrder();
+        Http::fake(['*/1/charges/search*' => Http::response([
+            'response' => [$this->pinCharge(['currency' => 'USD'])],
+        ])]);
+
+        $this->get(route('backend.orders.edit', $order->id))
+            ->assertOk()
+            ->assertDontSee('successful charge of')
+            ->assertSee('placeholder="ch_..." value=""', false);
     }
 
     public function test_warning_asks_staff_to_choose_between_several_matching_charges()

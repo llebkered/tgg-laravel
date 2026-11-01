@@ -105,7 +105,8 @@ class ChargeOrder
                 'address_country' => 'Australia',
             ],
             'description' => $this->description($order),
-            'amount' => (int) round($order->total * 100),
+            'amount' => $order->totalInCents(),
+            'currency' => Order::CURRENCY,
             'email' => $order->email,
             // Lets a charge be found by order number in Pin
             'metadata' => ['order_id' => (string) $order->id],

@@ -58,6 +58,47 @@ class OrderMailTest extends TestCase
         $this->assertPdfAttached($mail);
     }
 
+    public static function taxInvoices(): array
+    {
+        return ['invoice' => [OrderInvoiceMail::class], 'receipt' => [OrderPaidMail::class]];
+    }
+
+    /**
+     * An Australian tax invoice must show the words "Tax Invoice", the
+     * seller's name and ABN, the date issued, each item with its quantity and
+     * price, and the GST included.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('taxInvoices')]
+    public function test_tax_invoice_has_the_details_the_ato_requires($mailable)
+    {
+        // 2 November in Melbourne, still 1 November in UTC
+        $this->travelTo('2026-11-01 14:00:00');
+        $order = $this->order();
+
+        (new $mailable($order))
+            ->assertSeeInHtml('Tax Invoice')
+            ->assertSeeInHtml('Toad Gully Growers')
+            ->assertSeeInHtml('ABN:</strong> 61 173 928 602', false)
+            ->assertSeeInHtml('Date issued:</strong> 2 November 2026', false)
+            ->assertSeeInHtml('Order Date: </strong> 2 November 2026', false)
+            ->assertSeeInOrderInHtml(['1', 'Farm Pack', '$110.00', '$110.00'])
+            ->assertSeeInHtml('Includes GST: &nbsp;</strong> $10.00', false)
+            ->assertSeeInHtml('Total: &nbsp;</strong> $110.00 AUD', false);
+    }
+
+    public function test_invoice_says_how_much_to_deposit()
+    {
+        (new OrderInvoiceMail($this->order()))
+            ->assertSeeInHtml('please direct deposit <strong>$110.00</strong> to:', false);
+    }
+
+    public function test_invoice_pdf_includes_the_logos()
+    {
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('emails.orders.paid', ['orderDetails' => $this->order()])->output();
+
+        $this->assertGreaterThanOrEqual(2, substr_count($pdf, '/Subtype /Image'));
+    }
+
     public function test_receipt_says_how_the_order_was_paid()
     {
         $order = $this->order();

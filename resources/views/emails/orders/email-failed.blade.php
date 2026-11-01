@@ -2,7 +2,7 @@ The {{ $email }} email for order {{ $order->id }} could not be sent to {!! $orde
 
 The order itself is saved. Please contact the customer and send the {{ $email }} another way.
 
-Order total: ${{ number_format($order->total, 2) }}
+Order total: {{ money($order->total) }}
 Phone: {!! $order->phone !!}
 
 Error: {!! $error !!}

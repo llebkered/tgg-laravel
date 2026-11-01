@@ -16,7 +16,7 @@
                         @endif
                         <h4>Description</h4>
                         <div>{!! $variation->description !!}</div>
-                        <div class="my-3"><strong>Price: </strong> ${{ number_format($variation->price, 2) }}</div>
+                        <div class="my-3"><strong>Price: </strong> {{ money($variation->price) }}</div>
                         <footer class="card-footer py-3">
                             <a href="{{ route('backend.variations.edit',$variation->id) }}"
                                 class="button is-link is-small is-outlined">edit</a>

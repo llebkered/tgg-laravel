@@ -32,13 +32,13 @@
                     {{ $item->name }}
                 </td>
                 <td  class="has-text-right">
-                    ${{ number_format($item->price, 2) }}
+                    {{ money($item->price) }}
                 </td>
             </tr>
             @endforeach
             <tr>
                 <td></td>
-            <td class="has-text-right">Total: ${{ $order->total }}</td>
+            <td class="has-text-right">Total: {{ money($order->total) }}</td>
             </tr>
         </table>
 

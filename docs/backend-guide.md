@@ -190,7 +190,7 @@ Customers always buy a variation, never the product on its own, so **every produ
 2. Fill in:
    - **Title**, e.g. "140mm pot" or "1 metre trunk".
    - **Description**: detail about this variation. Required.
-   - **Price**: in dollars and cents, including GST, e.g. `19.95`. Up to 2 decimal places. Whole dollars like `35` are fine.
+   - **Price**: in dollars and cents, including GST, e.g. `19.95`. Up to 2 decimal places, and at least $0.01. Whole dollars like `35` are fine. All prices are in Australian dollars.
    - **Available**: whether this variation can be bought.
 3. Click **Submit**.
 

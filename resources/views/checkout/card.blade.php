@@ -20,6 +20,24 @@
         {!! $page['body'] !!} --}}
 
         @if (Cart::instance('cart')->count() > 0)
+        @if ($order)
+        <table class="table">
+            @foreach ($order->products as $item)
+            <tr>
+                <td>{{ $item->qty }} x {{ $item->name }}</td>
+                <td class="has-text-right">{{ money($item->subtotal) }}</td>
+            </tr>
+            @endforeach
+            <tr>
+                <td class="has-text-right">Includes GST</td>
+                <td class="has-text-right">{{ money($order->gstAmount()) }}</td>
+            </tr>
+            <tr>
+                <td class="has-text-right"><strong>Total to pay</strong></td>
+                <td class="has-text-right"><strong>{{ money($order->total) }} AUD</strong></td>
+            </tr>
+        </table>
+        @endif
         <div class="columns is-multiline">
             <div class="column register">
                 <div class="columns">
@@ -80,7 +98,7 @@
 
 
                             <div class="mt-6">
-                                <button type="submit" class="button is-block is-primary is-fullwidth is-medium">Submit Card</button>
+                                <button type="submit" class="button is-block is-primary is-fullwidth is-medium">{{ $order ? 'Pay ' . money($order->total) : 'Submit Card' }}</button>
                             </div>
 
                         </form>

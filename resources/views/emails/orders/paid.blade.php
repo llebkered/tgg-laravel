@@ -26,7 +26,8 @@
                                     <h1>Tax Invoice</h1>
                                 </td>
                                 <td class="has-text-right" align="right">
-                                    <p><strong>ABN:</strong> {{ config('tgg.abn', '61 173 928 602') }}</p>
+                                    <p><strong>ABN:</strong> {{ config('tgg.abn') }}<br />
+                                        <strong>Date issued:</strong> {{ now(config('tgg.timezone'))->format('j F Y') }}</p>
                                 </td>
                             </tr>
                             <tr>

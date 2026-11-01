@@ -26,7 +26,7 @@ class CartController extends Controller
 
         $cart = Cart::instance('cart')->content();
 
-        $gst = number_format(Order::gstIncluded(Cart::instance('cart')->total(2, '.', '')), 2);
+        $gst = Order::gstIncluded(Cart::instance('cart')->total(2, '.', ''));
 
         // The variation for each cart item, looked up by id. find() returns
         // them sorted by id, not in cart order, so they can't be matched by

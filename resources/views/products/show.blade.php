@@ -43,7 +43,7 @@
                     <div class="column">
                         <h3>{{ $variation->title }} </h3>
                         <div>{!! $variation->description !!} </div>
-                        <div>${{ number_format($variation->price, 2) }} </div>
+                        <div>{{ money($variation->price) }} </div>
                         <form action="{{ route('cart.store') }}" method="POST">
                             {{ csrf_field() }}
                             <input type="hidden" name="id" value="{{ $variation->id}}">

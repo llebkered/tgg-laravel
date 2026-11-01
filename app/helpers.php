@@ -23,3 +23,16 @@ if (! function_exists('option')) {
         return app('option')->get($key, $default);
     }
 }
+if (! function_exists('money')) {
+    /**
+     * An amount in Australian dollars for display, e.g. $1,234.50. The shop
+     * only sells in AUD (Order::CURRENCY).
+     *
+     * @param  int|float|string|null  $dollars
+     */
+    function money($dollars): string
+    {
+        // Amounts formatted elsewhere may contain thousands separators
+        return '$' . number_format((float) str_replace(',', '', (string) $dollars), 2);
+    }
+}

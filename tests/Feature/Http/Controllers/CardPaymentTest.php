@@ -56,6 +56,13 @@ class CardPaymentTest extends TestCase
             'total' => 25.00,
         ], $attributes));
 
+        // Checkout charges only an order the cart still matches, so put the
+        // order's items in the cart
+        foreach ($order->products as $rowId => $item) {
+            Cart::instance('cart')->add($item->id ?? $rowId, $item->name, $item->qty ?? 1, $item->price);
+        }
+        $order->update(['cart' => json_encode(Cart::instance('cart')->content())]);
+
         $this->withSession(['order' => $order->id]);
 
         return $order;
@@ -123,7 +130,8 @@ class CardPaymentTest extends TestCase
             'line1' => '1 Main St',
             'city' => 'Melbourne',
             'postcode' => '3000',
-            'cart' => json_encode(['row1' => ['name' => 'Farm Pack'], 'row2' => ['name' => 'Estate Pack']]),
+            'total' => 25.00,
+            'cart' => json_encode(['row1' => ['name' => 'Farm Pack', 'price' => 10], 'row2' => ['name' => 'Estate Pack', 'price' => 15]]),
         ]);
         $this->fakePin(self::PAID);
 
@@ -140,6 +148,8 @@ class CardPaymentTest extends TestCase
                 && $request['card']['address_postcode'] === '3000'
                 && $request['description'] === 'Order #' . $order->id . ': Farm Pack <br> Estate Pack <br> '
                 && $request['metadata'] === ['order_id' => (string) $order->id]
+                && $request['amount'] === 2500
+                && $request['currency'] === 'AUD'
                 && $request['email'] === 'john@test.com';
         });
     }

@@ -35,6 +35,10 @@ class DirectDepositController extends Controller
             return redirect()->route('checkout.card')->with('danger_message', self::PAYMENT_IN_PROGRESS);
         }
 
+        if (! $this->cartMatchesOrder($order)) {
+            return redirect()->route('checkout.index')->with('warning_message', self::CART_CHANGED);
+        }
+
         $order->order_status_id = OrderStatus::Invoiced;
         $order->payment_method = PaymentMethod::DirectDeposit;
         $order->save();

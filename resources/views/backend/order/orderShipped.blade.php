@@ -22,7 +22,7 @@
                 </div>
                 <div class="column has-text-right">
                     <p>{{ $order->name  }}</p>
-                    <p>${{ $order->total  }}</p>
+                    <p>{{ money($order->total) }}</p>
                 </div>
             </div>
         </div>
@@ -65,18 +65,18 @@
                                 {{ $item->name }}
                             </td>
                             <td  class="has-text-right">
-                                ${{ number_format($item->price, 2) }}
+                                {{ money($item->price) }}
                             </td>
                             <td class="has-text-right">
-                                ${{ $item->subtotal }}
+                                {{ money($item->subtotal) }}
                             </td>
                         </tr>
                         @endforeach
                         <tr>
                             <td colspan="3"></td>
                         <td class="has-text-right">
-                            <p>GST: ${{ number_format($order->gstAmount(), 2) }}</p>
-                            <p>Total: ${{ $order->total }}</p>   
+                            <p>GST: {{ money($order->gstAmount()) }}</p>
+                            <p>Total: {{ money($order->total) }}</p>   
                         </td>
                         </tr>
                     </table>

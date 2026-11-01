@@ -171,7 +171,16 @@ A `Product` has many `Variation`s. The cart holds variations, not products. A va
 
 [CartController](../app/Http/Controllers/CartController.php) checks this when an item is added. Cart items keep the name and price from when they were added, so [RefreshCart](../app/Actions/RefreshCart.php) runs at the start of checkout. It removes items that can no longer be bought, updates changed names and prices, and returns a message telling the customer what changed.
 
-**Prices are stored in cents.** `variations.price_cents` is an integer number of cents, so amounts don't pick up floating-point rounding errors. `$variation->price` reads and writes dollars (an Eloquent accessor in [Variation](../app/Models/Variation.php)), so forms, views and the cart work in dollars. Queries that bypass the model must use `price_cents` and cents, e.g. `Variation::where(...)->update(['price_cents' => 1995])`. A saved variation loaded without `price_cents` throws a `LogicException` rather than reading as $0.00. Admin entry is validated to 2 decimal places, and prices are shown with `number_format($price, 2)`. Orders store their own dollar amounts in the cart snapshot and totals, so they are not affected.
+**Prices are stored in cents.** `variations.price_cents` is an integer number of cents, so amounts don't pick up floating-point rounding errors. `$variation->price` reads and writes dollars (an Eloquent accessor in [Variation](../app/Models/Variation.php)), so forms, views and the cart work in dollars. Queries that bypass the model must use `price_cents` and cents, e.g. `Variation::where(...)->update(['price_cents' => 1995])`. A saved variation loaded without `price_cents` throws a `LogicException` rather than reading as $0.00. Admin entry must be at least $0.01, with up to 2 decimal places. Orders store their own dollar amounts in the cart snapshot and totals (`decimal(10,2)`), so they are not affected.
+
+### Money and currency
+
+The shop only sells in Australian dollars: `Order::CURRENCY` is `AUD`.
+
+- **Showing amounts.** Use the `money()` helper ([app/helpers.php](../app/helpers.php)) for every amount shown to customers or staff, in views, emails and messages. It gives `$1,234.50`: always 2 decimal places, with a thousands separator. Don't use `number_format` or print a raw total, as decimal columns come back as `60.1` on SQLite and the cart package formats without a separator. The cart says prices are in AUD and include GST, and the card page shows the total as e.g. `$59.85 AUD`.
+- **Charging.** Pin is charged `$order->totalInCents()` with `currency` `AUD`. Use `totalInCents()` wherever an order total is compared with a Pin amount; a Pin charge only matches an order if both its amount and its currency match.
+- **Comparing amounts.** Compare amounts as whole cents (`(int) round($dollars * 100)`), never as floats.
+- **Cart must match the order.** The order is created with a snapshot of the cart at the contact step, and its total is what gets charged. `InteractsWithCheckout::cartMatchesOrder()` checks the cart still has the same items, quantities and prices before a card is charged or a direct deposit order is placed. If it doesn't (e.g. the customer added an item in another tab), the customer is sent back to the contact step to make a new order, so they always pay for what their cart shows.
 
 The migration `2026_11_01_000000_store_variation_prices_in_cents` converted the old whole-dollar `price` column to cents and renamed it `price_cents`. It does nothing if `price_cents` already exists, so it can't multiply prices twice.
 
@@ -183,8 +192,8 @@ Checkout uses one controller per step under `app/Http/Controllers/Checkout/`. Th
 |---|---|---|---|
 | 1. Contact | `GET/POST /checkout` | `ContactController` | Refreshes the cart. Creates the `Customer` and the `Order` (status **InCart**) with a JSON snapshot of the cart and its totals. |
 | 2. Delivery | `GET/POST /checkout/delivery` | `DeliveryController` | Saves the address on the order. |
-| 3a. Card | `GET/POST /checkout/card` | `CardPaymentController` | Charges the card through `ChargeOrder`. On success the order becomes **Paid** and the `OrderPaid` event fires. |
-| 3b. Direct deposit | `GET /checkout/directdeposit` | `DirectDepositController` | The order becomes **Invoiced** with `payment_method` direct deposit, and the `OrderInvoiced` event fires. This is blocked while a card payment is in progress. |
+| 3a. Card | `GET/POST /checkout/card` | `CardPaymentController` | Shows the order and the total to pay. Charges the card through `ChargeOrder` if the cart still matches the order. On success the order becomes **Paid** and the `OrderPaid` event fires. |
+| 3b. Direct deposit | `GET /checkout/directdeposit` | `DirectDepositController` | The order becomes **Invoiced** with `payment_method` direct deposit, and the `OrderInvoiced` event fires. This is blocked while a card payment is in progress, or if the cart no longer matches the order. |
 | Done | `GET /checkout/thankyou` | `ThankYouController` | Needs a paid order. Safe to refresh. |
 
 `InteractsWithCheckout` holds the shared helpers. `alreadyPaid()` sends a back button press or a resubmitted form to the thank-you page instead of charging again.
@@ -273,6 +282,8 @@ The migration `2026_10_25_000000_add_payment_method_to_orders_table` filled in e
 | `ContactFormMessage` (notification) | Contact form. The message is also saved in `contacts`. | `RECIPIENT_EMAIL` |
 
 The queued listeners share the [SendsOrderEmails](../app/Listeners/SendsOrderEmails.php) trait, which tries 3 times, 60 seconds apart, and then calls `alertSales()`. With `QUEUE_CONNECTION=sync` there are no retries, so a failure alerts sales straight away. Checkout dispatches these events inside `rescue()`, so a mail failure never breaks a completed payment.
+
+**Tax invoices.** The invoice and the receipt are both Australian tax invoices, and the same template is used for the email and its PDF. They must show "Tax Invoice", the business name and ABN (`config('tgg.abn')`, which falls back to the real ABN if `TGG_ABN` isn't set), the date issued, each item with its quantity and price, the GST included and the total in AUD. Dates are shown in `config('tgg.timezone')` (Australia/Melbourne), since the app runs in UTC. The date issued is the date the email is sent. The logos are embedded as `data:` URIs, so `config/dompdf.php` must allow the `data://` protocol, or the PDF shows the alt text instead.
 
 ### Maintenance mode
 

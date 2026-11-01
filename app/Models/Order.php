@@ -14,6 +14,12 @@ class Order extends Model
 
     protected $guarded = [];
 
+    /**
+     * The only currency the shop sells in. Amounts are in dollars; Pin
+     * charges are in cents.
+     */
+    public const CURRENCY = 'AUD';
+
     protected $casts = [
         'order_status_id' => OrderStatus::class,
         'payment_started_at' => 'datetime',
@@ -52,6 +58,14 @@ class Order extends Model
     protected function products(): Attribute
     {
         return Attribute::get(fn () => (array) json_decode($this->cart ?? '[]'));
+    }
+
+    /**
+     * The total in whole cents, the amount Pin charges.
+     */
+    public function totalInCents(): int
+    {
+        return (int) round($this->total * 100);
     }
 
     public function isPaid()

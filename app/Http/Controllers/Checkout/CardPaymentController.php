@@ -26,15 +26,17 @@ class CardPaymentController extends Controller
     {
         $page = Page::where('slug', '=', 'checkout')->firstOrFail();
 
+        $order = $this->currentOrder($request);
+
         // Already paid (e.g. back button after paying)
-        if ($this->alreadyPaid($request, $this->currentOrder($request))) {
+        if ($this->alreadyPaid($request, $order)) {
             return redirect()->route('checkout.thankyou');
         }
 
         $customer = Customer::find($request->session()->get('customer'));
         $year = date('Y');
 
-        return view('checkout.card', compact('page', 'year', 'customer'));
+        return view('checkout.card', compact('page', 'year', 'customer', 'order'));
     }
 
     public function store(CheckoutCardRequest $request, ChargeOrder $chargeOrder)
@@ -48,6 +50,10 @@ class CardPaymentController extends Controller
 
         if (is_null($order)) {
             return redirect('/cart');
+        }
+
+        if (! $this->cartMatchesOrder($order)) {
+            return redirect()->route('checkout.index')->with('warning_message', self::CART_CHANGED);
         }
 
         $result = $chargeOrder($order, $request->card());

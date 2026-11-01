@@ -9,19 +9,19 @@
     <tr>
         <td>{{$product->qty}}</td>
         <td>{{ $product->name }} &nbsp;</td>
-        <td class="has-text-right" align="right">${{ number_format($product->price,2) }}</td>
-        <td class="has-text-right" align="right">${{ $product->subtotal }}</td>
+        <td class="has-text-right" align="right">{{ money($product->price) }}</td>
+        <td class="has-text-right" align="right">{{ money($product->subtotal) }}</td>
     </tr>
     @endforeach
 
     <tr>
         <td colspan="4" class="has-text-right" align="right">
-            <strong>GST: &nbsp;</strong> ${{ number_format($orderDetails->gstAmount(), 2) }}
+            <strong>Includes GST: &nbsp;</strong> {{ money($orderDetails->gstAmount()) }}
         </td>
     </tr>
     <tr>
         <td colspan="4" class="has-text-right" align="right">
-            <strong>Total: &nbsp;</strong> ${{ $orderDetails->total }}
+            <strong>Total: &nbsp;</strong> {{ money($orderDetails->total) }} AUD
         </td>
     </tr>
     <tr>

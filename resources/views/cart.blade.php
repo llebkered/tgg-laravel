@@ -45,9 +45,9 @@
                         {{ $row->qty  }}
                     </td>
                     <td class="has-text-right">
-                        ${{number_format($row->price ,2)  }}
+                        {{ money($row->price) }}
                     </td>
-                    <td class="has-text-right">${{ $row->total }}</td>
+                    <td class="has-text-right">{{ money($row->total) }}</td>
                     <td class="has-text-right">
                         <form action="{{ route('cart.destroy', $row->rowId)}}" method="POST">
                             {{ csrf_field() }}
@@ -64,26 +64,27 @@
                 <tr>
                     <td colspan="3">&nbsp;</td>
                     <td class="has-text-right">Subtotal</td>
-                    <td class="has-text-right">${{Cart::instance('cart')->subtotal()}}</td>
+                    <td class="has-text-right">{{ money(Cart::instance('cart')->subtotal(2, '.', '')) }}</td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td colspan="3">&nbsp;</td>
                     <td class="has-text-right">Includes GST</td>
-                    <td class="has-text-right">${{ $gst }}</td>
+                    <td class="has-text-right">{{ money($gst) }}</td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td colspan="3">&nbsp;</td>
                     <td class="has-text-right"><strong>Total</strong></td>
-                    <td class="has-text-right"><strong>${{ Cart::instance('cart')->total() }}</strong></td>
+                    <td class="has-text-right"><strong>{{ money(Cart::instance('cart')->total(2, '.', '')) }}</strong></td>
                     <td></td>
                     <td></td>
                 </tr>
             </tfoot>
         </table>
+        <p class="has-text-right is-size-7">All prices are in Australian dollars (AUD) and include GST.</p>
         <div class="is-pulled-right"> <a href="{{ route('checkout.contact') }}" class="button is-primary">Proceed to
                 checkout</a></div>
 

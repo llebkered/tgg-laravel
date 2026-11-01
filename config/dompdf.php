@@ -91,6 +91,8 @@ return array(
          * @var array
          */
         'allowed_protocols' => [
+            // Invoice logos are embedded as data: URIs
+            "data://" => ["rules" => []],
             "file://" => ["rules" => []],
             "http://" => ["rules" => []],
             "https://" => ["rules" => []]

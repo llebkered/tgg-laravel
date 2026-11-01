@@ -26,7 +26,8 @@
                                     <h1>Tax Invoice</h1>
                                 </td>
                                 <td class="has-text-right" align="right">
-                                    <p><strong>ABN:</strong> {{ config('tgg.abn', '61 173 928 602') }}</p>
+                                    <p><strong>ABN:</strong> {{ config('tgg.abn') }}<br />
+                                        <strong>Date issued:</strong> {{ now(config('tgg.timezone'))->format('j F Y') }}</p>
                                 </td>
                             </tr>
                             <tr>
@@ -61,7 +62,7 @@
                             <tr>
                                 <td>
                                     <p>Dear {{ $orderDetails->name }},</p>
-                                    <p>Thank your for your order. To pay for this please direct deposit to:</p>
+                                    <p>Thank you for your order. To pay for it, please direct deposit <strong>{{ money($orderDetails->total) }}</strong> to:</p>
                                     <div>
                                         <strong>Account name: </strong>Toad Gully Growers<br>
                                         <strong>Bank: </strong> {{ config('bank.name') }}<br>

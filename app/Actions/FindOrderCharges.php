@@ -144,7 +144,8 @@ class FindOrderCharges
             'success' => (bool) ($charge['success'] ?? false),
             'captured' => (bool) ($charge['captured'] ?? false),
             'message' => $charge['error_message'] ?? $charge['status_message'] ?? null,
-            'matches_amount' => $amount === (int) round($order->total * 100),
+            'matches_amount' => $amount === $order->totalInCents()
+                && strtoupper($charge['currency'] ?? '') === Order::CURRENCY,
             // Charges made since the order number was sent to Pin say which order they were for
             'for_this_order' => ($charge['metadata']['order_id'] ?? null) === (string) $order->id,
         ];

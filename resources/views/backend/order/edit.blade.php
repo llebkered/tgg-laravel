@@ -17,7 +17,7 @@
                 </div>
                 <div class="column has-text-right">
                     <p>{{ $order->name  }}</p>
-                    <p>${{ $order->total  }}</p>
+                    <p>{{ money($order->total) }}</p>
                     <p>Payment: {{ $order->payment_method?->label() ?? 'Unknown' }}</p>
                 </div>
             </div>
@@ -38,7 +38,7 @@
         $pinMatches->count() > 1 => 'several',
         default => 'not_charged',
     };
-    $amount = '$' . number_format($order->total, 2);
+    $amount = money($order->total);
     $startedAt = $order->payment_started_at->timezone('Australia/Melbourne');
     @endphp
     <div class="container mb-6">
@@ -58,7 +58,7 @@
                     around {{ $startedAt->format('g:i a') }} on {{ $startedAt->format('j M Y') }}, then choose an option below.</p>
                 @elseif ($pinVerdict === 'charged')
                 <p class="is-size-5 mb-2"><span class="tag is-medium is-success">Charged</span></p>
-                <p>Pin has a successful charge of ${{ number_format($pinMatch['amount'], 2) }} to {{ $order->email }}
+                <p>Pin has a successful charge of {{ money($pinMatch['amount']) }} to {{ $order->email }}
                     on {{ $pinMatch['created_at']?->timezone('Australia/Melbourne')->format('j M Y, g:i a') }}
                     (<code>{{ $pinMatch['token'] }}</code>).</p>
                 <p class="mt-2"><strong>What to do:</strong> The card was charged, so mark the order as paid. The charge token is already filled in.</p>
@@ -128,7 +128,7 @@
         <div class="notification is-info is-light">
             <h2 class="title is-5 mb-3">Waiting for direct deposit</h2>
             <p>{{ $order->name }} was invoiced on {{ $order->created_at->timezone('Australia/Melbourne')->format('j M Y') }}
-                for <strong>${{ number_format($order->total, 2) }}</strong>. They were asked to use their order number
+                for <strong>{{ money($order->total) }}</strong>. They were asked to use their order number
                 ({{ $order->id }}) and name as the payment reference.</p>
             <p class="mt-2">When the money is in the bank account, record it here.</p>
             <form class="mt-4" action="{{ route('backend.orders.payment.deposit', $order->id) }}" method="POST"
@@ -312,12 +312,12 @@
                     @foreach ($order->products as $item)
                     <tr>
                         <td>{{ $item->qty }} x {{ $item->name }} {{ $item->qty }}</td>
-                        <td class="has-text-right"> ${{ $item->subtotal }}</td>
+                        <td class="has-text-right"> {{ money($item->subtotal) }}</td>
                     </tr>
                     @endforeach
                     <tr>
                         <td></td>
-                        <td class="has-text-right"><strong>${{ $order->total}}</strong></td>
+                        <td class="has-text-right"><strong>{{ money($order->total) }}</strong></td>
                     </tr>
                 </table>
             </div>

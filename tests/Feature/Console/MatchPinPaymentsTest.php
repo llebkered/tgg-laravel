@@ -39,6 +39,7 @@ class MatchPinPaymentsTest extends TestCase
             'success' => true,
             'captured' => true,
             'amount' => 6700,
+            'currency' => 'AUD',
             'email' => 'paid@test.com',
             'description' => 'Farm Pack',
             'created_at' => '2025-03-10T01:05:00Z',

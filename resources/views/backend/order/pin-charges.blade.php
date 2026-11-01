@@ -47,7 +47,7 @@
         @unless ($order->charge_token)
         <p class="mb-3">Charges to {{ $order->email }} between
             {{ $pinSearchDates[0]->format('j M Y') }} and {{ $pinSearchDates[1]->copy()->subDay()->format('j M Y') }}.
-            This order is for <strong>${{ number_format($order->total, 2) }}</strong>.</p>
+            This order is for <strong>{{ money($order->total) }}</strong>.</p>
         @endunless
         <div class="table-container">
             <table class="table is-fullwidth">
@@ -68,7 +68,7 @@
                     <tr>
                         <td>{{ $charge['created_at']?->timezone('Australia/Melbourne')->format('j M Y, g:i a') }}</td>
                         <td class="has-text-right">
-                            ${{ number_format($charge['amount'], 2) }}
+                            {{ money($charge['amount']) }}
                             @if ($charge['matches_amount'])
                             <br><span class="tag is-info is-light">Matches order</span>
                             @endif

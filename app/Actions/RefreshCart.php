@@ -41,16 +41,19 @@ class RefreshCart
 
             $name = $product->title . ' - ' . $variation->title;
 
-            if ((float) $item->price !== (float) $variation->price) {
+            // Compared in cents, as floats of the same price can differ slightly
+            $priceChanged = (int) round($item->price * 100) !== (int) round($variation->price * 100);
+
+            if ($priceChanged) {
                 $changes[] = sprintf(
-                    '%s has changed price from $%s to $%s.',
+                    '%s has changed price from %s to %s.',
                     $name,
-                    number_format($item->price, 2),
-                    number_format($variation->price, 2)
+                    money($item->price),
+                    money($variation->price)
                 );
             }
 
-            if ($item->name !== $name || (float) $item->price !== (float) $variation->price) {
+            if ($item->name !== $name || $priceChanged) {
                 $cart->update($item->rowId, ['name' => $name, 'price' => $variation->price]);
             }
         }
