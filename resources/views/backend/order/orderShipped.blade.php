@@ -65,7 +65,7 @@
                                 {{ $item->name }}
                             </td>
                             <td  class="has-text-right">
-                                ${{ $item->price }}
+                                ${{ number_format($item->price, 2) }}
                             </td>
                             <td class="has-text-right">
                                 ${{ $item->subtotal }}

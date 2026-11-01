@@ -41,7 +41,7 @@ class BackendVariationController extends Controller
     {
         $data = $request->validate([
             'title' => 'required',
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|min:0|decimal:0,2',
             'description' => 'required',
             'product_id' => 'numeric'
         ]);
@@ -88,7 +88,7 @@ class BackendVariationController extends Controller
 
         $data = $request->validate([
             'title' => 'required',
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|min:0|decimal:0,2',
             'description' => 'required'
         ]);
         $data['is_published'] = $request->is_published;

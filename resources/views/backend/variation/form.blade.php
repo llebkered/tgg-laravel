@@ -31,8 +31,8 @@
             <div class="field">
                 <label class="label" for="price">Price</label>
                 <div class="control columns has-icons-left">
-                    <input class="input column is-2" name="price" type="text" placeholder="42"
-                        value="{{ old('price') ? old('price') : $variation['price'] }}">
+                    <input class="input column is-2" name="price" type="number" step="0.01" min="0" placeholder="42.00"
+                        value="{{ old('price') ?? ($variation->price === null ? '' : number_format($variation->price, 2, '.', '')) }}">
                     <span class="icon is-small is-left">
                         $
                     </span>

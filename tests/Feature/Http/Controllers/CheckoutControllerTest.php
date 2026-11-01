@@ -243,7 +243,7 @@ class CheckoutControllerTest extends TestCase
         $this->createCheckoutPage(true);
         $this->correctlyFillCart();
 
-        Variation::where('slug', 'small')->update(['price' => 150]);
+        Variation::where('slug', 'small')->update(['price_cents' => 15000]);
 
         $this->correctlyFillCheckoutForm()
             ->assertRedirect('/cart')
@@ -277,7 +277,7 @@ class CheckoutControllerTest extends TestCase
         $this->createCheckoutPage(true);
         $this->correctlyFillCart();
 
-        Variation::where('slug', 'small')->update(['price' => 150]);
+        Variation::where('slug', 'small')->update(['price_cents' => 15000]);
 
         $this->get('/checkout')->assertOk()
             ->assertSee('Product 1 - Small Pack has changed price from $100.00 to $150.00.');
