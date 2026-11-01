@@ -171,6 +171,10 @@ A `Product` has many `Variation`s. The cart holds variations, not products. A va
 
 [CartController](../app/Http/Controllers/CartController.php) checks this when an item is added. Cart items keep the name and price from when they were added, so [RefreshCart](../app/Actions/RefreshCart.php) runs at the start of checkout. It removes items that can no longer be bought, updates changed names and prices, and returns a message telling the customer what changed.
 
+**Prices are stored in cents.** `variations.price_cents` is an integer number of cents, so amounts don't pick up floating-point rounding errors. `$variation->price` reads and writes dollars (an Eloquent accessor in [Variation](../app/Models/Variation.php)), so forms, views and the cart work in dollars. Queries that bypass the model must use `price_cents` and cents, e.g. `Variation::where(...)->update(['price_cents' => 1995])`. A saved variation loaded without `price_cents` throws a `LogicException` rather than reading as $0.00. Admin entry is validated to 2 decimal places, and prices are shown with `number_format($price, 2)`. Orders store their own dollar amounts in the cart snapshot and totals, so they are not affected.
+
+The migration `2026_11_01_000000_store_variation_prices_in_cents` converted the old whole-dollar `price` column to cents and renamed it `price_cents`. It does nothing if `price_cents` already exists, so it can't multiply prices twice.
+
 ### Checkout
 
 Checkout uses one controller per step under `app/Http/Controllers/Checkout/`. The current order and customer ids are kept in the session (`order`, `customer`).
@@ -317,7 +321,7 @@ Deployment isn't automated and there's no CI. The site owner deploys by hand. Wh
 1. Run the tests locally.
 2. Upload the code, including `docs/`, which the backend Help page reads at runtime.
 3. Run `composer install --no-dev --optimize-autoloader` on the server, or upload `vendor/` built for **PHP 8.4**.
-4. Run `php artisan migrate --force` if there are new migrations.
+4. Run `php artisan migrate --force` if there are new migrations. Run them together with the code upload: new code against an unmigrated database can fail, e.g. product pages error until `price_cents` exists.
 5. Build assets with `npm run prod` and upload `public/css`, `public/js` and `public/images` if they changed.
 6. Clear caches: `php artisan optimize:clear`, then `php artisan config:cache` if you use config caching.
 
